@@ -6,8 +6,11 @@ const userRoutes = require('./routes/userRoutes');
 const blogRoutes = require('./routes/blogRoutes');
 const {notFound, errorHandler} = require('./middlewares/errorMiddleware');
 const path = require("path");
+
 const app = express();
+
 dotenv.config();
+
 connectDB();
 
 const allowedOrigins = '*'
@@ -52,4 +55,5 @@ app.use(errorHandler)
 
 
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, console.log(`server started on port ${PORT}`));

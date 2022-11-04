@@ -24,7 +24,7 @@ export default function Wall() {
 async function getPosts()  {
   const controller = new AbortController()
   try {
-    const data = await axios.get('http://localhost:5000/api/bloggers', {
+    const data = await axios.get('/api/bloggers', {
       signal: controller.signal
     }) 
     

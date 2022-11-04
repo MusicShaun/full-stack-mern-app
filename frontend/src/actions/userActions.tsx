@@ -13,7 +13,7 @@ export  const login = ({email, password}: LoginProps ) => async (dispatch: any) 
   
     try {
       const { data } = await axios.post(
-        'http://localhost:5000/api/users/login', //api/login
+        '/api/users/login', //api/login
         {
           email,
           password
@@ -48,7 +48,7 @@ export  const login = ({email, password}: LoginProps ) => async (dispatch: any) 
   export const registerUser = ( {firstName, lastName, email, password } : RegisterProps) => async (dispatch: any)  => {
 
     try {
-      const data = await axios.post('http://localhost:5000/api/users/', { //api/users
+      const data = await axios.post('/api/users/', { //api/users
         firstName,
         lastName,
         email,
