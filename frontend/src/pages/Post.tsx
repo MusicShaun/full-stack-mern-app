@@ -1,16 +1,13 @@
 import { Typography,TextField,Button,Box,Container,CssBaseline, Paper
 } from "@mui/material";
-import axios from "axios";
 import * as React from "react";
 import { useState, useEffect } from 'react'; 
-import { useAppDispatch, useAppSelector } from '../app/hook';
+import { useAppDispatch } from '../app/hook';
 import PostFinish from "../components/PostFinish";
 import { postBlog } from "../actions/userActions";
 
 export default function Post() {
 
-  const [ success, setSuccess ] = useState(false);
-  const [ isLoading, setIsLoading ] = useState(false);
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
 
   const [ tag, setTag ] = useState("");

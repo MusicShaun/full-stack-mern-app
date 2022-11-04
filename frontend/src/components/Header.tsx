@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import logo from './art/logo.png';
 import * as React from 'react';
-import { Dispatch, SetStateAction } from "react";
 import { useAppDispatch, useAppSelector } from '../app/hook';
 import { logOutUser } from '../features/loggedInSlice';
-import { loginUser, deleteUser } from '../features/loginSlice';
+import { deleteUser } from '../features/loginSlice';
 interface Props {
   children: React.ReactElement;
 }

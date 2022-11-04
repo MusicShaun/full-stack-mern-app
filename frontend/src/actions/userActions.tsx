@@ -1,4 +1,4 @@
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS } from "../constants/userConstants";
+import { USER_LOGIN_FAIL} from "../constants/userConstants";
 import axios from "axios";
 import { logInUser } from "../features/loggedInSlice";
 import { loginUser } from "../features/loginSlice";

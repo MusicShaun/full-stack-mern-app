@@ -14,13 +14,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useState , useEffect} from 'react';
-import axios from 'axios';
-import Loader from '../components/Loader';
-import Error from '../components/Error';
 import { useAppDispatch, useAppSelector } from '../app/hook';
 import { login } from '../actions/userActions';
-import { RootState } from '../app/store';
-import { loginUser } from '../features/loginSlice';
+
 
 function Copyright(props: any) {
   return (
