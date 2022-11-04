@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Typography, Box,  } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from "axios";
-import { useAppDispatch, useAppSelector } from "../app/hook";
+import { useAppDispatch } from "../app/hook";
 import { deleteWallPosts, getWallPosts } from "../features/wallPostsSlice";
 
 
@@ -41,6 +41,7 @@ async function getPosts()  {
   useEffect(() => {
     dispatch(deleteWallPosts())
     getPosts()
+    // eslint-disable-next-line
   }, [])
   
 

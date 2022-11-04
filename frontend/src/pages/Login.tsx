@@ -50,6 +50,7 @@ export default function Login( )  {
     if (loggedInStatus.value) {
       navigate('/wall')
     }
+    // eslint-disable-next-line
   }, [loggedInStatus])
 
 

@@ -28,7 +28,7 @@ export default function Profile() {
     if (usersProfilePosts){
     Object.values(usersProfilePosts).filter(item => item.lastName === local.lastName ? setUsersPost([item]) : null)
     }
-  }, [])
+  }, [usersProfilePosts])
 
 
 

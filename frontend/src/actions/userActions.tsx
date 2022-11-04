@@ -86,7 +86,7 @@ type MakePost = {
 export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost) => async (dispatch: any) => {
 
     try {
-      const {data} = await axios.post('http://localhost:5000/api/users/blogposts', {
+      const {data} = await axios.post('/api/users/blogposts', {
         tag,
         tag2,
         header,
@@ -94,7 +94,7 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
         firstName,
         lastName
       });
-      
+      console.log(data)
     } catch (error: any) {
       console.log(error.response.data.message)
     } finally {

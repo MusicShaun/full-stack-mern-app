@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 import Wall from './pages/Wall';
 import Post from './pages/Post';
 import Profile from './pages/Profile';
-import { useState, useEffect } from 'react'; 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
 
@@ -53,13 +52,13 @@ const theme: any = createTheme({
 // END OF EPISODE 13 TO GET THE SEARCH BAR FUNCTIONALITY 
 function App() {
 
-  const [ loggedIn, setLoggedIn ] = useState<boolean>(true);
-  useEffect(() => {
-    if (localStorage.getItem('userInfo')) {
-        setLoggedIn(true)
-        console.log('Logged in')
-    } 
-  }, [])
+  // const [ loggedIn, setLoggedIn ] = useState<boolean>(true);
+  // useEffect(() => {
+  //   if (localStorage.getItem('userInfo')) {
+  //       setLoggedIn(true)
+  //       console.log('Logged in')
+  //   } 
+  // }, [])
 
 
   return (
