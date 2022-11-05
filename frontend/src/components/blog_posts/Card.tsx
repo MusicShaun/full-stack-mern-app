@@ -82,23 +82,27 @@ export default function Card(
             
           }}>
         <Chip label={tag.toUpperCase()} 
-          sx={{color: '#3E5060', height: '22px'}}/>
+          sx={{color: 'text.primary', height: '22px'}}/>
         <Chip label={tag2.toUpperCase()} 
-          sx={{color: '#3E5060', height: '22px'}}/>     
+          sx={{color: 'text.primary', height: '22px'}}/>     
       </Box>
 
 
-        <Typography variant='h2' sx={{mb: '5px', fontSize: !showBody ? '1.125rem' : '1.6rem' }}>
+        <Typography variant='h2' 
+            sx={{mb: '5px', 
+                  fontSize: !showBody ? '1.125rem' : '1.6rem', 
+                  color: 'text.secondary',
+                  }}>
         {header}
         </Typography>
       
         {!delayText ?
-        <Typography variant='body1'>
+        <Typography variant='body1' sx={{color: 'text.primary',}}>
           {`${body.substring(0, 110)} . . . . .`}
         </Typography>
         :
         <Box >
-          <Typography variant='body1' sx={{mb: 1}}>{body}</Typography>
+          <Typography variant='body1' sx={{mb: 1, color: 'text.primary'}}>{body}</Typography>
         </Box>
         }
 
@@ -117,11 +121,12 @@ export default function Card(
             height: '45px'
             }}>
         <Box >
-          <Typography variant='body2' 
+          <Typography variant='body2' sx={{color: 'text.secondary',}} 
           > {`${name[0]} ${name[1]}`}
           </Typography>
           <Typography sx={{
-            fontSize: '0.75rem'
+            fontSize: '0.75rem',
+            color: 'text.secondary',
           }}> 
             {date.substring(0, 10)}
           </Typography>
@@ -131,7 +136,7 @@ export default function Card(
             sx={{
             fontSize: '0.825rem',
             fontWeight: '700',
-            textTransform: 'none'
+            textTransform: 'none',
           }}>
             {!showBody ? 'Read More' :'Read Less'}
             <ArrowForwardIosIcon sx={{fontSize: 'small'}}/>

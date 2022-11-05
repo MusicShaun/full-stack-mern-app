@@ -1,34 +1,28 @@
-import styled from 'styled-components';
+import { BottomNavigation, BottomNavigationAction, Paper, CssBaseline, Box } from '@mui/material';
+import { Restore, Archive, Favorite } from '@mui/icons-material';
+
 
 
 export default function Footer() {
+  
 
 
   return (
-    <Wrapper>
-      <div>LOGO</div>
-      <IconContainer>
-        <div>icon</div>
-        <div>icon</div>
-        <div>icon</div>
-      </IconContainer>
-    </Wrapper>
+
+    <Box sx={{  bgcolor:'secondary.main'}}>
+    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 , bgcolor:'secondary.main'}} elevation={3}  >
+      <CssBaseline />
+       <BottomNavigation
+          showLabels
+          sx={{ bgcolor:'secondary.main'}} 
+        >
+          <BottomNavigationAction label="inactive" sx={{color:'primary.dark'}} icon={<Restore color='primary'/>} />
+          <BottomNavigationAction label="inactive" sx={{color:'primary.dark'}} icon={<Favorite color='primary' />} />
+          <BottomNavigationAction label="inactive" sx={{color:'primary.dark'}} icon={<Archive color='primary' />} />
+        </BottomNavigation>
+      </Paper>
+      </Box>
+   
   )
 }
 
-const Wrapper = styled.div`
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  height: 300px;
-  background-color: lightgrey;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-`
-const IconContainer = styled.div`
-  display: flex;
-`

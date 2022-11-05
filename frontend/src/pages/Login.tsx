@@ -11,12 +11,10 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useState , useEffect} from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hook';
 import { login } from '../actions/userActions';
-
 
 function Copyright(props: any) {
   return (
@@ -31,12 +29,11 @@ function Copyright(props: any) {
   );
 }
 
-const theme = createTheme();
 
 
 
 
-export default function Login( )  {
+export default function Login(  )  {
 
   const [email, setEmail ] = useState('')
   const [password, setPassword ] = useState('')
@@ -61,12 +58,15 @@ export default function Login( )  {
 
 
 
-
   return (
-    <ThemeProvider theme={theme}>
       <Container  maxWidth="xs"
         sx={{
-          height: 'calc(100vh - 380px)'
+          height: 'calc(100vh - 136px)',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+
         }}>
         {/* {loading && <Loader /> } */}
         {/* {error && <Error setError={setError} />} */}
@@ -77,13 +77,17 @@ export default function Login( )  {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '100%'
+            height: '70%',
+            minHeight: '500px',
+            p: '2rem',
+            bgcolor: 'primary.contrastText',
+            borderRadius: '10px'
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{color: 'text.secondary'}} >
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -138,7 +142,6 @@ export default function Login( )  {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-    </ThemeProvider>
   );
 }
 

@@ -55,7 +55,8 @@ export default function Post() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'lightgrey'
+        bgcolor: 'background',
+        height: 'calc(100vh - 136px)',
     }}>
 
     {postFinish && 
@@ -66,6 +67,7 @@ export default function Post() {
         position: 'relative',
         width: `80%`, 
         minWidth: '400px',
+        height: '86%',
         maxHeight: '700px',
         p: 3, 
         borderRadius: 3, 
@@ -74,7 +76,7 @@ export default function Post() {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        mt: 5,
+        
         ":hover": {
           boxShadow: 8,
           },

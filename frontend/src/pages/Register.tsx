@@ -12,7 +12,6 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch , useAppSelector } from '../app/hook';
@@ -31,12 +30,6 @@ function Copyright(props: any) {
     </Typography>
   );
 }
-
-const theme = createTheme();
-
-
-
-
 
 
 export default function Register() {
@@ -73,21 +66,30 @@ export default function Register() {
 
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs" sx={{position: 'relative'}}> 
+      <Container  maxWidth="xs" 
+                sx={{position: 'relative', 
+                    height: 'calc(100vh - 136px)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    }}> 
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 14,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            p: '2rem',
+            height: '70%',
+            minHeight: '500px',
+            bgcolor: 'primary.contrastText',
+            borderRadius: '10px'
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{color: 'text.secondary'}}>
             Sign up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -164,6 +166,5 @@ export default function Register() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-    </ThemeProvider>
   );
 }

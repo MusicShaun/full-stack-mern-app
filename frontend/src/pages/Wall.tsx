@@ -2,18 +2,23 @@ import Card from "../components/blog_posts/Card"
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import * as React from 'react';
-import { Typography, Box,  } from '@mui/material';
+import { Typography, Box, Button } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useAppDispatch } from "../app/hook";
 import { deleteWallPosts, getWallPosts } from "../features/wallPostsSlice";
 
+type IProps = { 
+  setBlogContent: React.Dispatch<React.SetStateAction<any | null>>;
+  blogContent: any | null;
+  blogFilter: any;
+  clearListings: boolean;
+  setClearListings: React.Dispatch<React.SetStateAction<any | null>>;
+}
 
-export default function Wall() {
+export default function Wall( {setBlogContent, blogContent, blogFilter, clearListings , setClearListings}: IProps) {
 
   const [ counter, setCounter ] = useState<number>(0);
-  const [ blogContent, setBlogContent ] = useState<[] | null>();
-
   const dispatch = useAppDispatch();
   
   function checkBodies() {//TRIGGERS RERENDER ON CARD COMPONENT
@@ -27,7 +32,6 @@ async function getPosts()  {
     const data = await axios.get('/api/bloggers', {
       signal: controller.signal
     }) 
-    
     dispatch(getWallPosts(data.data))
     setBlogContent(data.data)
     return () => {
@@ -44,16 +48,29 @@ async function getPosts()  {
     // eslint-disable-next-line
   }, [])
   
+  function handleClearListings() {
+    setClearListings(false)
+  }
 
   return (
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="xl" >
         <Box sx={{ 
-            bgcolor:  '#f4f5f8'  , 
             transition: 'background-color 0.5s',
-
+            position: 'relative'
           }}>
+            
+          {clearListings && <Button 
+                variant="contained"
+                sx={{bgcolor:'error.main',
+                    position: 'absolute',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    mt: 3
+              }}
+                onClick={handleClearListings}
+                >Clear search</Button>}
 
           <Box sx={{
                 display: 'flex', 
@@ -71,10 +88,7 @@ async function getPosts()  {
                   }}>
               Blog
             </Typography>
-            <Typography variant='h1' 
-                  sx={{
-                    
-                  }}>
+            <Typography variant='h1' >
               The 
               <span style={{
                 background: 'linear-gradient(to right, #007FFF, #0059B2)',
@@ -99,7 +113,11 @@ async function getPosts()  {
              
         }}>
       
-        {[...blogContent].map((article: any, index) => {
+        {clearListings && blogFilter.length === 0 
+        ? <Typography variant='h1' >Search has 0 results</Typography>
+        :
+        (!clearListings ? [...blogContent] : [...blogFilter]) 
+          .map((article: any, index) => {
           return <Card  key={index} 
                         checkBodies={checkBodies} 
                         counter={counter} 
@@ -110,7 +128,7 @@ async function getPosts()  {
                         date={article.createdAt}
                         name={[article.firstName, article.lastName]}
                         />
-        })
+          })
         }
         </Box>
       }

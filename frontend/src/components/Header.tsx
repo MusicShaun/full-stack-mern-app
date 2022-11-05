@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TextField, Button, AppBar, useScrollTrigger, Slide } from '@mui/material';
+import { TextField, Button, AppBar, useScrollTrigger, Slide, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import logo from './art/logo.png';
@@ -7,6 +7,10 @@ import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hook';
 import { logOutUser } from '../features/loggedInSlice';
 import { deleteUser } from '../features/loginSlice';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
+
+
 interface Props {
   children: React.ReactElement;
 }
@@ -19,8 +23,15 @@ function HideOnScroll( {children}: Props) {
   )
 }
 
+type IProps = {
+  toggleLightDark: () => void;
+  darkMode: boolean;
+  blogContent: any | null;
+  setBlogFilter: React.Dispatch<React.SetStateAction<any | null>>;
+  setClearListings: React.Dispatch<React.SetStateAction<any | null>>;
+}
 
-export default function Header( ) {
+export default function Header( {toggleLightDark, darkMode, blogContent, setBlogFilter, setClearListings } : IProps ) {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -34,8 +45,18 @@ export default function Header( ) {
     console.log('logged out')
   }
 
+  function handleSearch(event: any) {
+    setClearListings(true)
+    let helper = [];
+    for (let i =0; i < blogContent.length; i++) {
+      if ((Object.values(blogContent[i]).toString().toLowerCase()).includes(event.target.value.toLowerCase())) {
+        helper.push(blogContent[i])
+      }
+    }
+    setBlogFilter(helper)
+    helper = [];
+  }
 
-  
   const killLinkStyle = {
     textDecoration: 'none',
     underline: 'none',
@@ -49,20 +70,27 @@ export default function Header( ) {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          boxShadow: '13px 3px 10px lightgrey',
-          backgroundColor: 'white',
+          boxShadow: '13px 3px 10px secondary.main',
+          bgcolor: 'background.default',
           
       }}>
       <Container>
         <Logo />
+        {/* <FormControl> */}
         <TextField id="outlined-basic" label="Search. . . " 
-        variant="outlined" size="small"
+          variant="outlined" size="small" 
+          onKeyUp={(event) => {
+            if (event.code === 'Enter') {
+              handleSearch(event);
+            }
+          }} 
           sx={{
               width: 350, 
               fontSize: 16, 
               fontWeight: 600 
             }}
           />
+          {/* </FormControl> */}
         <Spacer />
 
         {!loggedInStatus.value && 
@@ -117,6 +145,12 @@ export default function Header( ) {
                   >Logout
           </Button>
         }
+        <IconButton  onClick={toggleLightDark}>
+          {darkMode ?
+          <LightModeIcon sx={{color:'primary.main'}}/>
+           : <DarkModeIcon sx={{color:'primary.main'}}/>
+          }
+        </IconButton>
       </Container>
     </AppBar>
     </HideOnScroll>

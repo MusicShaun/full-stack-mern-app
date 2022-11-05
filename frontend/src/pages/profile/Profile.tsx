@@ -2,9 +2,9 @@ import { CssBaseline, Container, Box, Stack, Paper, styled, Divider, Typography,
 from "@mui/material";
 import React from "react";
 import { useState, useEffect } from 'react';
-import { useAppSelector } from "../app/hook";
-import Card from "../components/blog_posts/Card";
-
+import { useAppSelector } from "../../app/hook";
+import Card from "../../components/blog_posts/Card";
+import YourPosts from "./YourPosts";
 
 
 
@@ -30,7 +30,11 @@ export default function Profile() {
     }
   }, [usersProfilePosts])
 
-
+ const bigButton = {
+  height: '15%', display: 'flex', justifyContent: 'center', 
+  alignItems: 'center', bgcolor: 'primary.light', color: 'primary.contrastText', fontSize: '1.3rem',
+  borderTopRightRadius: '0px',  borderEndEndRadius: '0px' 
+ }
 
 return (
   <React.Fragment>
@@ -39,70 +43,45 @@ return (
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'lightgrey',
-        height: 'calc(100vh - 380px)',
-        mt: 10
-        // width: '100%'
+        bgcolor: 'background',
+        height: 'calc(100vh - 136px)',
+        width: '100%'
     }}>
       <Box sx={{
-        border: '2px solid lightblue',
         height: '100%',
         width: '30%',
-        backgroundColor: 'white',
       }}>
         <Stack
           direction="column"
           justifyContent="flex-start"
-          // spacing={4}
           divider={<Divider orientation="horizontal" flexItem />}
           sx={{
             height: '100%',
             width: '100%',
-            backgroundColor: 'lightgrey',
           }}
         >
-          <Item sx={{height: '15%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            Your posts</Item>
-          <Item sx={{height: '15%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          Personal Details</Item>
-          <Item sx={{height: '15%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            Something</Item>
+          <Item sx={{...bigButton}}>
+            YOUR POSTS</Item>
+          <Item sx={{...bigButton}}>
+          PERSONAL DETAILS</Item>
+          <Item sx={{...bigButton}}>
+            EMPTY</Item>
           <div style={{flexGrow: 1}}></div>
-          <Item sx={{height: '15%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            Logout</Item>
+          <Item sx={{...bigButton}}>
+            LOGOUT</Item>
 
         </Stack>
       </Box>
 
       <Box sx={{
-        border: '2px solid lightblue',
         height: '100%',
         width: '70%',
-        backgroundColor: 'white',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center'
       }}>
-        <Typography variant='h1' textAlign='center' >
-          {usersPosts.length > 0 ? 'Your posts' : 'You havent made any posts'}
-        </Typography>
-
-      
-        {usersPosts && 
-          usersPosts.map((item: any, index: number) => {
-            return <Card key={index}
-                  tag={item.tag}
-                  tag2={item.tag2}
-                  header={item.header}
-                  body={item.body}
-                  date={item.createdAt}
-                  name={item.firstName}
-                  />
-             
-          })
-        }
-        <Button>Add Delete Button</Button>
-        <Button>Add update Button</Button>
+            <YourPosts usersPosts={usersPosts}/>
       </Box>
 
 
