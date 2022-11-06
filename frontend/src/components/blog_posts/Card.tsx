@@ -2,7 +2,7 @@ import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
 import { Avatar, Typography, Box, Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { useState , useEffect } from 'react'; 
+import { useState , useEffect, useRef } from 'react'; 
 import { useWindowSize } from '@react-hook/window-size';
 
 
@@ -24,9 +24,9 @@ export default function Card(
   const [ showBody, setShowBody ] = useState<boolean>(false)
   const [ delayText, setDelayText ] = useState<boolean>(false)
   const [ onlyWidth ] = useWindowSize();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   function handleExpandPost() {
-
     if (!showBody && checkBodies) {
       checkBodies();
     }
@@ -39,6 +39,7 @@ export default function Card(
     if (!delayText) {
       const timer = setTimeout(() => {
         setDelayText(prev => !prev)
+        scrollRef.current?.scrollIntoView({behavior: 'smooth'})
     }, 250);
     return () => clearTimeout(timer);
     } else {
@@ -54,11 +55,12 @@ export default function Card(
 
 
   return (
-    <Paper elevation={3} sx={{
+    <Paper ref={scrollRef}
+          elevation={3} sx={{
           position: 'relative',
           width: !showBody ? '518px' : `${onlyWidth * 0.8}px`, 
           minWidth: '400px',
-          maxHeight: !showBody ? '300px' : '700px',
+          maxHeight: !showBody ? '300px' : '100%',
           p: 3, 
           borderRadius: 3, 
           color: '#1A2027', 
@@ -69,10 +71,9 @@ export default function Card(
           ":hover": {
             boxShadow: 8,
             },
-          }}
-          
+          }}          
           >
-      <Box 
+      <Box           
            sx={{
             display: 'flex',
             alignItems: 'center',

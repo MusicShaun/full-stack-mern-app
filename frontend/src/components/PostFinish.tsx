@@ -24,11 +24,13 @@ export default function PostFinish( {setPostFinish}:IProps) {
           alignItems: 'center',
           backgroundColor: 'lightgrey',
           zIndex: 20,
+          
       }}>
         <Paper elevation={3} sx={{
           position: 'relative',
           width: `80%`, 
           minWidth: '400px',
+          height: '86%',
           maxHeight: '700px',
           p: 3, 
           borderRadius: 3, 

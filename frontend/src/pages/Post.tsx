@@ -1,7 +1,7 @@
 import { Typography,TextField,Button,Box,Container,CssBaseline, Paper
 } from "@mui/material";
 import * as React from "react";
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect, useRef } from 'react'; 
 import { useAppDispatch } from '../app/hook';
 import PostFinish from "../components/PostFinish";
 import { postBlog } from "../actions/userActions";
@@ -9,7 +9,7 @@ import { postBlog } from "../actions/userActions";
 export default function Post() {
 
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
-
+  const refFocus = useRef<any>(null);
   const [ tag, setTag ] = useState("");
   const [ tag2, setTag2 ] = useState("");
   const [ header, setHeader ] = useState("");
@@ -19,6 +19,10 @@ export default function Post() {
 
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if(refFocus.current?.focus)
+    refFocus.current?.focus();
+  },[])
 
   // GET NAMES FROM LOCALSTORAGE 
   useEffect(() => {
@@ -54,9 +58,10 @@ export default function Post() {
     <Container maxWidth="xl" sx={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        // alignItems: 'center',
         bgcolor: 'background',
-        height: 'calc(100vh - 136px)',
+        minHeight: 'calc(100vh - 136px)',
+        height: 'auto',
     }}>
 
     {postFinish && 
@@ -66,10 +71,12 @@ export default function Post() {
       <Paper elevation={3} sx={{
         position: 'relative',
         width: `80%`, 
-        minWidth: '400px',
+        minWidth: '350px',
         height: '86%',
-        maxHeight: '700px',
+        minHeight: '600px',
         p: 3, 
+        mt: 5,
+        mb: 10,
         borderRadius: 3, 
         color: '#1A2027', 
         display: 'flex', 
@@ -80,6 +87,7 @@ export default function Post() {
         ":hover": {
           boxShadow: 8,
           },
+          
         }}
         >
           <Typography variant='h1' 
@@ -112,6 +120,7 @@ export default function Post() {
           justifyContent: 'flex-start',
         }}>
           <TextField
+          inputRef={refFocus}
           onChange={(e) => setTag(e.target.value)}
           type="text"
           label="Tag 1"

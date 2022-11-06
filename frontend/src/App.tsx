@@ -2,7 +2,7 @@ import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from "./pages/Login";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
-import Header from "./components/Header";
+import Header from "./components/header/Header";
 import Footer from "./components/Footer";
 import Wall from './pages/Wall';
 import Post from './pages/Post';
@@ -11,6 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
 import { useState } from 'react'; 
 import { grey } from '@mui/material/colors';
+import PersonalDetails from './pages/profile/PersonalDetails';
 
 // LIGHT THEME 
 const theme: any = createTheme({
@@ -136,17 +137,9 @@ const darkTheme = createTheme({
 
 
 
-
-// END OF EPISODE 13 TO GET THE SEARCH BAR FUNCTIONALITY 
 function App() {
 
-  // const [ loggedIn, setLoggedIn ] = useState<boolean>(true);
-  // useEffect(() => {
-  //   if (localStorage.getItem('userInfo')) {
-  //       setLoggedIn(true)
-  //       console.log('Logged in')
-  //   } 
-  // }, [])
+
   const [ blogContent, setBlogContent ] = useState<any | null>();
   const [ blogFilter , setBlogFilter ] = useState<any>();
   const [ darkMode, setDarkMode ] = useState(false);
@@ -168,8 +161,7 @@ function App() {
           blogContent={blogContent}
           setBlogFilter={setBlogFilter}
           setClearListings={setClearListings}
-        // loggedIn={loggedIn}
-        // setLoggedIn={setLoggedIn}
+          clearListings={clearListings}
         /> 
 
         
@@ -192,7 +184,9 @@ function App() {
                     setClearListings={setClearListings}
                     /> } 
           /> 
-          <Route path='post' element={ <Post /> } /> 
+          <Route path='post' element={ <Post /> }>
+            <Route path='personaldetails' element={ <PersonalDetails /> } /> 
+          </Route> 
           <Route path='profile' element={ <Profile /> } /> 
         </Routes> 
 
