@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TextField, Button, AppBar, useScrollTrigger, Slide, IconButton, Box } from '@mui/material';
+import { TextField, Button, AppBar, useScrollTrigger, Slide, IconButton, Box, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import logo from '../art/logo.png';
@@ -85,16 +85,15 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
   return (
     <React.Fragment>
       <HideOnScroll>
-      <AppBar position="fixed" sx={{
+      <AppBar position="fixed" elevation={1} sx={{
           height: '80px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          boxShadow: '13px 3px 10px secondary.main',
-          bgcolor: 'background.default',
-          
+          bgcolor: 'primary.contrastText',
+
       }}>
-      <Container>
+      <Container  maxWidth="lg" sx={{display: 'flex'}}>
         <Logo />
         <TextField id="outlined-basic" label="Search. . . " 
           variant="outlined" size="small" 
@@ -109,9 +108,18 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
           sx={{
               width: 350, 
               fontSize: 16, 
-              fontWeight: 600 
+              fontWeight: 600 ,
+              "& fieldset": { border: 'none' },
+              borderWidth: '1px', borderStyle: 'solid', borderColor: 'secondary.main', borderRadius: '10px',
+              marginRight: '1rem',
             }}
           />
+        <IconButton  onClick={toggleLightDark} sx={{borderWidth: '1px', borderStyle: 'solid', borderColor: 'secondary.main', borderRadius: '10px'}}>
+          {darkMode ?
+          <LightModeIcon sx={{color:'primary.main'}}/>
+           : <DarkModeIcon sx={{color:'primary.main'}}/>
+          }
+        </IconButton>
         <Spacer />
 
       <Box sx={{  display: { xs: 'none', md: 'flex' } }}>
@@ -184,12 +192,7 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
         handleLogout={handleLogout}
         />
        }
-        <IconButton  onClick={toggleLightDark}>
-          {darkMode ?
-          <LightModeIcon sx={{color:'primary.main'}}/>
-           : <DarkModeIcon sx={{color:'primary.main'}}/>
-          }
-        </IconButton>
+
 
       </Container>
     </AppBar>
@@ -199,12 +202,6 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
 }
 
 
-const Container = styled.div`
-  height: 100%;
-  width: 90%;
-  display: flex;
-  align-items: center;
-`
 const Spacer = styled.div`
   display: flex;
   flex: 1;
@@ -214,4 +211,5 @@ const Logo = styled.div`
   width: 40px;
   height: 40px;
   background-size: contain;
+  min-width: 40px;
 `

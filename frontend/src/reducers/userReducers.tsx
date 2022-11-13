@@ -27,3 +27,22 @@ export const userLoginReducer = ( {state=[], action}: IProps ) => {
     default : return state;
   }
 }
+
+export const userUpdateReducer = ( {state=[], action}: IProps ) => {
+  switch (action.type) {
+    case 'USER_UPDATE_REQUEST': 
+      return { loading: true } 
+    break;
+
+    case 'USER_UPDATE_SUCCESS': 
+    return { loading: false, userInfo: action.payload, sucess: true }
+    break;
+
+    case 'USER_UPDATE_FAIL': 
+    return { loading: false, userInfo: action.payload, sucess: false }
+    break;
+
+
+    default : return state;
+  }
+}

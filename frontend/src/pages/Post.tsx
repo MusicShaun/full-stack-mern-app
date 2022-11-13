@@ -32,8 +32,8 @@ export default function Post() {
       setLastName(currentUser.lastName)
     }
     if (currentUser.data) {
-      setFirstName(currentUser.data.msg.firstName)
-      setLastName(currentUser.data.msg.lastName)
+      setFirstName(currentUser.data.firstName)
+      setLastName(currentUser.data.lastName)
     }
   }, [])
 

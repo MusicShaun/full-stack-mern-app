@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useAppDispatch } from "../app/hook";
 import { deleteWallPosts, getWallPosts } from "../features/wallPostsSlice";
+import Footer from "../components/Footer";
 
 type IProps = { 
   setBlogContent: React.Dispatch<React.SetStateAction<any | null>>;
@@ -55,7 +56,7 @@ async function getPosts()  {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth="xl" >
+      <Container maxWidth="lg" sx={{minHeight: 'calc(100vh - 136px)'}}>
         <Box sx={{ 
             transition: 'background-color 0.5s',
             position: 'relative'
@@ -103,13 +104,11 @@ async function getPosts()  {
 
     {blogContent &&  
         <Box sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 5,
+              display: 'grid',
+              gap: 4,
               mb: 10,
-              transition: 'all 5s'
+              transition: 'all 5s',
+              gridTemplateColumns: `repeat(auto-fit, minmax(min(100%/1, max(300px, 100%/3)), 1fr))`
              
         }}>
       
@@ -137,6 +136,7 @@ async function getPosts()  {
 
         </Box>
       </Container>
+      <Footer />
     </React.Fragment>
       
       

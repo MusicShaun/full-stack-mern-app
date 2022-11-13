@@ -4,6 +4,7 @@ import { Avatar, Typography, Box, Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState , useEffect, useRef } from 'react'; 
 import { useWindowSize } from '@react-hook/window-size';
+import { Scale } from '@mui/icons-material';
 
 
 type IProps = {
@@ -35,7 +36,6 @@ export default function Card(
       setShowBody(prev => !prev)
     }, 5) 
 
-
     if (!delayText) {
       const timer = setTimeout(() => {
         setDelayText(prev => !prev)
@@ -55,21 +55,20 @@ export default function Card(
 
 
   return (
-    <Paper ref={scrollRef}
-          elevation={3} sx={{
+    <Paper ref={scrollRef} elevation={2}
+          sx={{
           position: 'relative',
-          width: !showBody ? '518px' : `${onlyWidth * 0.8}px`, 
-          minWidth: '400px',
-          maxHeight: !showBody ? '300px' : '100%',
           p: 3, 
           borderRadius: 3, 
           color: '#1A2027', 
           display: 'flex', 
           flexDirection: 'column',
-          justifyContent: 'space-around',
-          transition: 'width 0.4s, max-height 0.6s, maxHeight 0.6s',
+          transition: 'width 0.4s, max-height 0.6s, box-shadow 0.2s, transform 0.2s ',
+          backgroundColor: 'secondary.contrastText',
           ":hover": {
-            boxShadow: 8,
+            boxShadow: 3,
+            transform: 'scale(1.05)',
+            transition: 'all 0.2s ease',
             },
           }}          
           >

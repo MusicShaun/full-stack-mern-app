@@ -1,5 +1,7 @@
-import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography,  } from '@mui/material'
+import { grey } from '@mui/material/colors';
+import React, { useEffect, useState } from 'react'
+import DetailSlots from './DetailSlots';
 
 export default function PersonalDetails() {
 
@@ -7,9 +9,19 @@ export default function PersonalDetails() {
   const [ lastName, setLastName ] = useState("");
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
+  const [ localData , setLocalData ] = useState<any>({});
+
 console.log(firstName, lastName, email, password)
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+  }
+  useEffect(() => {
+    setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
+    console.log(localData)
+  }, [])
+
+  function editPersonalDetails() {
+
   }
 
   return (
@@ -37,38 +49,25 @@ console.log(firstName, lastName, email, password)
     {/* <LockOutlinedIcon /> */}
     </Avatar>
     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3,}} >
-    <Grid container spacing={6}>
-      <Grid item xs={12} >
-        <TextField
-          onChange={(e) => setFirstName(e.target.value)}
-          autoComplete="given-name"
-          name="firstName"
-          fullWidth
-          id="firstName"
-          label="First Name"
-          autoFocus
-        />
-      </Grid>
-      <Grid item xs={12} >
-        <TextField
-          onChange={(e) => setLastName(e.target.value)}
-          fullWidth
-          id="lastName"
-          label="Last Name"
-          name="lastName"
-          autoComplete="family-name"
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
-        />
-      </Grid>
+    <Grid container >
+
+      <DetailSlots 
+        attribute='First Name'
+        detail={localData.firstName} 
+        editPersonalDetails={editPersonalDetails}
+      />
+      <DetailSlots 
+        attribute='Last Name'
+        detail={localData.lastName} 
+        editPersonalDetails={editPersonalDetails}
+      />
+      <DetailSlots 
+        attribute='Email'
+        detail={localData.email} 
+        editPersonalDetails={editPersonalDetails}
+      />
+
+
       <Grid item xs={12}>
         <TextField
         onChange={(e) => setPassword(e.target.value)}
@@ -76,18 +75,6 @@ console.log(firstName, lastName, email, password)
           fullWidth
           name="password"
           label="Password"
-          type="password"
-          id="password"
-          autoComplete="new-password"
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-        onChange={(e) => setPassword(e.target.value)}
-          required
-          fullWidth
-          name="password"
-          label="Confirm Password"
           type="password"
           id="password"
           autoComplete="new-password"

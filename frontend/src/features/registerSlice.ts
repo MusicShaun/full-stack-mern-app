@@ -28,6 +28,9 @@ export const registerSlice = createSlice({
   },
 })
 
+
+
 export const { registerUser, deleteRegister } = registerSlice.actions; 
+
 
 export default registerSlice.reducer; 

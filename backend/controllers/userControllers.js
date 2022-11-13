@@ -5,8 +5,42 @@ const generateToken = require('../util/generateToken');
 
 
 
+
+
+const registerUser = asyncHandler(async (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    res.status(404);
+    throw new Error("User already exists");
+  }
+  const user = await User.create({
+    firstName,
+    lastName,
+    email,
+    password,
+    
+  });
+  if (user) {
+    res.status(201).json({
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("User not found");
+  }
+});
+
+
+
+
+
 const authUser = asyncHandler(async (req, res) => {
-  console.log('authUser function started')
 
   const { email , password  } = req.body;
   const user = await User.findOne({email});
@@ -29,34 +63,40 @@ const authUser = asyncHandler(async (req, res) => {
 
 
 
+  
 
-const registerUser = asyncHandler(async (req, res)  => {
-    //check email is not registered 
-    console.log(req.body)
-    User.findOne({ email: req.body.email })
-      .then((user) => {
-        if (user ) {
-          //throw error for email exists already
-          return res.status(400).json({ email: "A user has already registered this email"})
-        } else {
-          //otherwise create new user 
-          const newUser = new User({
-            _id: req.body.id,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            password: req.body.password,
-            token: generateToken(req.body._id)
-          });
-          newUser.save()
-          return res.status(200).json({ msg: newUser})
-          }
-      });
-  });
+  const updateUserProfile = asyncHandler(async (req, res) => {
+
+    const user = await User.findById(req.user._id);
+    console.log(user)
+    console.log(req.user)
+
+    if (user) {
+      user.firstName = req.body.firstName ||  user.firstName;
+      user.lastName = req.body.lastName ||  user.lastName;
+      user.email = req.body.email ||  user.email;
+
+      if (req.body.password) {
+        user.password = req.body.password
+      }
+
+      const updatedUser = await user.save();
+
+      res.json({
+        _id: updatedUser._id,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email,
+        token: generateToken(updatedUser._id)
+      })
+    } else {
+      res.status(404)
+      throw new Error("User not found. Attempt failed")
+    }
+    
+  })
 
 
 
 
-
-
-module.exports =  {registerUser, authUser} 
+module.exports =  {registerUser, authUser, updateUserProfile} 

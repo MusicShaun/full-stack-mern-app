@@ -4,8 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -53,8 +51,6 @@ export default function Register() {
 
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // const formData = new FormData(event.currentTarget);
-    // setFirstName(formData.get('firstName'))
 
     dispatch(registerUser({
       firstName: firstName, 
@@ -83,7 +79,10 @@ export default function Register() {
             height: '70%',
             minHeight: '500px',
             bgcolor: 'primary.contrastText',
-            borderRadius: '10px'
+            borderRadius: '10px',
+            borderWidth: '2px ',
+            borderStyle: 'solid ',
+            borderColor: 'secondary.main',
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
@@ -138,12 +137,6 @@ export default function Register() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>
             </Grid>

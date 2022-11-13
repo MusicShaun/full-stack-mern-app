@@ -67,6 +67,7 @@ export default function Login(  )  {
           flexDirection: 'column',
           justifyContent: 'center',
 
+
         }}>
         {/* {loading && <Loader /> } */}
         {/* {error && <Error setError={setError} />} */}
@@ -81,7 +82,10 @@ export default function Login(  )  {
             minHeight: '500px',
             p: '2rem',
             bgcolor: 'primary.contrastText',
-            borderRadius: '10px'
+            borderRadius: '10px',
+            borderWidth: '2px ',
+            borderStyle: 'solid ',
+            borderColor: 'secondary.main',
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>

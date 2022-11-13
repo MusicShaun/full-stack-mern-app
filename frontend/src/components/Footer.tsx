@@ -10,7 +10,7 @@ export default function Footer() {
   return (
 
     <Box sx={{  bgcolor:'secondary.main'}}>
-    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 , bgcolor:'secondary.main'}} elevation={3}  >
+    <Paper sx={{ position: 'relative', bgcolor:'secondary.main',}}   >
       <CssBaseline />
        <BottomNavigation
           showLabels
