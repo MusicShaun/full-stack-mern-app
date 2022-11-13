@@ -1,6 +1,6 @@
 import { Button, Grid, TextField, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface IProps {
   attribute: string;
@@ -11,6 +11,15 @@ interface IProps {
 export default function DetailSlots( {attribute, detail, editPersonalDetails } : IProps) {
 
   const [ openWindow, setOpenWindow ] = useState<boolean>(false);
+  
+  useEffect(() => {
+    function escape(e: any){
+      if (e.key === 'Escape'){
+      setOpenWindow(false)}
+    }
+    window.addEventListener('keyup', (e) => escape(e)) ;
+    return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
+  }, [] )
 
   return (
     <>

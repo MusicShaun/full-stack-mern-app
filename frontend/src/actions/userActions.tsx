@@ -118,3 +118,42 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
     }
   }
   
+
+  type UpdateUser = {
+    firstName: string;
+    lastName: string;
+    email: string;
+  }
+  export const updateUser = ( { firstName,lastName, email} : UpdateUser) => async (dispatch: any) => {
+    console.log('updateuser engaged')
+    let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
+  
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
+          },
+        };
+    
+        const {data} = await axios.put(
+          '/api/users/profile', {
+          firstName,
+          lastName,
+          email
+        }, config );
+        console.log(data)
+
+        dispatch({
+          payload: data,
+        });
+        localStorage.setItem("userInfo", JSON.stringify(data))
+
+      } catch (error: any) {
+        console.log(error.response.data.message)
+        console.log('userActions error log')
+      } finally {
+      }
+
+  }
+    

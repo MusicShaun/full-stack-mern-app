@@ -66,7 +66,7 @@ const authUser = asyncHandler(async (req, res) => {
   
 
   const updateUserProfile = asyncHandler(async (req, res) => {
-
+    console.log('server reached')
     const user = await User.findById(req.user._id);
     console.log(user)
     console.log(req.user)

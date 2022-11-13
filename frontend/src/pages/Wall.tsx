@@ -49,9 +49,20 @@ async function getPosts()  {
     // eslint-disable-next-line
   }, [])
   
+  // escapes search results
+  useEffect(() => {
+    function escape(e: any){
+      if (e.key === 'Escape'){
+        setClearListings(false)}
+    }
+    window.addEventListener('keyup', (e) => escape(e)) ;
+    return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
+  }, [] )
+
   function handleClearListings() {
     setClearListings(false)
   }
+
 
   return (
     <React.Fragment>

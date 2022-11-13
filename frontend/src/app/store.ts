@@ -4,6 +4,7 @@ import loggedInState from '../features/loggedInSlice';
 import registerState from '../features/registerSlice';
 import postState from '../features/postSlice';
 import getWallPostState from '../features/wallPostsSlice';
+import updateUserState from '../features/updateUserSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     registerState: registerState,
     postState: postState,
     getWallPostState: getWallPostState, 
+    updateUserState: updateUserState, 
   }
 })
 

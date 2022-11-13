@@ -1,6 +1,8 @@
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography,  } from '@mui/material'
 import { grey } from '@mui/material/colors';
 import React, { useEffect, useState } from 'react'
+import { updateUser } from '../../actions/userActions';
+import { useAppDispatch } from '../../app/hook';
 import DetailSlots from './DetailSlots';
 
 export default function PersonalDetails() {
@@ -11,17 +13,25 @@ export default function PersonalDetails() {
   const [ password, setPassword ] = useState("");
   const [ localData , setLocalData ] = useState<any>({});
 
-console.log(firstName, lastName, email, password)
+  const dispatch = useAppDispatch();
+
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   }
   useEffect(() => {
     setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
-    console.log(localData)
   }, [])
 
   function editPersonalDetails() {
 
+  }
+  function handleUpdateUser() {
+    dispatch(updateUser({
+      firstName: 'biggo',
+      lastName: 'biggo',
+      email: 'biggo',
+    })
+    )
   }
 
   return (
@@ -83,6 +93,7 @@ console.log(firstName, lastName, email, password)
 
     </Grid>
     <Button
+      onClick={handleUpdateUser}
       type="submit"
       fullWidth
       variant="contained"
