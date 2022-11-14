@@ -1,6 +1,6 @@
 import { CssBaseline, Container, Box, Stack, Paper, styled, Divider, Button, AppBar } 
 from "@mui/material";
-import React from "react";
+import React, { SetStateAction } from "react";
 import { useState, useEffect } from 'react';
 import { useAppSelector } from "../../app/hook";
 import PersonalDetails from "./PersonalDetails";
@@ -8,7 +8,21 @@ import YourPosts from "./YourPosts";
 
 
 
-export default function Profile() {
+const bigButton = {
+  height: '15%', display: 'flex', justifyContent: 'center', 
+  alignItems: 'center', bgcolor: 'secondary.light', color: 'primary.contrastText', fontSize: '1.3rem',
+  borderTopRightRadius: '0px',  borderEndEndRadius: '0px' 
+ }
+ const buttonBaby = {
+  display: 'flex', justifyContent: 'center', height: '100%', width: '100%',
+  alignItems: 'center', bgcolor: 'secondary.light', color: 'primary.contrastText', fontSize: '1.3rem',
+ }
+interface IProps {
+  setBlogContent: React.Dispatch<SetStateAction<any | null>>;
+
+}
+
+export default function Profile({setBlogContent, }: IProps) {
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -21,24 +35,20 @@ export default function Profile() {
   const [ usersPosts, setUsersPost ] = useState<object[]>([]);
   const usersProfilePosts = useAppSelector((state) => state.getWallPostState.value[0]); // blog content
   const [ rightSidePages, setRightSidePages ] = useState<number>(0)
-  
 
   useEffect(() => {
     let local = JSON.parse(localStorage.getItem('userInfo') || ""); 
+    let helper: object[] = [];
     if (usersProfilePosts){
-    Object.values(usersProfilePosts).filter(item => item.lastName === local.lastName ? setUsersPost([item]) : null)
+    Object.values(usersProfilePosts)
+      .filter((item: any )=> item.lastName === local.lastName 
+        ? helper.push(item)
+        : null)
     }
-  }, [usersProfilePosts])
+    setUsersPost(helper)
+  }, [ usersProfilePosts  ])
+  
 
- const bigButton = {
-  height: '15%', display: 'flex', justifyContent: 'center', 
-  alignItems: 'center', bgcolor: 'secondary.light', color: 'primary.contrastText', fontSize: '1.3rem',
-  borderTopRightRadius: '0px',  borderEndEndRadius: '0px' 
- }
- const buttonBaby = {
-  display: 'flex', justifyContent: 'center', height: '100%', width: '100%',
-  alignItems: 'center', bgcolor: 'secondary.light', color: 'primary.contrastText', fontSize: '1.3rem',
- }
 
 return (
   <React.Fragment>
@@ -84,11 +94,7 @@ return (
             </Item>
           </Button>
           <div style={{flexGrow: 1}}></div>
-          <Button sx={{...bigButton}}>
-            <Item sx={{...buttonBaby}}>
-            LOGOUT
-            </Item>
-          </Button>
+
         </Stack>
       </Box>
 
@@ -110,11 +116,6 @@ return (
               >
         Empty        
         </Button>
-        <Button
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-        Logout        
-        </Button>
 
         </Container>
       </AppBar>
@@ -122,15 +123,15 @@ return (
 
 
       <Box sx={{
+        position: 'relative',
         height: '100%',
         width: {sx: '95%', md: '70%'},
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
         mt: {xs : '136px', md: 0}
       }}>
-            {rightSidePages === 0 && <YourPosts usersPosts={usersPosts}/>}
+            {rightSidePages === 0 && <YourPosts usersPosts={usersPosts} setBlogContent={setBlogContent}/>}
             {rightSidePages === 1 && <PersonalDetails />}
             {/* {rightSidePages === 2 && <YourPosts />} */}
             

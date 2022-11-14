@@ -18,12 +18,11 @@ import  theme  from './mui-themes/LIGHT_THEMES';
 
 function App() {
 
-
   const [ blogContent, setBlogContent ] = useState<any | null>();
   const [ blogFilter , setBlogFilter ] = useState<any>();
   const [ darkMode, setDarkMode ] = useState(false);
   const [ clearListings, setClearListings ] = useState(false);
-
+  
   function toggleLightDark() {
     setDarkMode(prev => !prev)
   }
@@ -65,7 +64,7 @@ function App() {
           <Route path='post' element={ <Post /> }>
             <Route path='personaldetails' element={ <PersonalDetails /> } /> 
           </Route> 
-          <Route path='profile' element={ <Profile /> } /> 
+          <Route path='profile' element={ <Profile setBlogContent={setBlogContent} /> } /> 
         </Routes> 
 
 

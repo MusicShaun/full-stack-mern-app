@@ -50,17 +50,9 @@ const getBlogById = asyncHandler(async (req, res) => {
 
 
 const updateBlog = asyncHandler(async (req,res) => {
-  const { tag, tag2, header, body } = req.body;
-
+  const {tag, tag2, header, body } = req.body;
   const blog = await Blogger.findById(req.params.id);
 
-  console.log(req.user._id.toString())
-  console.log(blog)
-
-  if (blog.user.toString() !== req.user._id.toString()) {
-    res.status(401);
-    throw new Error('you cant perform this action')
-  }
   if (blog) {
     blog.tag = tag;
     blog.tag2 = tag2;
@@ -74,4 +66,19 @@ const updateBlog = asyncHandler(async (req,res) => {
   }
 })
 
-module.exports =  { blogEntry , getBlogs, getBlogById, updateBlog};
+
+
+
+const deleteBlog = asyncHandler(async (req,res) => {
+  const note = await Blogger.findById(req.params.id);
+
+  if ( note ) {
+    await note.remove(); 
+    res.json({ message: "Note removed " })
+  } else {
+    res.status(401);
+    throw new Error("Note not found")
+  }
+})
+
+module.exports =  { blogEntry , getBlogs, getBlogById, updateBlog, deleteBlog};

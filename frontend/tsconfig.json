@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "backend/server.js"  ]
+, "backend/server.js", "src/components/blog_posts"  ]
 }

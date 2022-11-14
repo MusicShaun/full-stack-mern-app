@@ -78,7 +78,6 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
     textDecoration: 'none',
     underline: 'none',
     color: 'inherit',
-
   }
 
 

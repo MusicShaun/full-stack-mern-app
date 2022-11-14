@@ -35,6 +35,7 @@ async function getPosts()  {
     }) 
     dispatch(getWallPosts(data.data))
     setBlogContent(data.data)
+
     return () => {
       controller.abort()
     }
@@ -57,7 +58,7 @@ async function getPosts()  {
     }
     window.addEventListener('keyup', (e) => escape(e)) ;
     return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
-  }, [] )
+  }, [setClearListings] )
 
   function handleClearListings() {
     setClearListings(false)

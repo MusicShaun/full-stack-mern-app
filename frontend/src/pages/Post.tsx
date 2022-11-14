@@ -37,7 +37,6 @@ export default function Post() {
     }
   }, [])
 
-
   async function handleBlogPost(event: React.FormEvent<HTMLFormElement>) { 
     event.preventDefault();
 
@@ -49,6 +48,7 @@ export default function Post() {
       firstName: firstName,
       lastName: lastName
     }))
+    setPostFinish(true)
   }
 
 
@@ -122,6 +122,7 @@ export default function Post() {
           <TextField
           inputRef={refFocus}
           onChange={(e) => setTag(e.target.value)}
+          required
           type="text"
           label="Tag 1"
           name="tag"
@@ -132,6 +133,7 @@ export default function Post() {
         />
         <TextField
           onChange={(e) => setTag2(e.target.value)}
+          required
           type="text"
           name="tag2"
           label="Tag 2"
@@ -144,6 +146,7 @@ export default function Post() {
       <br />
         <TextField
           onChange={(e) => setHeader(e.target.value)}
+          required
           type="text"
           name='header'
           label="Catchy heading"
@@ -156,6 +159,7 @@ export default function Post() {
         <br />
         <TextField
           onChange={(e) => setBody(e.target.value)}
+          required
           type="text"
           name="content"
           label="Write article"
@@ -170,7 +174,6 @@ export default function Post() {
         <br />
         <br />
         <Button 
-                onClick={() => setPostFinish(true)}
                 variant="contained" color="primary" type="submit" size="large" 
                 sx={{
                   backgroundColor: 'primary.light', 

@@ -101,7 +101,7 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
           Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
         },
       };
-  
+  // eslint-disable-next-line 
       const {data} = await axios.post(
         '/api/bloggers/create', {
         tag,
@@ -111,7 +111,6 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
         firstName,
         lastName
       }, config );
-      console.log(data)
     } catch (error: any) {
       console.log(error.response.data.message)
     } finally {
@@ -157,3 +156,56 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
 
   }
     
+
+  type UpdateBlog = {
+    id: number;
+    tag: string;
+    tag2: string;
+    header: string;
+    body: string;
+  }
+  export const updateBlog = ( {id, tag,tag2, header, body} : UpdateBlog) => async (dispatch: any) => {
+    console.log('updateuser engaged')
+    let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
+        },
+      };
+  // eslint-disable-next-line 
+      const {data} = await axios.put(
+        `/api/bloggers/${id}`, {
+        tag,
+        tag2,
+        header,
+        body,
+      }, config );
+    } catch (error: any) {
+      console.log(error.response.data.message)
+    } finally {
+    }
+
+  }
+
+
+
+  export const deleteBlog = ( id: any) => async (dispatch: any) => {
+    let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
+    console.log('Deleting Post')
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
+        },
+      };// eslint-disable-next-line 
+      const {data} = await axios.delete(`/api/bloggers/${id}`, config );
+    } catch (error: any) {
+      console.log(error.response.data.message)
+    } finally {
+    }
+
+  }

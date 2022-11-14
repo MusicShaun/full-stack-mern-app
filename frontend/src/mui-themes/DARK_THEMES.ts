@@ -22,8 +22,8 @@ const darkTheme = createTheme({
     `2px 2px 3px ${grey[300]} `, //header
     `#1a202 -2px -3px 1px 0px, rgb(0,157, 255, 15%) 0px 3px 3px 2px, rgb(0,0,0,20%) 3px 4px 4px 0px`, //card 
     '#1a202 -2px -3px 0px 0px, rgb(0,0, 0, 20%) 2px 5px 5px -3px, #1a202 -20px 19px 10px 2px', //card hover
-    createShadow(0, 2, 4, -1, 0, 4, 5, 0, 0, 1, 10, 0),
-    createShadow(0, 3, 5, -1, 0, 5, 8, 0, 0, 1, 14, 0),
+    'rgb(0,0, 0, 20%) 2px 5px 5px -3px, #1a202  -12px 12px 6px 2px', //button hover left
+    ' rgb(0,0, 0, 20%) 2px 5px 5px -3px, #1a202  12px 12px 6px 2px', //button hover right
     createShadow(0, 3, 5, -1, 0, 6, 10, 0, 0, 1, 18, 0),
     createShadow(0, 4, 5, -2, 0, 7, 10, 1, 0, 2, 16, 1),
     createShadow(0, 5, 5, -3, 0, 8, 10, 1, 0, 3, 14, 2),

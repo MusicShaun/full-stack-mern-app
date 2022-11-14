@@ -5,6 +5,8 @@ import registerState from '../features/registerSlice';
 import postState from '../features/postSlice';
 import getWallPostState from '../features/wallPostsSlice';
 import updateUserState from '../features/updateUserSlice';
+import patheticBoolean from '../features/patheticBooleanSlice';
+import showUpdateSlice from '../features/showUpdateSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,8 +16,13 @@ export const store = configureStore({
     postState: postState,
     getWallPostState: getWallPostState, 
     updateUserState: updateUserState, 
+    patheticBoolean: patheticBoolean,
+    showUpdateSlice: showUpdateSlice
+    
   }
 })
+
+
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch;
