@@ -30,6 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       token: generateToken(user._id),
     });
+    console.log('user is now registered')
   } else {
     res.status(400);
     throw new Error("User not found");

@@ -25,7 +25,7 @@ export const registerUser = ( {firstName, lastName, email, password } : Register
       } 
     );
     dispatch(logInUser())
-    localStorage.setItem("userInfo", JSON.stringify(data))
+    localStorage.setItem("userInfo", JSON.stringify(data.data))
     console.log(data)
 
   } catch (error: any) {

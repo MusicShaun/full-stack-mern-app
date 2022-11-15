@@ -1,5 +1,4 @@
-import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography,  } from '@mui/material'
-import { grey } from '@mui/material/colors';
+import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField,  } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { updateUser } from '../../actions/userActions';
 import { useAppDispatch } from '../../app/hook';
@@ -7,9 +6,10 @@ import DetailSlots from './DetailSlots';
 
 export default function PersonalDetails() {
 
-  const [ firstName, setFirstName ] = useState("");
-  const [ lastName, setLastName ] = useState("");
-  const [ email, setEmail ] = useState("");
+  // const [ firstName, setFirstName ] = useState("");
+  // const [ lastName, setLastName ] = useState("");
+  // const [ email, setEmail ] = useState("");
+  // eslint-disable-next-line
   const [ password, setPassword ] = useState("");
   const [ localData , setLocalData ] = useState<any>({});
 

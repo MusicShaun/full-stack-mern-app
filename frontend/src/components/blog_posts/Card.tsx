@@ -3,8 +3,6 @@ import Chip from '@mui/material/Chip';
 import { Avatar, Typography, Box, Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState , useEffect, useRef } from 'react'; 
-import { useWindowSize } from '@react-hook/window-size';
-import { Scale } from '@mui/icons-material';
 
 
 type IProps = {
@@ -24,7 +22,6 @@ export default function Card(
 
   const [ showBody, setShowBody ] = useState<boolean>(false)
   const [ delayText, setDelayText ] = useState<boolean>(false)
-  const [ onlyWidth ] = useWindowSize();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   function handleExpandPost() {
