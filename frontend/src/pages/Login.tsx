@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useState , useEffect} from 'react';
+import {  useEffect} from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hook';
 import { login } from '../actions/userActions';
 
@@ -35,9 +35,6 @@ function Copyright(props: any) {
 
 export default function Login(  )  {
 
-  const [email, setEmail ] = useState('')
-  const [password, setPassword ] = useState('')
-  
   let navigate = useNavigate();
   const dispatch = useAppDispatch()
 
@@ -53,7 +50,12 @@ export default function Login(  )  {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    dispatch(login({email: email, password: password}));
+    const formData = new FormData(e.currentTarget);
+
+    dispatch(login({
+      email: formData.get('email')!, 
+      password: formData.get('password')!
+    }));
   }
 
 
@@ -96,7 +98,6 @@ export default function Login(  )  {
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
-              onChange={(e) => setEmail(e.target.value)}
               margin="normal"
               required
               fullWidth
@@ -107,7 +108,6 @@ export default function Login(  )  {
               autoFocus
             />
             <TextField
-              onChange={(e) => setPassword(e.target.value)}
               margin="normal"
               required
               fullWidth

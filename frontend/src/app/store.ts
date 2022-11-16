@@ -7,6 +7,7 @@ import getWallPostState from '../features/wallPostsSlice';
 import updateUserState from '../features/updateUserSlice';
 import patheticBoolean from '../features/patheticBooleanSlice';
 import showUpdateSlice from '../features/showUpdateSlice';
+import loaderState from '../features/loaderSlice';
 
 export const store = configureStore({
   reducer: {
@@ -17,8 +18,8 @@ export const store = configureStore({
     getWallPostState: getWallPostState, 
     updateUserState: updateUserState, 
     patheticBoolean: patheticBoolean,
-    showUpdateSlice: showUpdateSlice
-    
+    showUpdateSlice: showUpdateSlice,
+    loaderState: loaderState
   }
 })
 

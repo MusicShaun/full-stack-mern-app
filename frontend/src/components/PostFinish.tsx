@@ -3,6 +3,7 @@ import { Typography,Button,Box, Container, Paper } from "@mui/material";
 
 import { Dispatch, SetStateAction } from "react";
 import { Link as RouterLink } from 'react-router-dom';
+import { useAppSelector } from "../app/hook";
 
 interface IProps  {
   setPostFinish: Dispatch<SetStateAction<boolean>>
@@ -10,6 +11,7 @@ interface IProps  {
 
 export default function PostFinish( {setPostFinish}:IProps) {
 
+  const loading = useAppSelector((state: any) => state.loaderState.value[0]);
 
 
   return (
@@ -49,7 +51,7 @@ export default function PostFinish( {setPostFinish}:IProps) {
                     sx={{
                       
                     }}>
-                Post successful!
+                {loading.message}
               </Typography>
   
         <Box component="form"  sx={{

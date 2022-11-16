@@ -2,9 +2,9 @@ import { SetStateAction, useState } from 'react'
 import { Typography, Button, Box } 
 from "@mui/material";
 import Card from "../../components/blog_posts/Card";
-import UpdateBlog from './UpdateBlog';
+import YourPosts_UpdateBlog from './YourPostsUpdateBlog';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
-import PostUpdateFinish from './PostUpdateFinish';
+import YourPosts_Finish from './YourPostsCloser';
 import { showUpdateTrue } from '../../features/showUpdateSlice';
 import { deleteBlog } from '../../actions/userActions';
 import { deleteWallPosts, getWallPosts } from '../../features/wallPostsSlice';
@@ -90,8 +90,8 @@ export default function YourPosts({usersPosts, setBlogContent}: IProps ) {
       }
 
 
-      {updateSelector.value && <UpdateBlog  usersPosts={usersPosts} updateNumber={updateNumber} /> }
-      {finishSelector.value && <PostUpdateFinish /> }
+      {updateSelector.value && <YourPosts_UpdateBlog  usersPosts={usersPosts} updateNumber={updateNumber} /> }
+      {finishSelector.value && <YourPosts_Finish /> }
   </div>
   )
 }

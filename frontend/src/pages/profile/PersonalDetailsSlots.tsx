@@ -1,17 +1,29 @@
 import { Button, Grid, TextField, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import React, { useEffect, useState } from 'react'
+import React, { SetStateAction, useEffect, useState } from 'react'
+
 
 interface IProps {
+  setFirstName?: React.Dispatch<SetStateAction<string>>;
+  setLastName?: React.Dispatch<SetStateAction<string>>;
+  setEmail?: React.Dispatch<SetStateAction<string>>;
   attribute: string;
-  detail: string;
-  editPersonalDetails: () => void;
+  textFieldString: string;
+  counter: number;
+  type?: string;
+
 }
 
-export default function DetailSlots( {attribute, detail, editPersonalDetails } : IProps) {
+export default function DetailSlots( 
+  {setFirstName, setLastName, setEmail, attribute, textFieldString,  counter ,type
+  } : IProps) {
 
   const [ openWindow, setOpenWindow ] = useState<boolean>(false);
-  
+
+  useEffect(() => { //close the pop ups 
+    setOpenWindow(false)
+  }, [counter])
+
   useEffect(() => {
     function escape(e: any){
       if (e.key === 'Escape'){
@@ -20,6 +32,17 @@ export default function DetailSlots( {attribute, detail, editPersonalDetails } :
     window.addEventListener('keyup', (e) => escape(e)) ;
     return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
   }, [] )
+
+  function handleDataInput(e: any) {
+    if (attribute === 'First Name' && setFirstName){
+      setFirstName(e.currentTarget.value)
+    } else if (attribute === 'Last Name' && setLastName){
+      setLastName(e.currentTarget.value)
+    } else if (attribute === 'Email' && setEmail){
+      setEmail(e.currentTarget.value)
+    } 
+  }
+
 
   return (
     <>
@@ -37,9 +60,9 @@ export default function DetailSlots( {attribute, detail, editPersonalDetails } :
       >{attribute}
     </Typography>
 
-    {detail && !openWindow && 
+    {textFieldString && !openWindow && 
       <Typography  variant='h6' sx={{flex: 1}}>
-        {detail}
+        {textFieldString}
       </Typography>
     }
 
@@ -55,17 +78,17 @@ export default function DetailSlots( {attribute, detail, editPersonalDetails } :
           display: 'flex', flex: 1
       }}>
       <TextField
-        // onChange={(e)}
+        onChange={(e) => handleDataInput(e)}
         autoComplete={attribute}
         name={attribute}
         fullWidth
         id={attribute}
         label={attribute}
         autoFocus
-        
+        type={type}
       />
       <Button onClick={() => setOpenWindow(false)}  
-      >save
+      >undo
     </Button> 
 
     </Grid>

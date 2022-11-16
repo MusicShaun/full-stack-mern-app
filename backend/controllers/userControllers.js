@@ -67,12 +67,10 @@ const authUser = asyncHandler(async (req, res) => {
   
 
   const updateUserProfile = asyncHandler(async (req, res) => {
-    console.log('server reached')
     const user = await User.findById(req.user._id);
-    console.log(user)
-    console.log(req.user)
+    const {password} = req.body;
 
-    if (user) {
+    if (user && (await user.matchPassword(password))) {
       user.firstName = req.body.firstName ||  user.firstName;
       user.lastName = req.body.lastName ||  user.lastName;
       user.email = req.body.email ||  user.email;
@@ -90,6 +88,7 @@ const authUser = asyncHandler(async (req, res) => {
         email: updatedUser.email,
         token: generateToken(updatedUser._id)
       })
+      console.log('successful profile update')
     } else {
       res.status(404)
       throw new Error("User not found. Attempt failed")

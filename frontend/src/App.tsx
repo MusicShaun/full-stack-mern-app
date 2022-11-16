@@ -8,10 +8,13 @@ import Post from './pages/Post';
 import Profile from './pages/profile/Profile';
 import { ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import PersonalDetails from './pages/profile/PersonalDetails';
 import darkTheme  from './mui-themes/DARK_THEMES';
 import  theme  from './mui-themes/LIGHT_THEMES';
+import YourPosts from './pages/profile/YourPosts';
+import { useAppSelector } from "./app/hook";
+import Draft from './pages/profile/Draft';
 
 
 
@@ -26,6 +29,21 @@ function App() {
   function toggleLightDark() {
     setDarkMode(prev => !prev)
   }
+
+  const [ usersPosts, setUsersPost ] = useState<object[]>([]);
+  const usersProfilePosts = useAppSelector((state) => state.getWallPostState.value[0]); // blog content
+  useEffect(() => {
+    let local = JSON.parse(localStorage.getItem('userInfo') || ""); 
+    let helper: object[] = [];
+    if (usersProfilePosts){
+    Object.values(usersProfilePosts)
+      .filter((item: any )=> item.lastName === local.lastName 
+        ? helper.push(item)
+        : null)
+    }
+    setUsersPost(helper)
+  }, [ usersProfilePosts  ])
+  
 
   return (
   <ThemeProvider theme={darkMode ? darkTheme : theme}>
@@ -62,9 +80,13 @@ function App() {
                     /> } 
           /> 
           <Route path='post' element={ <Post /> }>
-            <Route path='personaldetails' element={ <PersonalDetails /> } /> 
+
           </Route> 
-          <Route path='profile' element={ <Profile setBlogContent={setBlogContent} /> } /> 
+          <Route path='profile' element={ <Profile setBlogContent={setBlogContent} /> }>
+            <Route path='' element={ <YourPosts usersPosts={usersPosts} setBlogContent={setBlogContent}/> } /> 
+            <Route path='personal' element={ <PersonalDetails /> } /> 
+            <Route path='draft' element={ <Draft /> } /> 
+          </Route> 
         </Routes> 
 
 

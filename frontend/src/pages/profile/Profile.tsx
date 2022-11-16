@@ -1,11 +1,7 @@
 import { CssBaseline, Container, Box, Stack, Paper, styled, Divider, Button, AppBar } 
 from "@mui/material";
 import React, { SetStateAction } from "react";
-import { useState, useEffect } from 'react';
-import { useAppSelector } from "../../app/hook";
-import PersonalDetails from "./PersonalDetails";
-import YourPosts from "./YourPosts";
-
+import { Outlet, useNavigate } from "react-router-dom";
 
 
 const bigButton = {
@@ -31,24 +27,8 @@ export default function Profile({setBlogContent, }: IProps) {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
-
-  const [ usersPosts, setUsersPost ] = useState<object[]>([]);
-  const usersProfilePosts = useAppSelector((state) => state.getWallPostState.value[0]); // blog content
-  const [ rightSidePages, setRightSidePages ] = useState<number>(0)
-
-  useEffect(() => {
-    let local = JSON.parse(localStorage.getItem('userInfo') || ""); 
-    let helper: object[] = [];
-    if (usersProfilePosts){
-    Object.values(usersProfilePosts)
-      .filter((item: any )=> item.lastName === local.lastName 
-        ? helper.push(item)
-        : null)
-    }
-    setUsersPost(helper)
-  }, [ usersProfilePosts  ])
+  const navigate = useNavigate();
   
-
 
 return (
   <React.Fragment>
@@ -62,12 +42,12 @@ return (
         width: '100%',
         m:0,
         p:0,
-        flexDirection: {xs: 'column', md: 'row' }
+        flexDirection: {xs: 'column', md: 'row' },
     }}>
       <Box sx={{
         height: '100%',
         width: '30%',
-        display: { xs: 'none', md: 'flex' } 
+        display: { xs: 'none', md: 'flex' } ,
       }}>
         <Stack
           direction="column"
@@ -78,19 +58,19 @@ return (
             width: '100%',
           }}
         >
-          <Button sx={{...bigButton}} onClick={() => setRightSidePages(0)}>
+          <Button sx={{...bigButton}} onClick={() => navigate('/profile')}>
             <Item sx={{...buttonBaby}}>
             YOUR POSTS
             </Item>
           </Button>
-          <Button sx={{...bigButton}} onClick={() => setRightSidePages(1)}>
+          <Button sx={{...bigButton}} onClick={() => navigate('/profile/personal')}>
             <Item sx={{...buttonBaby}}>
             PERSONAL DETAILS
             </Item>
           </Button>
-          <Button sx={{...bigButton}} onClick={() => setRightSidePages(2)}>
+          <Button sx={{...bigButton}} onClick={() => navigate('/profile/draft')}>
             <Item sx={{...buttonBaby}}>
-            EMPTY
+            DRAFT
             </Item>
           </Button>
           <div style={{flexGrow: 1}}></div>
@@ -101,20 +81,21 @@ return (
       <AppBar position="fixed"  
               sx={{display: { xs: 'flex', md: 'none' }, mt: '80px',}} >
         <Container maxWidth={false} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-        <Button  onClick={() => setRightSidePages(0)}
+        <Button  onClick={() => navigate('/profile')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
         Post        
         </Button>
-        <Button  onClick={() => setRightSidePages(1)}
+        <Button  
+                onClick={() => navigate('/profile/personal')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
         Profile        
         </Button>
-        <Button  onClick={() => setRightSidePages(2)}
+        <Button  onClick={() => navigate('/profile/draft')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-        Empty        
+        Draft        
         </Button>
 
         </Container>
@@ -131,11 +112,7 @@ return (
         alignItems: 'center',
         mt: {xs : '136px', md: 0}
       }}>
-            {rightSidePages === 0 && <YourPosts usersPosts={usersPosts} setBlogContent={setBlogContent}/>}
-            {rightSidePages === 1 && <PersonalDetails />}
-            {/* {rightSidePages === 2 && <YourPosts />} */}
-            
-            
+        <Outlet />
       </Box>
 
 

@@ -8,6 +8,7 @@ interface UpdateType {
   firstName: string;
   lastName: string; 
   email: string; 
+  password?: string; 
 }
 const initialState:Updater = {
   value: [],

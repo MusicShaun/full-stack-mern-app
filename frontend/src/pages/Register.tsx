@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useState, useEffect } from 'react'; 
+import {  useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch , useAppSelector } from '../app/hook';
 import { registerUser } from '../actions/userActions';
@@ -32,11 +32,6 @@ function Copyright(props: any) {
 
 export default function Register() {
 
-  const [ firstName, setFirstName ] = useState("");
-  const [ lastName, setLastName ] = useState("");
-  const [ email, setEmail ] = useState("");
-  const [ password, setPassword ] = useState("");
-
   let navigate = useNavigate();
   const dispatch = useAppDispatch();
   const loggedInStatus = useAppSelector((state) => state.loggedInState);
@@ -51,12 +46,13 @@ export default function Register() {
 
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
     dispatch(registerUser({
-      firstName: firstName, 
-      lastName: lastName, 
-      email: email, 
-      password: password
+      firstName: formData.get('firstName')!, 
+      lastName: formData.get('lastName')!, 
+      email: formData.get('email')!, 
+      password: formData.get('password')!
     }));
   };
 
@@ -95,7 +91,6 @@ export default function Register() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  onChange={(e) => setFirstName(e.target.value)}
                   autoComplete="given-name"
                   name="firstName"
                   required
@@ -107,7 +102,6 @@ export default function Register() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  onChange={(e) => setLastName(e.target.value)}
                   required
                   fullWidth
                   id="lastName"
@@ -118,7 +112,6 @@ export default function Register() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  onChange={(e) => setEmail(e.target.value)}
                   required
                   fullWidth
                   id="email"
@@ -129,7 +122,6 @@ export default function Register() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                 onChange={(e) => setPassword(e.target.value)}
                   required
                   fullWidth
                   name="password"

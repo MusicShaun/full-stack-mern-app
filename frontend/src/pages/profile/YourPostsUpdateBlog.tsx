@@ -9,7 +9,7 @@ interface IProps  {
   updateNumber: number;
 }
 
-export default function UpdateBlog({usersPosts, updateNumber, }: IProps ) {
+export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProps ) {
   const [ tag, setTag ] = useState(usersPosts[updateNumber].tag);
   const [ tag2, setTag2 ] = useState(usersPosts[updateNumber].tag2);
   const [ header, setHeader ] = useState(usersPosts[updateNumber].header);

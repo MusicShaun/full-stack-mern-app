@@ -2,51 +2,50 @@ import { Typography,TextField,Button,Box,Container,CssBaseline, Paper
 } from "@mui/material";
 import * as React from "react";
 import { useState, useEffect, useRef } from 'react'; 
-import { useAppDispatch } from '../app/hook';
+import { useAppDispatch, useAppSelector } from '../app/hook';
 import PostFinish from "../components/PostFinish";
 import { postBlog } from "../actions/userActions";
+import Loader from "../components/Loader";
 
 export default function Post() {
 
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
   const refFocus = useRef<any>(null);
-  const [ tag, setTag ] = useState("");
-  const [ tag2, setTag2 ] = useState("");
-  const [ header, setHeader ] = useState("");
-  const [ body, setBody ] = useState("");
+  const dispatch = useAppDispatch();
+
+  const loading = useAppSelector((state: any) => state.loaderState.value[0]);
+
+  // get first and last names from store
+  const userCredentialsSelector = useAppSelector((state) => state.loginUserState.value)
   const [ firstName, setFirstName ] = useState("");
   const [ lastName, setLastName ] = useState("");
+    useEffect(() => {  
+    if (userCredentialsSelector[0]){
+      setFirstName(Object.values(userCredentialsSelector[0])[1])
+      setLastName(Object.values(userCredentialsSelector[0])[2])
+    }
+    // eslint-disable-next-line
+  }, [])
 
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if(refFocus.current?.focus)
     refFocus.current?.focus();
   },[])
 
-  // GET NAMES FROM LOCALSTORAGE 
-  useEffect(() => {
-    let currentUser = JSON.parse(localStorage.getItem('userInfo') || '{}');
-    if (currentUser.firstName) {
-      setFirstName(currentUser.firstName)
-      setLastName(currentUser.lastName)
-    }
-    if (currentUser.data) {
-      setFirstName(currentUser.data.firstName)
-      setLastName(currentUser.data.lastName)
-    }
-  }, [])
+
 
   async function handleBlogPost(event: React.FormEvent<HTMLFormElement>) { 
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
     dispatch(postBlog({
-      tag: tag,
-      tag2: tag2,
-      header: header,
-      body: body,
-      firstName: firstName,
-      lastName: lastName
+      tag: formData.get('tag')!,
+      tag2: formData.get('tag2')!,
+      header:  formData.get('header')!,
+      body:  formData.get('content')!,
+      firstName:  firstName,
+      lastName:  lastName
     }))
     setPostFinish(true)
   }
@@ -55,6 +54,8 @@ export default function Post() {
   return (
   <React.Fragment>
   <CssBaseline />
+    {loading && loading.booly && <Loader /> }
+
     <Container maxWidth="xl" sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -121,7 +122,6 @@ export default function Post() {
         }}>
           <TextField
           inputRef={refFocus}
-          onChange={(e) => setTag(e.target.value)}
           required
           type="text"
           label="Tag 1"
@@ -132,7 +132,6 @@ export default function Post() {
           }}
         />
         <TextField
-          onChange={(e) => setTag2(e.target.value)}
           required
           type="text"
           name="tag2"
@@ -145,7 +144,6 @@ export default function Post() {
       </Box>
       <br />
         <TextField
-          onChange={(e) => setHeader(e.target.value)}
           required
           type="text"
           name='header'
@@ -158,7 +156,6 @@ export default function Post() {
         />
         <br />
         <TextField
-          onChange={(e) => setBody(e.target.value)}
           required
           type="text"
           name="content"
@@ -184,7 +181,10 @@ export default function Post() {
           POST
         </Button>
       </Box>
+      <Button variant='outlined'>ADD SAVE AS DRAFT BUTTON</Button>
+      <Button variant='outlined'>ADD TO LOCAL STORAGE IN CASE OF PAGE REFRESH </Button>
       </Paper>
+
   </Container>
   </React.Fragment>
   );

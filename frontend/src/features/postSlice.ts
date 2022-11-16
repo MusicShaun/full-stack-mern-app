@@ -4,11 +4,11 @@ interface Poster {
   value: PostType[];
 }
 interface PostType {
-  tag: string;
-  tag2: string;
-  header: string;
-  body: string;
-  firstName: string;
+  tag: FormDataEntryValue;
+  tag2: FormDataEntryValue;
+  header:  FormDataEntryValue;
+  body:  FormDataEntryValue;
+  firstName:  string;
   lastName: string;
 }
 const initialState: Poster = {

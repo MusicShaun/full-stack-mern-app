@@ -4,6 +4,8 @@ interface Login {
   value: LoginState[];
 }
 interface LoginState {
+  firstName?: string;
+  lastName?: string;
   email: string; 
   password: string; 
   
@@ -20,7 +22,7 @@ export const loginSlice = createSlice({
       state.value.push(action.payload)
     },
     deleteUser: (state) => {
-      state.value.splice(0, -1)
+      state.value.splice(0, 1)
     },
   }
 })

@@ -22,15 +22,15 @@ export const registerSlice = createSlice({
     registerUser: (state, action: PayloadAction<Registering>) => {
       state.value.push(action.payload);
     },
-    deleteRegister: (state) => {
-      state.value.slice(0, -1)
-    }
+    deleteRegisterUser: (state) => {
+      state.value.splice(0, 1)
+    },
   },
 })
 
 
 
-export const { registerUser, deleteRegister } = registerSlice.actions; 
+export const { registerUser,  deleteRegisterUser} = registerSlice.actions; 
 
 
 export default registerSlice.reducer; 

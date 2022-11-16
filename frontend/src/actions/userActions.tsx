@@ -1,17 +1,18 @@
 import { USER_LOGIN_FAIL} from "../constants/userConstants";
 import axios from "axios";
-import { logInUser } from "../features/loggedInSlice";
-import { loginUser } from "../features/loginSlice";
-import { deleteRegister } from "../features/registerSlice";
+import { loggedIn } from "../features/loggedInSlice";
+import { deleteUser, loginUser } from "../features/loginSlice";
+import { deleteRegisterUser } from "../features/registerSlice";
+import { loaderTrue } from "../features/loaderSlice";
 
 
 
 
 type RegisterProps = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string; 
+  firstName: FormDataEntryValue;
+  lastName: FormDataEntryValue;
+  email: FormDataEntryValue;
+  password: FormDataEntryValue; 
 }
 
 export const registerUser = ( {firstName, lastName, email, password } : RegisterProps) => async (dispatch: any)  => {
@@ -24,9 +25,10 @@ export const registerUser = ( {firstName, lastName, email, password } : Register
       password 
       } 
     );
-    dispatch(logInUser())
+    dispatch(deleteRegisterUser()) /// remove any old content
+    dispatch(loginUser(data.data)) // renew login information for the app to use
+    dispatch(loggedIn()) // set logged in state for header
     localStorage.setItem("userInfo", JSON.stringify(data.data))
-    console.log(data)
 
   } catch (error: any) {
     dispatch({
@@ -37,7 +39,6 @@ export const registerUser = ( {firstName, lastName, email, password } : Register
       : error.message, 
     })
   } finally {
-    dispatch(deleteRegister())
   }
 }
 
@@ -47,8 +48,8 @@ export const registerUser = ( {firstName, lastName, email, password } : Register
 
 
 type LoginProps = {
-  email: string;
-  password: string;
+  email: FormDataEntryValue;
+  password: FormDataEntryValue;
 }
 
 export  const login = ({email, password}: LoginProps ) => async (dispatch: any) => { 
@@ -61,8 +62,9 @@ export  const login = ({email, password}: LoginProps ) => async (dispatch: any) 
           password
         }
       );
-      dispatch(loginUser(data))
-      dispatch(logInUser())
+      dispatch(deleteUser()) // empty the state 
+      dispatch(loginUser(data))// includes first and last name
+      dispatch(loggedIn())
       localStorage.setItem('userInfo', JSON.stringify(data))
 
     } catch (error: any) {
@@ -82,18 +84,18 @@ export  const login = ({email, password}: LoginProps ) => async (dispatch: any) 
 
 
 type MakePost = {
-  tag: string;
-  tag2: string;
-  header: string;
-  body: string;
-  firstName: string;
-  lastName: string;
+  tag: FormDataEntryValue;
+  tag2: FormDataEntryValue;
+  header:  FormDataEntryValue;
+  body:  FormDataEntryValue;
+  firstName:  string;
+  lastName:  string;
 }
 export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost) => async (dispatch: any) => {
-  console.log('userActions engaged')
+
+  dispatch(loaderTrue({booly:true, message: ''}))
 
   let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
-
     try {
       const config = {
         headers: {
@@ -111,10 +113,11 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
         firstName,
         lastName
       }, config );
+        dispatch(loaderTrue({booly:false, message: "Blog has posted successfully!"}))
     } catch (error: any) {
-      console.log(error.response.data.message)
-    } finally {
-    }
+        dispatch(loaderTrue({booly: false, message: error.response.data.message}))
+        alert('Something happened that wasn\'t supposed to. Please have another go.')
+    } 
   }
   
 
@@ -122,11 +125,13 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
     firstName: string;
     lastName: string;
     email: string;
+    _id: string;
+    password: string; 
   }
-  export const updateUser = ( { firstName,lastName, email} : UpdateUser) => async (dispatch: any) => {
-    console.log('updateuser engaged')
+  export const updateUser = ( { firstName,lastName, email, _id, password} : UpdateUser) => async (dispatch: any) => {
+    console.log('useractions')
     let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
-  
+
       try {
         const config = {
           headers: {
@@ -134,26 +139,22 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
             Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
           },
         };
-    
-        const {data} = await axios.put(
+        const {data} = await axios.post(
           '/api/users/profile', {
           firstName,
           lastName,
-          email
+          email,
+          _id, 
+          password
         }, config );
-        console.log(data)
-
-        dispatch({
-          payload: data,
-        });
+        dispatch(deleteUser()) 
+        dispatch(loginUser(data))// includes first and last name
         localStorage.setItem("userInfo", JSON.stringify(data))
 
       } catch (error: any) {
         console.log(error.response.data.message)
         console.log('userActions error log')
-      } finally {
-      }
-
+      } 
   }
     
 

@@ -7,7 +7,7 @@ import { showUpdateFalse } from "../../features/showUpdateSlice";
 
 
 
-export default function PostUpdateFinish( ) {
+export default function YourPosts_Finish( ) {
 
   const dispatch = useAppDispatch();
 

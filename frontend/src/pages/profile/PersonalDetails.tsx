@@ -2,36 +2,38 @@ import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField,  } from '
 import React, { useEffect, useState } from 'react'
 import { updateUser } from '../../actions/userActions';
 import { useAppDispatch } from '../../app/hook';
-import DetailSlots from './DetailSlots';
+import DetailSlots from './PersonalDetailsSlots';
 
 export default function PersonalDetails() {
 
-  // const [ firstName, setFirstName ] = useState("");
-  // const [ lastName, setLastName ] = useState("");
-  // const [ email, setEmail ] = useState("");
-  // eslint-disable-next-line
-  const [ password, setPassword ] = useState("");
   const [ localData , setLocalData ] = useState<any>({});
-
+  const [ firstName, setFirstName ] = useState(localData.firstName);
+  const [ lastName, setLastName ] = useState(localData.lastName);
+  const [ email, setEmail ] = useState(localData.email);
+  const [ password, setPassword ] = useState("");
+  const [ counter , setCounter ] = useState(0); 
   const dispatch = useAppDispatch();
 
-  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  }
   useEffect(() => {
     setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
   }, [])
 
-  function editPersonalDetails() {
-
-  }
-  function handleUpdateUser() {
-    dispatch(updateUser({
-      firstName: 'biggo',
-      lastName: 'biggo',
-      email: 'biggo',
-    })
-    )
+  function handleUpdateUser(e: React.SyntheticEvent) {
+    e.preventDefault();
+    if(!password) {
+      alert('Please enter your password')
+    } else {
+      dispatch(updateUser({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        _id: localData._id,
+        password: password, 
+      })
+      )
+      setPassword("")
+      setCounter(prev => prev += 1)
+    }
   }
 
   return (
@@ -56,37 +58,42 @@ export default function PersonalDetails() {
     }}
     >
     <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-    {/* <LockOutlinedIcon /> */}
     </Avatar>
-    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3,}} >
+    <Box component="form" noValidate sx={{ mt: 3,}} >
     <Grid container >
 
       <DetailSlots 
+        setFirstName={setFirstName}
         attribute='First Name'
-        detail={localData.firstName} 
-        editPersonalDetails={editPersonalDetails}
+        textFieldString={localData.firstName} 
+        counter={counter}
+        type='name'
       />
       <DetailSlots 
+        setLastName={setLastName}
         attribute='Last Name'
-        detail={localData.lastName} 
-        editPersonalDetails={editPersonalDetails}
+        textFieldString={localData.lastName} 
+        counter={counter}
+        type='surname'
       />
       <DetailSlots 
+        setEmail={setEmail}
         attribute='Email'
-        detail={localData.email} 
-        editPersonalDetails={editPersonalDetails}
+        textFieldString={localData.email} 
+        counter={counter}
+        type='email'
       />
-
 
       <Grid item xs={12}>
         <TextField
-        onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required
           fullWidth
           name="password"
           label="Password"
           type="password"
           id="password"
+          value={password}
           autoComplete="new-password"
         />
       </Grid>
