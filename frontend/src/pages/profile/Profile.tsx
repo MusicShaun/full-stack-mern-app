@@ -38,14 +38,12 @@ export default function Profile({setBlogContent, }: IProps) {
 return (
   <React.Fragment>
   <CssBaseline />
-    <Container maxWidth={false} sx={{
+    <Container maxWidth="lg"  sx={{
         display: 'flex',
         alignItems: 'center',
         bgcolor: 'background',
         height: `${setHeight}px`,
-        width: `${onlyWidth}px`,
-        m:0,
-        p: '0 !important',
+        // width: `${onlyWidth}px`,
         flexDirection: {xs: 'column', md: 'row' },
     }}>
       <Box sx={{

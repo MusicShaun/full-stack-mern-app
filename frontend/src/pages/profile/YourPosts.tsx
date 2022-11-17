@@ -86,7 +86,7 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
 
 
   return (
-    <Box sx={{width: '90%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column'}} >
+    <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column'}} >
 
   {loading && loading.booly && <Loader /> }
   {finishSelector.value && <YourPostsFinish />}
