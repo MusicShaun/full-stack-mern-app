@@ -6,13 +6,19 @@ import { useAppDispatch, useAppSelector } from '../app/hook';
 import PostFinish from "../components/PostFinish";
 import { postBlog } from "../actions/userActions";
 import Loader from "../components/Loader";
+import { useWindowHeight} from "@react-hook/window-size";
 
 export default function Post() {
+
+  const onlyHeight = useWindowHeight(); /// ridiculous setup for perfect height
+  const [setHeight, setIt] = useState(onlyHeight - 80);
+  useEffect(() => {
+    setIt(onlyHeight - 80)
+  }, [onlyHeight])
 
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
   const refFocus = useRef<any>(null);
   const dispatch = useAppDispatch();
-
   const loading = useAppSelector((state: any) => state.loaderState.value[0]);
 
   // get first and last names from store
@@ -59,10 +65,10 @@ export default function Post() {
     <Container maxWidth="xl" sx={{
         display: 'flex',
         justifyContent: 'center',
-        // alignItems: 'center',
+        alignItems: 'center',
         bgcolor: 'background',
-        minHeight: 'calc(100vh - 136px)',
-        height: 'auto',
+        height: `${setHeight}px`,
+        
     }}>
 
     {postFinish && 
@@ -73,11 +79,9 @@ export default function Post() {
         position: 'relative',
         width: `80%`, 
         minWidth: '350px',
-        height: '86%',
+        height: '90%',
         minHeight: '600px',
         p: 3, 
-        mt: 5,
-        mb: 10,
         borderRadius: 3, 
         color: '#1A2027', 
         display: 'flex', 

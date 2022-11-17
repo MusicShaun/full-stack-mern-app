@@ -1,10 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
+interface Thing {
+  bool: boolean;
+  counter : number; 
+}
+interface ValueThing {
+  value: Thing;
+}
 
-
-const initialState = {
-  value: false,
+const initialState: ValueThing = {
+  value: {bool: false, counter: 0},
 }
 
 const showUpdaterSlice = createSlice({
@@ -12,10 +18,10 @@ const showUpdaterSlice = createSlice({
   initialState,
   reducers: {
     showUpdateFalse: (state) => {
-      state.value = false; 
+      state.value = {bool: false, counter: 0}; 
     },
-    showUpdateTrue: (state) => {
-      state.value = true; 
+    showUpdateTrue: (state, action: PayloadAction<number>) => {
+      state.value = {bool: true, counter: action.payload}; 
     },
   },
 })

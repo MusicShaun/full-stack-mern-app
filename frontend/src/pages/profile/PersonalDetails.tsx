@@ -1,7 +1,9 @@
-import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField,  } from '@mui/material'
+import {  Box, Button, Container, CssBaseline, Grid, TextField, Typography,  } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { updateUser } from '../../actions/userActions';
-import { useAppDispatch } from '../../app/hook';
+import { useAppDispatch, useAppSelector } from '../../app/hook';
+import Loader from '../../components/Loader';
+import PostFinish from '../../components/PostFinish';
 import DetailSlots from './PersonalDetailsSlots';
 
 export default function PersonalDetails() {
@@ -13,12 +15,14 @@ export default function PersonalDetails() {
   const [ password, setPassword ] = useState("");
   const [ counter , setCounter ] = useState(0); 
   const dispatch = useAppDispatch();
+  const [ postFinish, setPostFinish ] = useState<boolean>(false);
+  const loading = useAppSelector((state: any) => state.loaderState.value[0]);
 
   useEffect(() => {
     setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
   }, [])
 
-  function handleUpdateUser(e: React.SyntheticEvent) {
+  async function handleUpdateUser(e: React.SyntheticEvent) {
     e.preventDefault();
     if(!password) {
       alert('Please enter your password')
@@ -33,6 +37,7 @@ export default function PersonalDetails() {
       )
       setPassword("")
       setCounter(prev => prev += 1)
+      setPostFinish(true)
     }
   }
 
@@ -42,23 +47,39 @@ export default function PersonalDetails() {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        alignItems: 'center',
+        bgcolor: 'primary.contrastText',
         }}> 
   <CssBaseline />
+
+  {loading && loading.booly && <Loader /> }
+  {postFinish && 
+      <PostFinish setPostFinish={setPostFinish}
+      />}
+
     <Box
       sx={{
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       p: '2rem',
-      height: '100%',
-      minHeight: '500px',
-      bgcolor: 'primary.contrastText',
-      borderRadius: '10px'
+      height: 'auto',
+      maxWidth: '1200px',
+      width: '100%',
+      borderColor: 'text.primary',
+      borderWidth: '0px 0px 1px 0px',
+      borderStyle: 'solid',
+      borderRadius: '0px',
     }}
     >
-    <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-    </Avatar>
+    <Typography variant='h1' 
+        sx={{ color: 'text.secondary', width: '100%', 
+          borderColor: 'text.primary',
+          borderWidth: '0px 0px 1px 0px',
+          borderStyle: 'solid', pb: 4}}>
+      Personal Details
+    </Typography>
+
     <Box component="form" noValidate sx={{ mt: 3,}} >
     <Grid container >
 
@@ -103,8 +124,8 @@ export default function PersonalDetails() {
       onClick={handleUpdateUser}
       type="submit"
       fullWidth
-      variant="contained"
-      sx={{ mt: 3, mb: 2, p: 2 }}
+      variant="outlined"
+      sx={{ mt: 3, mb: 2, p: 2, fontWeight: '700'}}
     >
       Update details
     </Button>

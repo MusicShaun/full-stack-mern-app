@@ -49,19 +49,19 @@ export default function DetailSlots(
     <Grid item xs={12} 
           sx={{display: 'flex', 
               flex: 1 , 
-              padding: 3,
-              borderTop: `1px solid ${grey[300]}`, 
+              padding: 2,
               borderBottom: `1px solid ${grey[300]}`,
-              alignItems: 'center'
+              alignItems: 'center',
+              
                }}>
     
 
-    <Typography variant='h6' sx={{color: 'text.secondary', flex: 0.3}} 
+    <Typography variant='h6' sx={{color: 'text.secondary', flex: 0.3,fontWeight: '700'}} 
       >{attribute}
     </Typography>
 
     {textFieldString && !openWindow && 
-      <Typography  variant='h6' sx={{flex: 1}}>
+      <Typography  variant='h6' sx={{flex: 1, fontWeight: '600'}}>
         {textFieldString}
       </Typography>
     }
@@ -79,11 +79,11 @@ export default function DetailSlots(
       }}>
       <TextField
         onChange={(e) => handleDataInput(e)}
-        autoComplete={attribute}
+        placeholder={textFieldString}
+        autoComplete={type}
         name={attribute}
         fullWidth
         id={attribute}
-        label={attribute}
         autoFocus
         type={type}
       />

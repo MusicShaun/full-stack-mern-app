@@ -4,6 +4,7 @@ import { loggedIn } from "../features/loggedInSlice";
 import { deleteUser, loginUser } from "../features/loginSlice";
 import { deleteRegisterUser } from "../features/registerSlice";
 import { loaderTrue } from "../features/loaderSlice";
+import { trueBoolean } from "../features/patheticBooleanSlice";
 
 
 
@@ -131,6 +132,7 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
   export const updateUser = ( { firstName,lastName, email, _id, password} : UpdateUser) => async (dispatch: any) => {
     console.log('useractions')
     let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
+    dispatch(loaderTrue({booly:true, message: ''}))
 
       try {
         const config = {
@@ -147,13 +149,13 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
           _id, 
           password
         }, config );
+        dispatch(loaderTrue({booly:false, message: "Details updated successfully!"}))
         dispatch(deleteUser()) 
         dispatch(loginUser(data))// includes first and last name
         localStorage.setItem("userInfo", JSON.stringify(data))
-
       } catch (error: any) {
         console.log(error.response.data.message)
-        console.log('userActions error log')
+        dispatch(loaderTrue({booly: false, message: error.response.data.message}))
       } 
   }
     
@@ -167,6 +169,7 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
   }
   export const updateBlog = ( {id, tag,tag2, header, body} : UpdateBlog) => async (dispatch: any) => {
     console.log('updateuser engaged')
+    dispatch(loaderTrue({booly:true, message: ''}))
     let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
 
     try {
@@ -184,11 +187,13 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
         header,
         body,
       }, config );
+      dispatch(loaderTrue({booly:false, message: "Blog updated successfully!"}))
+      dispatch(trueBoolean())
     } catch (error: any) {
       console.log(error.response.data.message)
-    } finally {
+      dispatch(loaderTrue({booly: false, message: error.response.data.message}))
+      dispatch(trueBoolean())
     }
-
   }
 
 

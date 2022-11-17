@@ -1,65 +1,113 @@
-import { SetStateAction, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import { Typography, Button, Box } 
 from "@mui/material";
 import Card from "../../components/blog_posts/Card";
-import YourPosts_UpdateBlog from './YourPostsUpdateBlog';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
-import YourPosts_Finish from './YourPostsCloser';
-import { showUpdateTrue } from '../../features/showUpdateSlice';
+import YourPostsFinish from './YourPostsCloser';
+import { showUpdateFalse, showUpdateTrue } from '../../features/showUpdateSlice';
 import { deleteBlog } from '../../actions/userActions';
 import { deleteWallPosts, getWallPosts } from '../../features/wallPostsSlice';
 import axios from 'axios';
+import Loader from '../../components/Loader';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 
 interface IProps {
-  usersPosts: object[];
   setBlogContent: React.Dispatch<SetStateAction<any | null>>;
-
+  blogContent: object[];
 }
 
-export default function YourPosts({usersPosts, setBlogContent}: IProps ) {
+export default function YourPosts({setBlogContent, blogContent}: IProps ) {
 
   const dispatch = useAppDispatch();
-  const [ updateNumber , setUpdateNumber ] = useState<number>(0);
-
+  const navigate = useNavigate();
   const finishSelector = useAppSelector(state => state.patheticBoolean);
   const updateSelector = useAppSelector(state => state.showUpdateSlice)
+  const loading = useAppSelector((state: any) => state.loaderState.value[0]);
+  const wallPostsSelector = useAppSelector(state => state.getWallPostState.value[0])
 
-  function handleUpdaterButton(index: number) {
-    dispatch(showUpdateTrue())
-    setUpdateNumber(index)
+  async function handleUpdaterButton(index: number) {
+    navigate('updatepost')
+    dispatch(showUpdateTrue(index))
   }
 
   async function handleDeletePost(postID: any) {
-      dispatch(deleteBlog(postID)
-    )
-      const controller = new AbortController() // retrieve new updated list 
-      try {
-        const data = await axios.get('/api/bloggers', {
-          signal: controller.signal
-        }) 
-        dispatch(deleteWallPosts())
-        dispatch(getWallPosts(data.data))
-        setBlogContent(data.data)
-        return () => {
-          controller.abort()
-        }
-      } catch (error) {
-        console.log(error)
-      }
+    dispatch(deleteBlog(postID))
+    dispatch(deleteWallPosts())
+
+      setTimeout(() => { // GET REQ WAS OVERLAPPING DELETE REQ
+        getUpdatedWallPosts()
+      }, 100)
+    
   }
+  async function getUpdatedWallPosts() {
+    try { 
+      const data = await axios.get('/api/bloggers', {
+      }) 
+      dispatch(getWallPosts(data.data))
+      setBlogContent(data.data)
+    } catch (error) {
+      console.log(error)
+    } 
+  }
+
+    // escape key
+    useEffect(() => {
+      function escape(e: any){
+        if (e.key === 'Escape'){
+          navigate('./')
+          dispatch(showUpdateFalse())
+        }
+      }
+      window.addEventListener('keyup', (e) => escape(e)) ;
+      return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
+      // eslint-disable-next-line
+    }, [] )
+
   
+    // FILTER BLOG POSTS BASED ON localStorage lastName// should probaby change it to email
+    const [ usersPosts, setUsersPost ] = useState<object[]>([]);
+    useEffect(() => {
+      setUsersPost([]) // creates a shallow update
+      let local: any; 
+      if (localStorage.getItem('userInfo')){
+      local = JSON.parse(localStorage.getItem('userInfo') || ""); 
+      }
+      let helper: object[] = [];
+      if (wallPostsSelector){
+      Object.values(wallPostsSelector)
+        .filter((item: any )=> item.lastName === local.lastName 
+          ? helper.push(item)
+          : null)
+      }
+      setUsersPost(helper)
+    }, [ wallPostsSelector ])
+
+
 
   return (
-    <div>
+    <Box sx={{width: '90%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column'}} >
+
+  {loading && loading.booly && <Loader /> }
+  {finishSelector.value && <YourPostsFinish />}
+
     <Typography variant='h1' textAlign='center' sx={{filter: finishSelector.value ? 'blur(5px)' : 'null', mt: 4, mb: 4}}>
         {usersPosts.length > 0 ? 'Your Posts' : 'You havent made any posts'}
       </Typography>
 
+      <Box sx={{
+              display: 'grid',
+              gap: 4,
+              mb: 10,
+              transition: 'all 5s',
+              gridTemplateColumns: `repeat(auto-fit, minmax(min(100%/1, max(300px, 100%/3)), 1fr))`
+             , width: '100%'
+              }}>
 
-      {usersPosts && !updateSelector.value && 
+      {usersPosts && !updateSelector.value.bool && 
         usersPosts.map((item: any, index: number) => {
-          return <><Card key={index}
+          return (<Box sx={{display: 'flex', flexDirection: 'column'}}>
+                <Card  key={index} 
                 tag={item.tag}
                 tag2={item.tag2}
                 header={item.header}
@@ -85,13 +133,11 @@ export default function YourPosts({usersPosts, setBlogContent}: IProps ) {
                                     }}
                   >Delete</Button>
                 </Box>
-                </>
+                </Box>)
         })
       }
-
-
-      {updateSelector.value && <YourPosts_UpdateBlog  usersPosts={usersPosts} updateNumber={updateNumber} /> }
-      {finishSelector.value && <YourPosts_Finish /> }
-  </div>
+      </Box>
+      <Outlet context={{usersPosts }}/>
+  </Box>
   )
 }

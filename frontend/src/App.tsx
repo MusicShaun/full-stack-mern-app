@@ -8,13 +8,14 @@ import Post from './pages/Post';
 import Profile from './pages/profile/Profile';
 import { ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
-import { useState, useEffect } from 'react'; 
+import { useState } from 'react'; 
 import PersonalDetails from './pages/profile/PersonalDetails';
 import darkTheme  from './mui-themes/DARK_THEMES';
 import  theme  from './mui-themes/LIGHT_THEMES';
 import YourPosts from './pages/profile/YourPosts';
 import { useAppSelector } from "./app/hook";
 import Draft from './pages/profile/Draft';
+import YourPostsUpdateBlog from './pages/profile/YourPostsUpdateBlog';
 
 
 
@@ -25,24 +26,13 @@ function App() {
   const [ blogFilter , setBlogFilter ] = useState<any>();
   const [ darkMode, setDarkMode ] = useState(false);
   const [ clearListings, setClearListings ] = useState(false);
-  
+  const updateSelector = useAppSelector(state => state.showUpdateSlice)
+
   function toggleLightDark() {
     setDarkMode(prev => !prev)
   }
 
-  const [ usersPosts, setUsersPost ] = useState<object[]>([]);
-  const usersProfilePosts = useAppSelector((state) => state.getWallPostState.value[0]); // blog content
-  useEffect(() => {
-    let local = JSON.parse(localStorage.getItem('userInfo') || ""); 
-    let helper: object[] = [];
-    if (usersProfilePosts){
-    Object.values(usersProfilePosts)
-      .filter((item: any )=> item.lastName === local.lastName 
-        ? helper.push(item)
-        : null)
-    }
-    setUsersPost(helper)
-  }, [ usersProfilePosts  ])
+
   
 
   return (
@@ -83,9 +73,13 @@ function App() {
 
           </Route> 
           <Route path='profile' element={ <Profile setBlogContent={setBlogContent} /> }>
-            <Route path='' element={ <YourPosts usersPosts={usersPosts} setBlogContent={setBlogContent}/> } /> 
+            <Route path='' element={ <YourPosts setBlogContent={setBlogContent} blogContent={blogContent}/> }>
+              <Route path='updatepost' element={ <YourPostsUpdateBlog   updateNumber={updateSelector.value.counter} /> } />
+            </Route> 
+
             <Route path='personal' element={ <PersonalDetails /> } /> 
             <Route path='draft' element={ <Draft /> } /> 
+
           </Route> 
         </Routes> 
 

@@ -182,11 +182,11 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
       </Box>
 
         {/* // CHANGE TO HAMBURGER */}
-       {!loggedInStatus && 
+       {!loggedInStatus.value && 
         <LoggedOutNav 
         />
        }
-        {loggedInStatus && 
+        {loggedInStatus.value && 
         <LoggedInNav 
         handleLogout={handleLogout}
         />

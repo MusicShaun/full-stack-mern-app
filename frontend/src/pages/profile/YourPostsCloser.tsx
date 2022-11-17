@@ -1,22 +1,41 @@
 
 import { Typography,Button,Box, Container, Paper } from "@mui/material";
-import { Link as RouterLink } from 'react-router-dom';
-import { useAppDispatch } from "../../app/hook";
+import axios from "axios";
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { falseBoolean } from "../../features/patheticBooleanSlice";
 import { showUpdateFalse } from "../../features/showUpdateSlice";
+import { deleteWallPosts, getWallPosts } from "../../features/wallPostsSlice";
 
 
 
 export default function YourPosts_Finish( ) {
 
   const dispatch = useAppDispatch();
-
-  function handleFinish() {
+  const navigate = useNavigate(); 
+  const finalMessage = useAppSelector(state => state.loaderState.value[0].message)
+  
+  async function handleFinish() {
     dispatch(falseBoolean())
     dispatch(showUpdateFalse())
-    console.log('Post update complete')
-  }
+    dispatch(deleteWallPosts())
 
+    setTimeout(() => {
+      getUpdatedWallPosts()
+    }, 50)
+
+  }
+async function getUpdatedWallPosts () {
+  try { 
+    const data = await axios.get('/api/bloggers', {
+    }) 
+    dispatch(getWallPosts(data.data))
+    console.log('Post update complete')
+    navigate('./')
+  } catch (error) {
+    console.log(error)
+  } 
+}
   return (
 
       <Container  
@@ -56,7 +75,7 @@ export default function YourPosts_Finish( ) {
                     sx={{
                       
                     }}>
-                Post successful!
+                {finalMessage}
               </Typography>
   
         <Box component="form"  sx={{

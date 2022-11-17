@@ -35,7 +35,7 @@ export default function LoggedOutNav( ) {
           <MenuIcon />
         </IconButton>
         <Menu
-          sx={{ mt: '45px' }}
+          sx={{ mt: '45px',}}
           id="menu-appbar"
           anchorEl={anchorElNav}
           anchorOrigin={{
@@ -50,9 +50,9 @@ export default function LoggedOutNav( ) {
           open={Boolean(anchorElNav)}
           onClose={handleCloseOutMenu}
         >
-        <MenuItem onClick={handleCloseOutMenu}>
-        <Button variant="text" size="large"
-              sx={{fontSize: 16, fontWeight: 600 }} 
+        <MenuItem onClick={handleCloseOutMenu}  sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant="outlined" size="large"
+              sx={{fontSize: 16, fontWeight: 600, width: '100%'}} 
               >
           <Link to='login' style={killLinkStyle}>Login</Link>  
         </Button>

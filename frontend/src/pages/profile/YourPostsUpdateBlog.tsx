@@ -2,20 +2,22 @@ import { Box, Button, TextField } from '@mui/material'
 import React , {useState, useRef, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import { updateBlog } from "../../actions/userActions";
-import { trueBoolean } from '../../features/patheticBooleanSlice';
+import { useNavigate, useOutletContext  } from 'react-router-dom';
+import { showUpdateFalse } from '../../features/showUpdateSlice';
 
 interface IProps  {
-  usersPosts: any[];
   updateNumber: number;
 }
 
-export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProps ) {
+export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
+  const {usersPosts} = useOutletContext<{ usersPosts: any[]}>();
   const [ tag, setTag ] = useState(usersPosts[updateNumber].tag);
   const [ tag2, setTag2 ] = useState(usersPosts[updateNumber].tag2);
   const [ header, setHeader ] = useState(usersPosts[updateNumber].header);
   const [ body, setBody ] = useState(usersPosts[updateNumber].body);
   const [ id, setId ] = useState(usersPosts[updateNumber]._id)
 
+  const navigate = useNavigate();
   const refFocus = useRef<any>(null);
   const dispatch = useAppDispatch();
   const finishSelector = useAppSelector(state => state.patheticBoolean);
@@ -24,8 +26,6 @@ export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProp
 
   async function handleUpdateBlog(event: React.FormEvent<HTMLFormElement>) { 
     event.preventDefault();
-    console.log('post button clicked')
-
     dispatch(updateBlog({
       id: id,
       tag: tag,
@@ -33,9 +33,9 @@ export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProp
       header: header,
       body: body
     }))
-
-    dispatch(trueBoolean())
   }
+
+
 
   useEffect(() => {
     if(refFocus.current?.focus) {
@@ -43,6 +43,10 @@ export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProp
       }
   }, [])
 
+  function handleCancel() {
+    navigate('../')
+    dispatch(showUpdateFalse())
+  }
 
   return (
     <Box component="form"  onSubmit={handleUpdateBlog}  sx={{
@@ -57,8 +61,6 @@ export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProp
 
     }}>
 
-  
-
   <Box sx={{
     display: 'flex',
     gap: '2rem',
@@ -68,20 +70,20 @@ export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProp
     <TextField
     inputRef={refFocus}
     onChange={(e) => setTag(e.target.value)}
+    defaultValue={usersPosts[updateNumber].tag}
     type="text"
     name="tag"
     variant="outlined"
-    label={usersPosts[updateNumber].tag}
     sx={{
       maxWidth: '150px',
     }}
   />
   <TextField
     onChange={(e) => setTag2(e.target.value)}
+    defaultValue={usersPosts[updateNumber].tag2}
     type="text"
     name="tag2"
     variant="outlined"
-    label={usersPosts[updateNumber].tag2}
     sx={{
       maxWidth: '150px',
     }}
@@ -90,10 +92,10 @@ export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProp
 <br />
   <TextField
     onChange={(e) => setHeader(e.target.value)}
+    defaultValue={usersPosts[updateNumber].header}
     type="text"
     name='header'
     variant="outlined"
-    label={usersPosts[updateNumber].header}
     sx={{
       width: '100%',
       minWidth: '300px',
@@ -102,9 +104,9 @@ export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProp
   <br />
   <TextField
     onChange={(e) => setBody(e.target.value)}
+    defaultValue={usersPosts[updateNumber].body}
     type="text"
     name="content"
-    label={usersPosts[updateNumber].body}
     variant="outlined"    
     multiline
     rows={10}
@@ -124,6 +126,16 @@ export default function YourPosts_UpdateBlog({usersPosts, updateNumber, }: IProp
       
       >
     POST
+  </Button>
+  <Button onClick={handleCancel}
+          variant="contained" type="submit" size="large" 
+          sx={{
+            backgroundColor: 'error.main', 
+            fontWeight: 600,
+          }}
+      
+      >
+    Cancel
   </Button>
 </Box>
   )
