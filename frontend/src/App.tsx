@@ -38,10 +38,12 @@ function App() {
   return (
   <ThemeProvider theme={darkMode ? darkTheme : theme}>
     <Wrapper 
-      style={{width: `${onlyWidth}px`, 
-      height: window.location.href.includes('login' || 'register' || 'post' || 'profile/personal')
-        ? `${onlyHeight}px` 
-        : '100%'
+      style={{
+        width: `${onlyWidth}px`, 
+        height: window.location.href.includes('login' || 'register' || 'post' || 'profile/personal')
+          ? `${onlyHeight}px` : '100%',
+        overflowY: window.location.href.includes('login' || 'register' || 'post' || 'profile/personal')
+        ? 'hidden' : 'scroll' 
         }}>
       <Router>
 
