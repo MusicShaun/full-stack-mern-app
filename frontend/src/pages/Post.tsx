@@ -6,15 +6,11 @@ import { useAppDispatch, useAppSelector } from '../app/hook';
 import PostFinish from "../components/PostFinish";
 import { postBlog } from "../actions/userActions";
 import Loader from "../components/Loader";
-import { useWindowHeight} from "@react-hook/window-size";
+import { useWindowSize} from "@react-hook/window-size";
+import usePerfectWindowHeight from "../hooks/usePerfectWindowHeight";
 
 export default function Post() {
-
-  const onlyHeight = useWindowHeight(); /// ridiculous setup for perfect height
-  const [setHeight, setIt] = useState(onlyHeight - 80);
-  useEffect(() => {
-    setIt(onlyHeight - 80)
-  }, [onlyHeight])
+  const [onlyWidth, onlyHeight] = useWindowSize(); 
 
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
   const refFocus = useRef<any>(null);
@@ -67,7 +63,8 @@ export default function Post() {
         justifyContent: 'center',
         alignItems: 'center',
         bgcolor: 'background',
-        height: `${setHeight}px`,
+        height: `${usePerfectWindowHeight(onlyHeight)}px`,
+        mt: 10
         
     }}>
 
@@ -77,11 +74,11 @@ export default function Post() {
 
       <Paper elevation={3} sx={{
         position: 'relative',
-        width: `80%`, 
+        width: onlyWidth > 500 ? `80%` : '95%', 
         minWidth: '350px',
         height: '90%',
         minHeight: '600px',
-        p: 3, 
+        p: onlyWidth > 500 ? 3 : 0, 
         borderRadius: 3, 
         color: '#1A2027', 
         display: 'flex', 
@@ -115,7 +112,7 @@ export default function Post() {
             flexDirection: 'column',
             alignItems: 'center',
             minWidth: '300px',
-            width: '70%',
+            width: onlyWidth > 500 ? `70%` : '95%', 
           }}>
 
         <Box sx={{
@@ -134,6 +131,9 @@ export default function Post() {
           sx={{
             maxWidth: '150px',
           }}
+          inputProps={{
+            style: { padding: onlyWidth < 500 ? 10 : '16.5px 14px' },
+          }}
         />
         <TextField
           required
@@ -144,6 +144,9 @@ export default function Post() {
           sx={{
             maxWidth: '150px',
           }}
+          inputProps={{
+            style: { padding: onlyWidth < 500 ? 10 : '16.5px 14px' },
+          }}
         />
       </Box>
       <br />
@@ -153,6 +156,9 @@ export default function Post() {
           name='header'
           label="Catchy heading"
           variant="outlined"
+          inputProps={{
+            style: { padding: onlyWidth < 500 ? 10 : '16.5px 14px' },
+          }}
           sx={{
             width: '100%',
             minWidth: '300px',

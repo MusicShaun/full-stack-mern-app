@@ -57,6 +57,12 @@ const theme: any = createTheme({
       fontWeight: '700',
       lineHeight: '1.33',
     },
+    h6: {
+      fontSize: '1.3rem',
+      '@media (max-width:600px)': {
+        fontSize: '1rem',
+      },
+    },
     body1: {
       fontSize: '1rem',
       lineHeight: '1.5',

@@ -12,10 +12,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import {  useEffect, useState} from 'react';
+import {  useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hook';
 import { login } from '../actions/userActions';
 import { useWindowHeight } from '@react-hook/window-size';
+import usePerfectWindowHeight from '../hooks/usePerfectWindowHeight';
 
 function Copyright(props: any) {
   return (
@@ -35,13 +36,8 @@ function Copyright(props: any) {
 
 
 export default function Login(  )  {
+  const onlyHeight = useWindowHeight();
 
-  const onlyHeight = useWindowHeight(); /// ridiculous setup for perfect height
-  const [setHeight, setIt] = useState(onlyHeight - 80);
-  useEffect(() => {
-    setIt(onlyHeight - 80)
-  }, [onlyHeight])
-  
   let navigate = useNavigate();
   const dispatch = useAppDispatch()
 
@@ -70,12 +66,13 @@ export default function Login(  )  {
   return (
       <Container  maxWidth="xs"
         sx={{
-          height: `${setHeight}px`,
+          height: `${usePerfectWindowHeight(onlyHeight)}px`,
+          mt: 10,
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
         {/* {loading && <Loader /> } */}
         {/* {error && <Error setError={setError} />} */}

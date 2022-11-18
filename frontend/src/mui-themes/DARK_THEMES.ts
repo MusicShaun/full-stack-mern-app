@@ -19,7 +19,7 @@ function createShadow(...px: number[]) {
 const darkTheme = createTheme({
   shadows: [
     'none',
-    `2px 2px 3px ${grey[300]} `, //header
+    `2px 2px 3px ${grey[900]} `, //header
     `#1a202 -2px -3px 1px 0px, rgb(0,157, 255, 15%) 0px 3px 3px 2px, rgb(0,0,0,20%) 3px 4px 4px 0px`, //card 
     '#1a202 -2px -3px 0px 0px, rgb(0,0, 0, 20%) 2px 5px 5px -3px, #1a202 -20px 19px 10px 2px', //card hover
     'rgb(0,0, 0, 20%) 2px 5px 5px -3px, #1a202  -12px 12px 6px 2px', //button hover left
@@ -60,6 +60,12 @@ const darkTheme = createTheme({
       fontSize: '1.125rem',
       fontWeight: '700',
       lineHeight: '1.33',
+    },
+    h6: {
+      fontSize: '1.3rem',
+      '@media (max-width:600px)': {
+        fontSize: '1rem',
+      },
     },
     body1: {
       fontSize: '1rem',

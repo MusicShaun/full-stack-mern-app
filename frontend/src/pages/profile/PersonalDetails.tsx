@@ -5,8 +5,11 @@ import { useAppDispatch, useAppSelector } from '../../app/hook';
 import Loader from '../../components/Loader';
 import PostFinish from '../../components/PostFinish';
 import DetailSlots from './PersonalDetailsSlots';
+import {  useWindowSize} from "@react-hook/window-size";
+import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
 
 export default function PersonalDetails() {
+  const [ onlyWidth, onlyHeight] = useWindowSize(); 
 
   const [ localData , setLocalData ] = useState<any>({});
   const [ firstName, setFirstName ] = useState(localData.firstName);
@@ -42,13 +45,14 @@ export default function PersonalDetails() {
   }
 
   return (
-    <Container  maxWidth='xl'
-    sx={{position: 'relative', 
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        bgcolor: 'primary.contrastText',
+    <Container  
+        maxWidth='xl'
+      sx={{position: 'relative', 
+          height: `${usePerfectWindowHeight(onlyHeight)}px`,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          bgcolor: 'primary.contrastText',
         }}> 
   <CssBaseline />
 
@@ -62,7 +66,7 @@ export default function PersonalDetails() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      p: '2rem',
+      p: onlyWidth < 600 ? 0 : '2rem',
       height: 'auto',
       maxWidth: '1200px',
       width: '100%',
@@ -80,8 +84,9 @@ export default function PersonalDetails() {
       Personal Details
     </Typography>
 
-    <Box component="form" noValidate sx={{ mt: 3,}} >
-    <Grid container >
+    <Box component="form" noValidate sx={{width: '100%',}} >
+    <Grid container sx={{flexWrap: 'none', flexDirection: 'column', 
+        }}>
 
       <DetailSlots 
         setFirstName={setFirstName}

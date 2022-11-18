@@ -14,7 +14,8 @@ import {  useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch , useAppSelector } from '../app/hook';
 import { registerUser } from '../actions/userActions';
-
+import usePerfectWindowHeight from '../hooks/usePerfectWindowHeight';
+import { useWindowHeight } from '@react-hook/window-size';
 
 function Copyright(props: any) {
   return (
@@ -31,7 +32,7 @@ function Copyright(props: any) {
 
 
 export default function Register() {
-
+  const onlyHeight = useWindowHeight(); 
   let navigate = useNavigate();
   const dispatch = useAppDispatch();
   const loggedInStatus = useAppSelector((state) => state.loggedInState);
@@ -59,12 +60,14 @@ export default function Register() {
 
   return (
       <Container  maxWidth="xs" 
-                sx={{position: 'relative', 
-                    height: 'calc(100vh - 136px)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    }}> 
+        sx={{
+          position: 'relative', 
+          height: `${usePerfectWindowHeight(onlyHeight)}px`,
+          mt: 10,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+            }}> 
         <CssBaseline />
         <Box
           sx={{

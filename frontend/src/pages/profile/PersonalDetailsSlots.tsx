@@ -47,16 +47,17 @@ export default function DetailSlots(
   return (
     <>
     <Grid item xs={12} 
-          sx={{display: 'flex', 
+          sx={{
+              display: 'flex', 
               flex: 1 , 
-              padding: 2,
+              height: '80px',
+              minHeight: '80px',
               borderBottom: `1px solid ${grey[300]}`,
               alignItems: 'center',
-              
                }}>
     
 
-    <Typography variant='h6' sx={{color: 'text.secondary', flex: 0.3,fontWeight: '700'}} 
+    <Typography variant='h6' sx={{color: 'text.secondary', flex: 0.3, fontWeight: '700'}} 
       >{attribute}
     </Typography>
 
