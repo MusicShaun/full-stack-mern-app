@@ -193,7 +193,7 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
         />
        }
 
-    {!updateSelector.value.bool &&
+    {!updateSelector.value.bool && window.location.href.includes('profile') && 
       <AppBar position="fixed"  
               sx={{display: { xs: 'flex', md: 'none' }, mt: '80px', }} >
         <Container maxWidth={false} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
