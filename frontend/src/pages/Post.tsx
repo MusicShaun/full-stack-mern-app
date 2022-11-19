@@ -107,7 +107,7 @@ export default function Post() {
             </Typography>
 
       <Box component="form"  onSubmit={handleBlogPost}  sx={{
-            marginTop: 4,
+            marginTop: onlyWidth > 500 ? 4 : 2,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -179,7 +179,6 @@ export default function Post() {
           }}
         />
         <br />
-        <br />
         <Button 
                 variant="contained" color="primary" type="submit" size="large" 
                 sx={{
@@ -191,8 +190,8 @@ export default function Post() {
           POST
         </Button>
       </Box>
-      <Button variant='outlined'>ADD SAVE AS DRAFT BUTTON</Button>
-      <Button variant='outlined'>ADD TO LOCAL STORAGE IN CASE OF PAGE REFRESH </Button>
+      {/* <Button variant='outlined'>ADD SAVE AS DRAFT BUTTON</Button> */}
+      {/* <Button variant='outlined'>ADD TO LOCAL STORAGE IN CASE OF PAGE REFRESH </Button> */}
       </Paper>
 
   </Container>

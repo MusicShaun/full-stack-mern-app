@@ -57,7 +57,7 @@ export default function DetailSlots(
                }}>
     
 
-    <Typography variant='h6' sx={{color: 'text.secondary', flex: 0.3, fontWeight: '700'}} 
+    <Typography variant='h6' sx={{color: 'text.secondary', flex: 0.3, fontWeight: '700', minWidth: '85px'}} 
       >{attribute}
     </Typography>
 
