@@ -55,7 +55,7 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
     useEffect(() => {
       function escape(e: any){
         if (e.key === 'Escape'){
-          navigate('./')
+          // navigate('./') // IS THERE A REASON I HAD THIS?
           dispatch(showUpdateFalse())
         }
       }
@@ -86,19 +86,23 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
 
 
   return (
-    <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column'}} >
+    <Box sx={{width: '92%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column'}} >
 
   {loading && loading.booly && <Loader /> }
   {finishSelector.value && <YourPostsFinish />}
 
-    <Typography variant='h1' textAlign='center' sx={{filter: finishSelector.value ? 'blur(5px)' : 'null', mt: 4, mb: 4}}>
+    <Typography variant='h1' textAlign='center' 
+        sx={{filter: finishSelector.value ? 'blur(5px)' : 'null', 
+            mt: {xs: 1, md: 4}, 
+            mb: {xs: 1, md: 4},
+            }}>
         {usersPosts.length > 0 ? 'Your Posts' : 'You havent made any posts'}
       </Typography>
 
       <Box sx={{
               display: 'grid',
-              gap: 4,
-              mb: 10,
+              gap:!updateSelector.value.bool ? 4 : 0,
+              mb: !updateSelector.value.bool ? 10 : 0,
               transition: 'all 5s',
               gridTemplateColumns: `repeat(auto-fit, minmax(min(100%/1, max(300px, 100%/3)), 1fr))`
              , width: '100%'

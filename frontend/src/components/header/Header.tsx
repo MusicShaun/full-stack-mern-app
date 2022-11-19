@@ -43,6 +43,7 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
   const loggedInStatus = useAppSelector((state) => state.loggedInState);
   const filterRef = useRef<HTMLInputElement>(null);
   const [ inputValue , setInputValue ] = useState('');
+  const updateSelector = useAppSelector(state => state.showUpdateSlice)
 
   useEffect(() => {if (filterRef.current){filterRef.current.focus()}},[])
 
@@ -191,6 +192,28 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
         handleLogout={handleLogout}
         />
        }
+
+    {!updateSelector.value.bool &&
+      <AppBar position="fixed"  
+              sx={{display: { xs: 'flex', md: 'none' }, mt: '80px', }} >
+        <Container maxWidth={false} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+        <Button  onClick={() => navigate('/profile')}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              > Post        
+        </Button>
+        <Button  
+                onClick={() => navigate('/profile/personal')}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >Profile        
+        </Button>
+        <Button  onClick={() => navigate('/profile/draft')}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >Draft        
+        </Button>
+
+        </Container>
+      </AppBar>
+      }
 
 
       </Container>

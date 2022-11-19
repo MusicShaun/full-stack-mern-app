@@ -1,7 +1,7 @@
-import { CssBaseline, Container, Box, Stack, Divider, Button, AppBar, Typography } 
+import { CssBaseline, Container, Box, Stack, Divider,Typography } 
 from "@mui/material";
 import React from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
 import { useWindowSize} from "@react-hook/window-size";
 import ProfileMUIButtons from "./ProfileMUIButtons";
@@ -9,7 +9,6 @@ import ProfileMUIButtons from "./ProfileMUIButtons";
 
 export default function Profile() {
   const [onlyWidth, onlyHeight] = useWindowSize(); 
-  const navigate = useNavigate();
 
 return (
   <React.Fragment>
@@ -17,11 +16,12 @@ return (
     <Container maxWidth="lg"
       sx={{
         minHeight: `${usePerfectWindowHeight(onlyHeight)}px`,
-        mt: 10,
+        mt: {xs: 18, md : 10},
         display: 'flex',
         bgcolor: 'background',
         flexDirection: {xs: 'column', md: 'row' },
         p: onlyWidth > 600 ? "lg" : 0,
+        transition: 'all 0.1s', ///// WHY ARE THERE WEIRD SLOW TRANSITIONS?!
       }}>
       <Box sx={{
         width: '30%',
@@ -50,35 +50,10 @@ return (
       </Box>
 
 
-      <AppBar position="fixed"  
-              sx={{display: { xs: 'flex', md: 'none' }, mt: '80px',}} >
-        <Container maxWidth={false} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-        <Button  onClick={() => navigate('/profile')}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-        Post        
-        </Button>
-        <Button  
-                onClick={() => navigate('/profile/personal')}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-        Profile        
-        </Button>
-        <Button  onClick={() => navigate('/profile/draft')}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-        Draft        
-        </Button>
-
-        </Container>
-      </AppBar>
-
-
-
       <Box sx={{
         position: 'relative',
         height: '100%',
-        maxWidth: {sx: '95%', md: '100%'},
+        maxWidth: {sm: '95%', md: '100%'},
         width: '100%',
         flex: '1',
         display: 'flex',

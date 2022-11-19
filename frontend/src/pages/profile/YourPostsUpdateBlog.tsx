@@ -21,6 +21,7 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
   const refFocus = useRef<any>(null);
   const dispatch = useAppDispatch();
   const finishSelector = useAppSelector(state => state.patheticBoolean);
+  const updateSelector = useAppSelector(state => state.showUpdateSlice)
 
   useEffect(() => { setId(usersPosts[updateNumber]._id)}, [usersPosts, updateNumber])
 
@@ -47,10 +48,19 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
     navigate('../')
     dispatch(showUpdateFalse())
   }
+  // escapes search results // TURN THIS INTO A HOOK      
+  useEffect(() => {
+    function escape(e: any){
+      if (e.key === 'Escape'){
+        handleCancel()}
+    }
+    window.addEventListener('keyup', (e) => escape(e)) ;
+    return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
+  }, [] )
 
   return (
     <Box component="form"  onSubmit={handleUpdateBlog}  sx={{
-      marginTop: 4,
+      marginTop: !updateSelector.value.bool ? 4 : 0,
       position: 'relative',
       display: 'flex',
       flexDirection: 'column',
@@ -116,7 +126,7 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
     }}
   />
   <br />
-  <br />
+
   <Button 
           variant="contained" color="primary" type="submit" size="large" 
           sx={{

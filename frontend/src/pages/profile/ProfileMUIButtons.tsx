@@ -1,12 +1,16 @@
 import { Paper, styled, Button } from "@mui/material";
 import shadows from "@mui/material/styles/shadows";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../app/hook";
+import { showUpdateFalse } from "../../features/showUpdateSlice";
 
 interface IProps {
   text: string;
   destination: string;
 }
 export default function ProfileMUIButtons( {text, destination} : IProps) {
+  
+  const dispatch = useAppDispatch();
   
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -18,6 +22,10 @@ export default function ProfileMUIButtons( {text, destination} : IProps) {
   
   const navigate = useNavigate();
 
+  function handleNavigationButton() {
+    navigate(`${destination}`)
+    dispatch(showUpdateFalse())
+  }
   
   return (
     <Button sx={{height: '15%', 
@@ -31,7 +39,7 @@ export default function ProfileMUIButtons( {text, destination} : IProps) {
                 '&:hover': {
                   background: "lightgrey"}  
                  }} 
-      onClick={() => navigate(`${destination}`)}>
+      onClick={handleNavigationButton}>
       <Item sx={{display: 'flex',  
                 height: '100%', 
                 width: '100%', 
