@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom';
 const killLinkStyle = {
   textDecoration: 'none',
   underline: 'none',
-  color: 'inherit'
+  color: 'inherit',
+  width: '100%', height: '100%'
 }
 
 

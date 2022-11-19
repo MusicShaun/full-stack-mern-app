@@ -7,7 +7,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 const killLinkStyle = {
   textDecoration: 'none',
   underline: 'none',
-  color: 'inherit'
+  color: 'inherit',
+  width: '100%', height: '100%'
 }
 
 
@@ -54,7 +55,7 @@ export default function LoggedOutNav( ) {
         <Button variant="outlined" size="large"
               sx={{fontSize: 16, fontWeight: 600, width: '100%'}} 
               >
-          <Link to='login' style={killLinkStyle}>Login</Link>  
+          <Link to='login' style={killLinkStyle} >Login</Link>  
         </Button>
         </MenuItem>
         <MenuItem onClick={handleCloseOutMenu}>

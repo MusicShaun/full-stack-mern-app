@@ -2,6 +2,8 @@
   font-family: "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue"; 
 }
 html {
+  background-color: rgb(237, 236, 236);
+  overflow: hidden;
   box-sizing: border-box;
 }
 html::after {

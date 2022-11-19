@@ -91,7 +91,8 @@ async function getPosts()  {
                 justifyContent: 'center',
                 alignItems: 'center',
                 pt: 10,
-                mb: 12
+                mb: 12,
+                mt: 2
                 }}>
             <Typography variant='body2' 
                   sx={{
