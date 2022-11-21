@@ -2,26 +2,27 @@ import Card from "../components/blog_posts/Card"
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import * as React from 'react';
-import { Typography, Box, Button } from '@mui/material';
+import { Typography, Box, Button, Paper } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useAppDispatch } from "../app/hook";
 import { deleteWallPosts, getWallPosts } from "../features/wallPostsSlice";
 import Footer from "../components/Footer";
+import WallBtn from "../components/WallBtn";
 
 type IProps = { 
   setBlogContent: React.Dispatch<React.SetStateAction<any | null>>;
   blogContent: any | null;
   blogFilter: any;
+  setBlogFilter: React.Dispatch<React.SetStateAction<any | null>>;
   clearListings: boolean;
   setClearListings: React.Dispatch<React.SetStateAction<any | null>>;
 }
 
-export default function Wall( {setBlogContent, blogContent, blogFilter, clearListings , setClearListings}: IProps) {
+export default function Wall( {setBlogContent, blogContent, blogFilter, setBlogFilter, clearListings , setClearListings}: IProps) {
 
   const [ counter, setCounter ] = useState<number>(0);
   const dispatch = useAppDispatch();
-  
   function checkBodies() {//TRIGGERS RERENDER ON CARD COMPONENT
     setCounter(prev => prev += 1 )
   }
@@ -33,9 +34,12 @@ async function getPosts()  {
     const data = await axios.get('/api/bloggers', {
       signal: controller.signal
     }) 
-    dispatch(getWallPosts(data.data))
-    setBlogContent(data.data)
-
+    let helper = data.data.filter(function( obj:any ) { // remove any that belong with the drafts
+      return obj.isDraft !== true || obj.isDraft === null;
+    });
+    dispatch(getWallPosts(helper))
+    setBlogContent(helper)
+    console.log('Blog content retrieved')
     return () => {
       controller.abort()
     }
@@ -60,17 +64,30 @@ async function getPosts()  {
     return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
   }, [setClearListings] )
 
-  function handleClearListings() {
+  function handleClearListings() { 
     setClearListings(false)
   }
 
 
+  function handleTagClick(str: string) { // SEARCH VIA TAG
+    setClearListings(true)
+    let helper = [];
+    for (let i =0; i < blogContent.length; i++) {
+      if (blogContent[i].tag.toString().toLowerCase().includes(str.toLowerCase()) || 
+      blogContent[i].tag2.toString().toLowerCase().includes(str.toLowerCase())) {
+        helper.push(blogContent[i])
+      }
+    }
+    setBlogFilter(helper)
+    helper = [];
+  }
+
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth="lg" sx={{minHeight: 'calc(100vh - 136px)', overflowY: 'scroll'}}>
+      <Container maxWidth="lg" sx={{minHeight: 'calc(100vh - 136px)', mt: '80px'}}>
         <Box sx={{ 
-            transition: 'background-color 0.5s',
+            transition: 'background-color 0.2s',
             position: 'relative'
           }}>
             
@@ -115,34 +132,83 @@ async function getPosts()  {
             </Typography>
           </Box>
 
-    {blogContent &&  
+    {blogContent &&  // PINNED CONTENT - FROM [0] & [1] 
+      <Box sx={{
+        display: clearListings ? 'none':'grid',
+        gap: 4,
+        mb: 10,
+        gridTemplateColumns: `repeat(auto-fit, minmax(min(100%/1, max(300px, 100%/3)), 1fr))`  
+      }}>
+      {!clearListings && blogContent 
+        .filter((item: any, index: number) => index <= 1)
+        .map((item: object) => {
+          return <Card  
+                checkBodies={checkBodies}
+                counter={counter}
+                content={item}
+                pinned={true}
+              />
+            }
+          )
+        }
+      </Box>
+    }  
+    {blogContent &&  // REMAINING CONTENT
+      <Box sx={{ //COLUMN 1111111
+        display: 'flex',
+        columnGap: {xs: '0', md: '80px'},
+        gridTemplateColumns: '1fr 380px'}}>
         <Box sx={{
-              display: 'grid',
-              gap: 4,
-              mb: 10,
-              transition: 'all 5s',
-              gridTemplateColumns: `repeat(auto-fit, minmax(min(100%/1, max(300px, 100%/3)), 1fr))`
-             
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+          mb: 10,
+          mt: clearListings ? 0 : 4,
+          maxWidth: '800px'
         }}>
-      
+        <Typography variant='h1' sx={{pl: 2}}>
+          Posts 
+        </Typography>
         {clearListings && blogFilter.length === 0 
         ? <Typography variant='h1' >Search has 0 results</Typography>
         :
-        (!clearListings ? [...blogContent] : [...blogFilter]) 
-          .map((article: any, index) => {
-          return <Card  key={index} 
-                        checkBodies={checkBodies} 
-                        counter={counter} 
-                        tag={article.tag}
-                        tag2={article.tag2}
-                        header={article.header}
-                        body={article.body}
-                        date={article.createdAt}
-                        name={[article.firstName, article.lastName]}
-                        />
+        (!clearListings ? 
+          [...blogContent].filter((item: any, index: number) => index > 1) 
+          : [...blogFilter])
+          .reverse().map((item: object) => {
+            return <Card  
+            checkBodies={checkBodies}
+            counter={counter}
+            content={item}
+            pinned={false}
+          />
           })
         }
         </Box>
+        <Box sx={{ display: {xs: 'none', md: 'flex'}, width: '30%'}}>
+          <Paper //COLUMN 2222222
+            sx={{
+              display: {xs: 'none', md: 'flex'},
+              height: '300px',
+              width: '100%',
+              flexWrap: 'wrap',
+              borderRadius: '20px',
+              border: '1px solid lightgrey',
+              flexDirection: 'column',
+            }}
+          > 
+          <Typography sx={{pl: 2, pt: 2, mb: 2, color: 'text.secondary', fontWeight: 600}}>Filter by popular tag</Typography>
+            <Box sx={{pl: 2, display: 'flex', flexWrap: 'wrap'}}>
+              <div onClick={() => handleTagClick('ninja')}><WallBtn text={'Ninja'} /></div>
+              <div onClick={() => handleTagClick('MUI')}><WallBtn text={'MUI'} /></div>
+              <div onClick={() => handleTagClick('twitter')}><WallBtn text={'twitter'} /></div>
+              <div onClick={() => handleTagClick('Development')}><WallBtn text={'Development'} /></div>
+              <div onClick={() => handleTagClick('blog')}><WallBtn text={'blog'} /></div>
+              <div onClick={() => handleTagClick('How To')}><WallBtn text={'How To'} /></div>
+            </Box>
+          </Paper>
+        </Box>
+      </Box>
       }
 
 

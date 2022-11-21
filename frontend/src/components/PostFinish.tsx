@@ -9,7 +9,7 @@ interface IProps  {
 
 export default function PostFinish( {setPostFinish}:IProps) {
 
-  const loading = useAppSelector((state: any) => state.loaderState.value[0]);
+  const loading = useAppSelector((state: any) => state.loaderState.value);
   
   async function finishButton(){
     setPostFinish(false)
@@ -67,7 +67,7 @@ export default function PostFinish( {setPostFinish}:IProps) {
   
           <Button 
                   onClick={finishButton}
-                  component={RouterLink} to='/wall' 
+                  component={RouterLink} to='./' 
                   variant="contained" color="primary" type="submit" size="large" 
                   sx={{
                     backgroundColor: 'primary.light', 

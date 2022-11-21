@@ -23,8 +23,9 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
   const navigate = useNavigate();
   const finishSelector = useAppSelector(state => state.patheticBoolean);
   const updateSelector = useAppSelector(state => state.showUpdateSlice)
-  const loading = useAppSelector((state: any) => state.loaderState.value[0]);
-  const wallPostsSelector = useAppSelector(state => state.getWallPostState.value[0])
+  const loading = useAppSelector((state: any) => state.loaderState.value);
+  const wallPostsSelector = useAppSelector(state => state.getWallPostState.value)
+
 
   async function handleUpdaterButton(index: number) {
     navigate('updatepost')
@@ -38,8 +39,8 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
       setTimeout(() => { // GET REQ WAS OVERLAPPING DELETE REQ
         getUpdatedWallPosts()
       }, 100)
-    
   }
+
   async function getUpdatedWallPosts() {
     try { 
       const data = await axios.get('/api/bloggers', {
@@ -55,7 +56,6 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
     useEffect(() => {
       function escape(e: any){
         if (e.key === 'Escape'){
-          // navigate('./') // IS THERE A REASON I HAD THIS?
           dispatch(showUpdateFalse())
         }
       }
@@ -79,7 +79,8 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
         .filter((item: any )=> item.lastName === local.lastName 
           ? helper.push(item)
           : null)
-      }
+      } 
+
       setUsersPost(helper)
     }, [ wallPostsSelector ])
 
@@ -100,24 +101,19 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
       </Typography>
 
       <Box sx={{
-              display: 'grid',
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
               gap:!updateSelector.value.bool ? 4 : 0,
               mb: !updateSelector.value.bool ? 10 : 0,
-              transition: 'all 5s',
-              gridTemplateColumns: `repeat(auto-fit, minmax(min(100%/1, max(300px, 100%/3)), 1fr))`
-             , width: '100%'
               }}>
 
       {usersPosts && !updateSelector.value.bool && 
         usersPosts.map((item: any, index: number) => {
           return (<Box sx={{display: 'flex', flexDirection: 'column'}}>
                 <Card  key={index} 
-                tag={item.tag}
-                tag2={item.tag2}
-                header={item.header}
-                body={item.body}
-                date={item.createdAt}
-                name={item.firstName}
+                content={item}
+                pinned={false}
                 
                 />
                 <Box  key={index + 1000} sx={{display: 'flex', justifyContent: 'space-between', mb: 6, mt: 1, }}>

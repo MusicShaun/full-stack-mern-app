@@ -1,11 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface WallType {
-  value: any[];
+  value: object[];
 }
-// interface TheThings {
-//   data: any  
-// }
 const initialState : WallType = {
   value: [],
 }
@@ -15,10 +12,10 @@ export const wallPostSlice = createSlice({
   initialState,
   reducers: {
     getWallPosts: (state, action: PayloadAction<any>) => {
-      state.value.push(action.payload)
+      state.value = {...action.payload}
     },
     deleteWallPosts: (state) => {
-      state.value.splice(0, state.value.length)
+      state.value = [{}];
     },
   }
 })

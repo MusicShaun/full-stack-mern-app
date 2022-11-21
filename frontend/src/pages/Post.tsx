@@ -15,7 +15,7 @@ export default function Post() {
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
   const refFocus = useRef<any>(null);
   const dispatch = useAppDispatch();
-  const loading = useAppSelector((state: any) => state.loaderState.value[0]);
+  const loading = useAppSelector((state: any) => state.loaderState.value);
 
   // get first and last names from store
   const userCredentialsSelector = useAppSelector((state) => state.loginUserState.value)
@@ -41,14 +41,28 @@ export default function Post() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    dispatch(postBlog({
-      tag: formData.get('tag')!,
-      tag2: formData.get('tag2')!,
-      header:  formData.get('header')!,
-      body:  formData.get('content')!,
-      firstName:  firstName,
-      lastName:  lastName
-    }))
+    if (document.activeElement!.id === 'post') {
+      dispatch(postBlog({
+        tag: formData.get('tag')!,
+        tag2: formData.get('tag2')!,
+        header:  formData.get('header')!,
+        body:  formData.get('content')!,
+        firstName:  firstName,
+        lastName:  lastName,
+        isDraft: false
+      }))
+    }
+    else if (document.activeElement!.id === 'draft') {
+      dispatch(postBlog({
+        tag: formData.get('tag')!,
+        tag2: formData.get('tag2')!,
+        header:  formData.get('header')!,
+        body:  formData.get('content')!,
+        firstName:  firstName,
+        lastName:  lastName,
+        isDraft: true,
+      }))
+    }
     setPostFinish(true)
   }
 
@@ -179,19 +193,21 @@ export default function Post() {
           }}
         />
         <br />
-        <Button 
-                variant="contained" color="primary" type="submit" size="large" 
-                sx={{
-                  backgroundColor: 'primary.light', 
-                  fontWeight: 600,
-                }}
-            
-            >
-          POST
-        </Button>
+        <Box>
+          <Button id='post'
+                  variant="contained" color="primary" type="submit" size="large" 
+                  sx={{
+                    backgroundColor: 'primary.light', 
+                    fontWeight: 600,
+                  }}>
+            POST
+          </Button>
+          <Button variant='outlined' id='draft' type="submit">ADD draft btn</Button>
+          <Button variant='outlined' id='delete'>ADD delete </Button>
+        </Box>
       </Box>
-      {/* <Button variant='outlined'>ADD SAVE AS DRAFT BUTTON</Button> */}
-      {/* <Button variant='outlined'>ADD TO LOCAL STORAGE IN CASE OF PAGE REFRESH </Button> */}
+
+
       </Paper>
 
   </Container>

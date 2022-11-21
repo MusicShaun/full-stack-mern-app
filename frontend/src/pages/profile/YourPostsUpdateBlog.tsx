@@ -32,7 +32,8 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
       tag: tag,
       tag2: tag2,
       header: header,
-      body: body
+      body: body,
+      isDraft: false
     }))
   }
 

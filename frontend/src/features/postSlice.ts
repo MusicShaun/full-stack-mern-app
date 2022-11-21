@@ -10,6 +10,7 @@ interface PostType {
   body:  FormDataEntryValue;
   firstName:  string;
   lastName: string;
+  isDraft: boolean;
 }
 const initialState: Poster = {
   value: [],

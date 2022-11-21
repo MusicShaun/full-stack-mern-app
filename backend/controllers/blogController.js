@@ -16,8 +16,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 const blogEntry = asyncHandler(async(req, res) => {
   console.log('making a blog post')
 
-  const {firstName, lastName, tag, tag2, header, body} = req.body;
-
+  const {firstName, lastName, tag, tag2, header, body, isDraft} = req.body;
   const newBlog = new Blogger({
     user: req.user._id,
     firstName,
@@ -26,6 +25,7 @@ const blogEntry = asyncHandler(async(req, res) => {
     tag2,
     header,
     body,
+    isDraft
   });
   const createdBlog = await newBlog.save()
   res.status(201).json(createdBlog)
@@ -50,7 +50,7 @@ const getBlogById = asyncHandler(async (req, res) => {
 
 
 const updateBlog = asyncHandler(async (req,res) => {
-  const {tag, tag2, header, body } = req.body;
+  const {tag, tag2, header, body, isDraft} = req.body;
   const blog = await Blogger.findById(req.params.id);
 
   if (blog) {
@@ -58,7 +58,7 @@ const updateBlog = asyncHandler(async (req,res) => {
     blog.tag2 = tag2;
     blog.header = header; 
     blog.body = body; 
-
+    blog.isDraft = isDraft; 
     const updatedBlog = await blog.save(); 
     res.json(updatedBlog)
   } else {

@@ -8,6 +8,7 @@ import updateUserState from '../features/updateUserSlice';
 import patheticBoolean from '../features/patheticBooleanSlice';
 import showUpdateSlice from '../features/showUpdateSlice';
 import loaderState from '../features/loaderSlice';
+import getDraftPostsState from '../features/draftPostsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     registerState: registerState,
     postState: postState,
     getWallPostState: getWallPostState, 
+    getDraftPostsState: getDraftPostsState,
     updateUserState: updateUserState, 
     patheticBoolean: patheticBoolean,
     showUpdateSlice: showUpdateSlice,
@@ -34,3 +36,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
+
+

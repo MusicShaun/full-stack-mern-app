@@ -1,22 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface second {
-  value: first[]; 
-}
-interface first { 
   booly: boolean;
   message: string; 
 }
-const initialState: second = {
-  value: [],
+
+const initialState = {
+  value: {
+    booly: false,
+    message: ''
+  },
 }
 
 export const loaderSlice = createSlice({
   name: 'loginUserState',
   initialState,
   reducers: {
-    loaderTrue: (state, action: PayloadAction<first>) => {
-      state.value.splice(0 , 1,  action.payload)
+    loaderTrue: (state, action: PayloadAction<second>) => {
+      state.value = {...action.payload}
     },
   }
 })

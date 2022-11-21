@@ -99,9 +99,9 @@ const theme: any = createTheme({
     error: {
       main: '#d32f2f',
     },
-    // success: {
-    //   main: '',
-    // }
+    success: {
+      main: '#4caf50',
+    }
   },
 
 });

@@ -208,7 +208,7 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
         </Button>
         <Button  onClick={() => navigate('/profile/draft')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
-              >Draft        
+              >Drafts        
         </Button>
 
         </Container>

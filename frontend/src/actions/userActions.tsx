@@ -91,8 +91,9 @@ type MakePost = {
   body:  FormDataEntryValue;
   firstName:  string;
   lastName:  string;
+  isDraft :boolean;
 }
-export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost) => async (dispatch: any) => {
+export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : MakePost) => async (dispatch: any) => {
 
   dispatch(loaderTrue({booly:true, message: ''}))
 
@@ -112,7 +113,8 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
         header,
         body,
         firstName,
-        lastName
+        lastName,
+        isDraft
       }, config );
         dispatch(loaderTrue({booly:false, message: "Blog has posted successfully!"}))
     } catch (error: any) {
@@ -166,12 +168,12 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
     tag2: string;
     header: string;
     body: string;
+    isDraft: boolean;
   }
-  export const updateBlog = ( {id, tag,tag2, header, body} : UpdateBlog) => async (dispatch: any) => {
+  export const updateBlog = ( {id, tag,tag2, header, body, isDraft} : UpdateBlog) => async (dispatch: any) => {
     console.log('updateuser engaged')
     dispatch(loaderTrue({booly:true, message: ''}))
     let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
-
     try {
       const config = {
         headers: {
@@ -186,9 +188,11 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName} : MakePost)
         tag2,
         header,
         body,
+        isDraft,
       }, config );
       dispatch(loaderTrue({booly:false, message: "Blog updated successfully!"}))
       dispatch(trueBoolean())
+      console.log(data)
     } catch (error: any) {
       console.log(error.response.data.message)
       dispatch(loaderTrue({booly: false, message: error.response.data.message}))

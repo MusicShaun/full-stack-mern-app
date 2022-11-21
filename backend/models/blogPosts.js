@@ -31,6 +31,10 @@
       required: true,
       ref: "User",
     },
+    isDraft: {
+      type: Boolean, 
+      required: true,
+    }
   },
   {
     timestamps: true,

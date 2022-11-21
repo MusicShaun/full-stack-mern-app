@@ -17,6 +17,7 @@ import { useAppSelector } from "./app/hook";
 import Draft from './pages/profile/Draft';
 import YourPostsUpdateBlog from './pages/profile/YourPostsUpdateBlog';
 import { useWindowSize } from '@react-hook/window-size';
+import DraftUpdate from './pages/profile/DraftUpdate';
 
 
 
@@ -43,7 +44,7 @@ function App() {
         height: window.location.href.includes('login' || 'register' || 'post' || 'profile/personal')
           ? `${onlyHeight}px` : '100%',
         overflowY: window.location.href.includes('login' || 'register' || 'post' || 'profile/personal')
-        ? 'hidden' : 'scroll' 
+        ? 'hidden' : 'auto' 
         }}>
       <Router>
 
@@ -58,34 +59,31 @@ function App() {
 
         
         <Routes>
-          <Route path='/' element={ <Landing 
-                          setBlogContent={setBlogContent}
-                          blogContent={blogContent}
-                          blogFilter={blogFilter}
-                          clearListings={clearListings}
-                          setClearListings={setClearListings}
-                          /> } />
+          <Route path='/' element={ <Landing/> } >   
+            <Route path='wall' element={ <Wall 
+              setBlogContent={setBlogContent}
+              blogContent={blogContent}
+              blogFilter={blogFilter}
+              setBlogFilter={setBlogFilter}
+              clearListings={clearListings}
+              setClearListings={setClearListings}
+            /> } 
+          /> 
+          </Route>
+
           <Route path='login' element={ <Login  /> } /> 
           <Route path='register' element={ <Register /> } /> 
+          <Route path='post' element={ <Post /> } />
 
-          <Route path='wall' element={ <Wall 
-                    setBlogContent={setBlogContent}
-                    blogContent={blogContent}
-                    blogFilter={blogFilter}
-                    clearListings={clearListings}
-                    setClearListings={setClearListings}
-                    /> } 
-          /> 
-          <Route path='post' element={ <Post /> }>
-
-          </Route> 
           <Route path='profile' element={ <Profile /> }>
             <Route path='' element={ <YourPosts setBlogContent={setBlogContent} blogContent={blogContent}/> }>
               <Route path='updatepost' element={ <YourPostsUpdateBlog   updateNumber={updateSelector.value.counter} /> } />
             </Route> 
 
             <Route path='personal' element={ <PersonalDetails /> } /> 
-            <Route path='draft' element={ <Draft /> } /> 
+            <Route path='draft' element={ <Draft /> }>
+              <Route path='updatepost' element={ <DraftUpdate  updateNumber={updateSelector.value.counter}  /> } /> 
+            </Route> 
 
           </Route> 
 
