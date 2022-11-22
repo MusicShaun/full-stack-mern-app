@@ -4,7 +4,7 @@ import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Header from "./components/header/Header";
 import Wall from './pages/Wall';
-import Post from './pages/Post';
+import Post from './pages/posts/Post';
 import Profile from './pages/profile/Profile';
 import { ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
@@ -32,7 +32,6 @@ function App() {
   function toggleLightDark() {
     setDarkMode(prev => !prev)
   }
-
 
   
 

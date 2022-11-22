@@ -9,14 +9,15 @@ import ProfileMUIButtons from "./ProfileMUIButtons";
 
 export default function Profile() {
   const [onlyWidth, onlyHeight] = useWindowSize(); 
+  let screenHeight = usePerfectWindowHeight(onlyHeight);
 
 return (
   <React.Fragment>
   <CssBaseline />
     <Container maxWidth="lg"
       sx={{
-        minHeight: `${usePerfectWindowHeight(onlyHeight)}px`,
-        mt: {xs: 18, md : 10},
+        minHeight: `${screenHeight - 40}px`,
+        mt: {xs: '120px', md : 10},
         display: 'flex',
         bgcolor: 'background',
         flexDirection: {xs: 'column', md: 'row' },

@@ -85,7 +85,7 @@ async function getPosts()  {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth="lg" sx={{minHeight: 'calc(100vh - 136px)', mt: '80px'}}>
+      <Container maxWidth="lg" sx={{minHeight: 'calc(100vh - 136px)',}}>
         <Box sx={{ 
             transition: 'background-color 0.2s',
             position: 'relative'

@@ -21,6 +21,8 @@ export default function PersonalDetails() {
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
   const loading = useAppSelector((state: any) => state.loaderState.value[0]);
 
+  let screenHeight = usePerfectWindowHeight(onlyHeight);
+
   useEffect(() => {
     setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
   }, [])
@@ -48,7 +50,7 @@ export default function PersonalDetails() {
     <Container  
         maxWidth='xl'
       sx={{position: 'relative', 
-          height: `${usePerfectWindowHeight(onlyHeight)}px`,
+          height: `${screenHeight - 40}px`,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -74,6 +76,7 @@ export default function PersonalDetails() {
       borderWidth: '0px 0px 1px 0px',
       borderStyle: 'solid',
       borderRadius: '0px',
+      pt: 1,
     }}
     >
     <Typography variant='h1' 

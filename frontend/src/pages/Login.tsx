@@ -17,6 +17,8 @@ import { useAppDispatch, useAppSelector } from '../app/hook';
 import { login } from '../actions/userActions';
 import { useWindowHeight } from '@react-hook/window-size';
 import usePerfectWindowHeight from '../hooks/usePerfectWindowHeight';
+import LoginBackground from '../components/LoginBackground';
+
 
 function Copyright(props: any) {
   return (
@@ -73,6 +75,7 @@ export default function Login(  )  {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
+          // position: 'relative'
         }}>
         {/* {loading && <Loader /> } */}
         {/* {error && <Error setError={setError} />} */}
@@ -83,14 +86,15 @@ export default function Login(  )  {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '70%',
-            minHeight: '500px',
+            height: '60%',
+            minHeight: '480px',
             p: '2rem',
             bgcolor: 'primary.contrastText',
             borderRadius: '10px',
             borderWidth: '2px ',
             borderStyle: 'solid ',
             borderColor: 'secondary.main',
+            zIndex: 2,
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
@@ -147,6 +151,9 @@ export default function Login(  )  {
             </Grid>
           </Box>
         </Box>
+
+        <LoginBackground onlyHeight={onlyHeight} />
+
         <Copyright />
       </Container>
   );

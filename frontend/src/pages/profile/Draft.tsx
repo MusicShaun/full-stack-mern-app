@@ -77,7 +77,7 @@ export default function Draft() {
             mt: {xs: 1, md: 4}, 
             mb: {xs: 1, md: 4},
             }}>
-        {usersDrafts.length > 0 ? 'Your Drafts' : 'You havent made any posts'}
+        {usersDrafts.length > 0 ? 'Your Drafts' : 'You don\'t have any drafts'}
       </Typography>
 
     <Box sx={{
@@ -93,7 +93,7 @@ export default function Draft() {
 
     {localDraft && !updateSelector.value.bool &&
     localDraft.map((item: any, index: number) => {
-      return (<Box sx={{display: 'flex', flexDirection: 'column'}}>
+      return (<Box sx={{display: 'flex', flexDirection: 'column', width: '100%'}}>
           <Card  
             key={index} 
             content={item}

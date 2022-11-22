@@ -11,24 +11,25 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {  useEffect } from 'react'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink, } from 'react-router-dom';
 import { useAppDispatch , useAppSelector } from '../app/hook';
 import { registerUser } from '../actions/userActions';
 import usePerfectWindowHeight from '../hooks/usePerfectWindowHeight';
 import { useWindowHeight } from '@react-hook/window-size';
+import LoginBackground from '../components/LoginBackground';
 
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+// function Copyright(props: any) {
+//   return (
+//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://mui.com/">
+//         Your Website
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
 
 
 export default function Register() {
@@ -57,13 +58,15 @@ export default function Register() {
     }));
   };
 
+    console.log(onlyHeight)
 
   return (
       <Container  maxWidth="xs" 
         sx={{
-          position: 'relative', 
+          // position: 'relative', 
           height: `${usePerfectWindowHeight(onlyHeight)}px`,
           mt: 10,
+          width: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -75,13 +78,14 @@ export default function Register() {
             flexDirection: 'column',
             alignItems: 'center',
             p: '2rem',
-            height: '70%',
-            minHeight: '500px',
+            height: '60%',
+            minHeight: '480px',
             bgcolor: 'primary.contrastText',
             borderRadius: '10px',
             borderWidth: '2px ',
             borderStyle: 'solid ',
             borderColor: 'secondary.main',
+            zIndex: 2,
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
@@ -145,13 +149,16 @@ export default function Register() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link component={RouterLink} to='/login' variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
+
+        <LoginBackground onlyHeight={onlyHeight} />
+        
       </Container>
   );
 }

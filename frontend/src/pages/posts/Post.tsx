@@ -2,20 +2,25 @@ import { Typography,TextField,Button,Box,Container,CssBaseline, Paper
 } from "@mui/material";
 import * as React from "react";
 import { useState, useEffect, useRef } from 'react'; 
-import { useAppDispatch, useAppSelector } from '../app/hook';
-import PostFinish from "../components/PostFinish";
-import { postBlog } from "../actions/userActions";
-import Loader from "../components/Loader";
+import { useAppDispatch, useAppSelector } from '../../app/hook';
+import PostFinish from "../../components/PostFinish";
+import { postBlog } from "../../actions/userActions";
+import Loader from "../../components/Loader";
 import { useWindowSize} from "@react-hook/window-size";
-import usePerfectWindowHeight from "../hooks/usePerfectWindowHeight";
+import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
+import AreYouSure from "./AreYouSure";
+import { useNavigate } from "react-router-dom";
 
 export default function Post() {
   const [onlyWidth, onlyHeight] = useWindowSize(); 
 
+  const [ areYouSure, setAreYouSure ] = useState(false);
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
   const refFocus = useRef<any>(null);
   const dispatch = useAppDispatch();
   const loading = useAppSelector((state: any) => state.loaderState.value);
+  const navigate = useNavigate();
+  let screenHeight = usePerfectWindowHeight(onlyHeight);
 
   // get first and last names from store
   const userCredentialsSelector = useAppSelector((state) => state.loginUserState.value)
@@ -34,7 +39,6 @@ export default function Post() {
     if(refFocus.current?.focus)
     refFocus.current?.focus();
   },[])
-
 
 
   async function handleBlogPost(event: React.FormEvent<HTMLFormElement>) { 
@@ -66,6 +70,10 @@ export default function Post() {
     setPostFinish(true)
   }
 
+  function resetFormInputs() {
+    setAreYouSure(false)
+    navigate(0)
+  }
 
   return (
   <React.Fragment>
@@ -77,7 +85,7 @@ export default function Post() {
         justifyContent: 'center',
         alignItems: 'center',
         bgcolor: 'background',
-        height: `${usePerfectWindowHeight(onlyHeight)}px`,
+        height: `${screenHeight}px`,
         mt: 10
         
     }}>
@@ -91,7 +99,7 @@ export default function Post() {
         width: onlyWidth > 500 ? `80%` : '95%', 
         minWidth: '350px',
         height: '90%',
-        minHeight: '600px',
+        minHeight: '550px',
         p: onlyWidth > 500 ? 3 : 0, 
         borderRadius: 3, 
         color: '#1A2027', 
@@ -120,7 +128,8 @@ export default function Post() {
               }}> BLOG </span> 
             </Typography>
 
-      <Box component="form"  onSubmit={handleBlogPost}  sx={{
+      <Box component="form"  onSubmit={handleBlogPost}   
+          sx={{
             marginTop: onlyWidth > 500 ? 4 : 2,
             display: 'flex',
             flexDirection: 'column',
@@ -193,7 +202,13 @@ export default function Post() {
           }}
         />
         <br />
-        <Box>
+        <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
+          <Button variant="contained" color="primary"  id='draft' type="submit"
+                    sx={{
+                      backgroundColor: 'success.main', 
+                      fontWeight: 600,
+                    }}>Save To Drafts
+          </Button>
           <Button id='post'
                   variant="contained" color="primary" type="submit" size="large" 
                   sx={{
@@ -202,13 +217,16 @@ export default function Post() {
                   }}>
             POST
           </Button>
-          <Button variant='outlined' id='draft' type="submit">ADD draft btn</Button>
-          <Button variant='outlined' id='delete'>ADD delete </Button>
+          <Button variant='contained' color="primary" id='delete' onClick={() => setAreYouSure(true)}
+                            sx={{
+                              backgroundColor: 'error.main', 
+                              fontWeight: 600,
+                            }}>DELETE </Button>
         </Box>
       </Box>
-
-
       </Paper>
+
+    {areYouSure && <AreYouSure resetFormInputs={resetFormInputs}/> }
 
   </Container>
   </React.Fragment>

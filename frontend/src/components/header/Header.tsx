@@ -79,6 +79,8 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
     textDecoration: 'none',
     underline: 'none',
     color: 'inherit',
+    // width: '100%',
+    // height: '100%'
   }
 
 
@@ -122,21 +124,28 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
         </IconButton>
         <Spacer />
 
+{/* NOT LOGGED IN  */}
       <Box sx={{  display: { xs: 'none', md: 'flex' } }}>
         {!loggedInStatus.value && 
-          <Button variant="text" size="large"
-                  sx={{fontSize: 16, fontWeight: 600 }} 
+          <Link to='login' style={killLinkStyle}>
+            <Button variant="text" size="large"
+                  sx={{fontSize: 16, fontWeight: 600, }} 
                   >
-            <Link to='login' style={killLinkStyle}>Login</Link>  
-          </Button>
+Login  
+            </Button>
+          </Link>
         }
         {!loggedInStatus.value && 
+        <Link to='register' style={killLinkStyle}>
           <Button variant="outlined"  size="large"
-                  sx={{fontSize: 16, fontWeight: 600 }} 
+                  sx={{fontSize: 16, fontWeight: 600, }} 
                   >
-            <Link to='register' style={killLinkStyle}>Create Account</Link>  
+Create Account
           </Button>
+        </Link> 
         }
+
+{/* LOGGED IN */}
         {loggedInStatus.value && 
         <Link to='wall' style={killLinkStyle}>
           <Button variant={window.location.href.includes('wall') ? "contained" : "outlined"} 
@@ -195,8 +204,9 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
 
     {!updateSelector.value.bool && window.location.href.includes('profile') && 
       <AppBar position="fixed"  
-              sx={{display: { xs: 'flex', md: 'none' }, mt: '80px', }} >
-        <Container maxWidth={false} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+              sx={{display: { xs: 'flex', md: 'none' }, mt: '80px', height: '40px'}} >
+        <Container maxWidth={false} sx={{display: 'flex', flexDirection: 'row', 
+        justifyContent: 'space-around' ,  alignItems: 'center', height: '100%'}}>
         <Button  onClick={() => navigate('/profile')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               > Post        
