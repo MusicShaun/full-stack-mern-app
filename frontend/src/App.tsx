@@ -43,7 +43,8 @@ function App() {
         height: window.location.href.includes('login' || 'register' || 'post' || 'profile/personal')
           ? `${onlyHeight}px` : '100%',
         overflowY: window.location.href.includes('login' || 'register' || 'post' || 'profile/personal')
-        ? 'hidden' : 'auto' 
+        ? 'hidden' : 'auto', 
+        
         }}>
       <Router>
 

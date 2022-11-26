@@ -1,19 +1,24 @@
 import { Typography,Button,Box, Container, Paper } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {  useAppSelector } from "../app/hook";
 
 interface IProps  {
-  setPostFinish: Dispatch<SetStateAction<boolean>>
+  setPostFinish: Dispatch<SetStateAction<boolean>>;
+  name?: string; 
 }
 
-export default function PostFinish( {setPostFinish}:IProps) {
+export default function PostFinish( {setPostFinish, name}:IProps) {
 
   const loading = useAppSelector((state: any) => state.loaderState.value);
-  
+  const navigate = useNavigate();
+
   async function finishButton(){
     setPostFinish(false)
 
+    if (name === 'post') {
+      navigate('/wall')
+    }
   }
 
   return (
@@ -67,7 +72,7 @@ export default function PostFinish( {setPostFinish}:IProps) {
   
           <Button 
                   onClick={finishButton}
-                  component={RouterLink} to='./' 
+                  
                   variant="contained" color="primary" type="submit" size="large" 
                   sx={{
                     backgroundColor: 'primary.light', 

@@ -5,11 +5,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import PostFinish from "../../components/PostFinish";
 import { postBlog } from "../../actions/userActions";
-import Loader from "../../components/Loader";
 import { useWindowSize} from "@react-hook/window-size";
 import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
 import AreYouSure from "./AreYouSure";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../components/Loading";
 
 export default function Post() {
   const [onlyWidth, onlyHeight] = useWindowSize(); 
@@ -78,7 +78,7 @@ export default function Post() {
   return (
   <React.Fragment>
   <CssBaseline />
-    {loading && loading.booly && <Loader /> }
+    {loading && loading.booly && <Loading /> }
 
     <Container maxWidth="xl" sx={{
         display: 'flex',
@@ -91,7 +91,7 @@ export default function Post() {
     }}>
 
     {postFinish && 
-      <PostFinish setPostFinish={setPostFinish}
+      <PostFinish setPostFinish={setPostFinish} name='post'
       />}
 
       <Paper elevation={3} sx={{

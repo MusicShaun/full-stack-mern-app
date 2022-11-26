@@ -9,6 +9,7 @@ import { useAppDispatch } from "../app/hook";
 import { deleteWallPosts, getWallPosts } from "../features/wallPostsSlice";
 import Footer from "../components/Footer";
 import WallBtn from "../components/WallBtn";
+import Loading from "../components/Loading";
 
 type IProps = { 
   setBlogContent: React.Dispatch<React.SetStateAction<any | null>>;
@@ -22,6 +23,7 @@ type IProps = {
 export default function Wall( {setBlogContent, blogContent, blogFilter, setBlogFilter, clearListings , setClearListings}: IProps) {
 
   const [ counter, setCounter ] = useState<number>(0);
+  const [ loader , setLoader ] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   function checkBodies() {//TRIGGERS RERENDER ON CARD COMPONENT
     setCounter(prev => prev += 1 )
@@ -29,6 +31,7 @@ export default function Wall( {setBlogContent, blogContent, blogFilter, setBlogF
 
 
 async function getPosts()  {
+  setLoader(true)
   const controller = new AbortController()
   try {
     const data = await axios.get('/api/bloggers', {
@@ -40,11 +43,13 @@ async function getPosts()  {
     dispatch(getWallPosts(helper))
     setBlogContent(helper)
     console.log('Blog content retrieved')
+    setLoader(false)
     return () => {
       controller.abort()
     }
   } catch (error) {
     console.log(error)
+    setLoader(false)
   }
 }
 // CLEARS STATE AND RUNS GET REQUEST
@@ -83,9 +88,12 @@ async function getPosts()  {
   }
 
   return (
-    <React.Fragment>
+    <React.Fragment >
       <CssBaseline />
-      <Container maxWidth="lg" sx={{minHeight: 'calc(100vh - 136px)',}}>
+      <Container maxWidth="lg" sx={{minHeight: 'calc(100vh - 136px)'}}>
+
+      {loader && <Loading />}
+
         <Box sx={{ 
             transition: 'background-color 0.2s',
             position: 'relative'
@@ -164,13 +172,14 @@ async function getPosts()  {
           gap: 8,
           mb: 10,
           mt: clearListings ? 0 : 4,
-          maxWidth: '800px'
+          maxWidth: '800px',
+          flex: '1'
         }}>
         <Typography variant='h1' sx={{pl: 2}}>
           Posts 
         </Typography>
         {clearListings && blogFilter.length === 0 
-        ? <Typography variant='h1' >Search has 0 results</Typography>
+        ? <Typography variant='h1'>Search has 0 results</Typography>
         :
         (!clearListings ? 
           [...blogContent].filter((item: any, index: number) => index > 1) 
@@ -210,7 +219,6 @@ async function getPosts()  {
         </Box>
       </Box>
       }
-
 
 
         </Box>

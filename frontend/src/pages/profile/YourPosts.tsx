@@ -8,8 +8,8 @@ import { showUpdateFalse, showUpdateTrue } from '../../features/showUpdateSlice'
 import { deleteBlog } from '../../actions/userActions';
 import { deleteWallPosts, getWallPosts } from '../../features/wallPostsSlice';
 import axios from 'axios';
-import Loader from '../../components/Loader';
 import { Outlet, useNavigate } from 'react-router-dom';
+import Loading from '../../components/Loading';
 
 
 interface IProps {
@@ -87,9 +87,9 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
 
 
   return (
-    <Box sx={{width: '92%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column'}} >
+    <Box sx={{position: 'relative', width: '92%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column'}} >
 
-  {loading && loading.booly && <Loader /> }
+  {loading && loading.booly && <Loading /> }
   {finishSelector.value && <YourPostsFinish />}
 
     <Typography variant='h1' textAlign='center' 
