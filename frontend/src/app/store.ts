@@ -1,4 +1,8 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'reduxjs-toolkit-persist'
+import storage from 'reduxjs-toolkit-persist/lib/storage'
+import { combineReducers } from 'redux'
+
 import loginUserState from "../features/loginSlice";
 import loggedInState from '../features/loggedInSlice';
 import registerState from '../features/registerSlice';
@@ -10,19 +14,28 @@ import showUpdateSlice from '../features/showUpdateSlice';
 import loaderState from '../features/loaderSlice';
 import getDraftPostsState from '../features/draftPostsSlice';
 
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
+const rootReducer = combineReducers({ 
+  loginUserState: loginUserState,
+  loggedInState: loggedInState, 
+  registerState: registerState,
+  postState: postState,
+  getWallPostState: getWallPostState, 
+  getDraftPostsState: getDraftPostsState,
+  updateUserState: updateUserState, 
+  patheticBoolean: patheticBoolean,
+  showUpdateSlice: showUpdateSlice,
+  loaderState: loaderState
+})
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 export const store = configureStore({
-  reducer: {
-    loginUserState: loginUserState,
-    loggedInState: loggedInState, 
-    registerState: registerState,
-    postState: postState,
-    getWallPostState: getWallPostState, 
-    getDraftPostsState: getDraftPostsState,
-    updateUserState: updateUserState, 
-    patheticBoolean: patheticBoolean,
-    showUpdateSlice: showUpdateSlice,
-    loaderState: loaderState
-  }
+  reducer: persistedReducer
 })
 
 

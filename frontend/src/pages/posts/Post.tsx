@@ -23,17 +23,17 @@ export default function Post() {
   let screenHeight = usePerfectWindowHeight(onlyHeight);
 
   // get first and last names from store
-  const userCredentialsSelector = useAppSelector((state) => state.loginUserState.value)
-  const [ firstName, setFirstName ] = useState("");
-  const [ lastName, setLastName ] = useState("");
+  const [ firstName, setFirstName ] = useState<any>("");
+  const [ lastName, setLastName ] = useState<any>("");
     useEffect(() => {  
-    if (userCredentialsSelector[0]){
-      setFirstName(Object.values(userCredentialsSelector[0])[1])
-      setLastName(Object.values(userCredentialsSelector[0])[2])
+    if (localStorage.getItem('userInfo')){
+      let helper: any = JSON.parse(localStorage.getItem('userInfo') || '{}');
+      setFirstName(helper.firstName)
+      setLastName(helper.lastName)
     }
     // eslint-disable-next-line
   }, [])
-
+  
 
   useEffect(() => {
     if(refFocus.current?.focus)

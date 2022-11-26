@@ -8,16 +8,17 @@ import Post from './pages/posts/Post';
 import Profile from './pages/profile/Profile';
 import { ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
-import {  useState } from 'react'; 
+import {  useEffect, useState } from 'react'; 
 import PersonalDetails from './pages/profile/PersonalDetails';
 import darkTheme  from './mui-themes/DARK_THEMES';
 import  theme  from './mui-themes/LIGHT_THEMES';
 import YourPosts from './pages/profile/YourPosts';
-import { useAppSelector } from "./app/hook";
+import { useAppDispatch, useAppSelector } from "./app/hook";
 import Draft from './pages/profile/Draft';
 import YourPostsUpdateBlog from './pages/profile/YourPostsUpdateBlog';
 import { useWindowSize } from '@react-hook/window-size';
 import DraftUpdate from './pages/profile/DraftUpdate';
+import { loggedIn } from './features/loggedInSlice';
 
 
 
@@ -28,11 +29,18 @@ function App() {
   const [ darkMode, setDarkMode ] = useState(false);
   const [ clearListings, setClearListings ] = useState(false);
   const updateSelector = useAppSelector(state => state.showUpdateSlice)
-
+  const dispatch = useAppDispatch();
+  
   function toggleLightDark() {
     setDarkMode(prev => !prev)
   }
 
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('userInfo');
+    if (isLoggedIn) {
+      dispatch(loggedIn())
+    }
+  }, [])
   
 
   return (

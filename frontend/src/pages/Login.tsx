@@ -50,7 +50,7 @@ export default function Login(  )  {
       navigate('/wall')
     }
     // eslint-disable-next-line
-  }, [loggedInStatus])
+  }, [loggedInStatus.value])
 
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

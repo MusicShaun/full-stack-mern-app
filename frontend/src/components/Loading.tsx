@@ -39,6 +39,7 @@ const Wrapper = styled.div`
   z-index: 100;
   transform: scale(1.1);
   background-color: rgba(255, 255, 255, 0.4);
+  left: 0;
 
 `;
 
