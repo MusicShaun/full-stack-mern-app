@@ -69,13 +69,9 @@ export  const login = ({email, password}: LoginProps ) => async (dispatch: any) 
       localStorage.setItem('userInfo', JSON.stringify(data))
 
     } catch (error: any) {
-      dispatch({
-        type: USER_LOGIN_FAIL,
-        payload: 
-        error.response && error.response.data.message
-        ? error.response.data.message 
-        : error.message, 
-      })
+        console.log(error.response.data.message)
+        console.log(error)
+        alert("Invalid email or password")
     }
   };
 

@@ -45,26 +45,26 @@ const Wrapper = styled.div`
 
 const Loader = styled.div`
 position: relative;
-  width: 100px; 
+  width: 140px; 
   height: 150px; 
   /* border: 1px grey solid; */
-  border-bottom-right-radius: 45%;
-  border-bottom-left-radius: 45%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
   overflow: hidden;
 
 `
 const Spinner = styled.div`
   position: absolute;
-  bottom: 0;
-  left: 19%;
-  width: 60px; 
-  height: 60px;
-  animation: bouncing 0.5s infinite ease-out alternate;
+  bottom: -7%;
+  left: 25%;
+  width: 70px; 
+  height: 70px;
+  animation: bouncing 0.3s infinite ease-out alternate;
   @keyframes bouncing {
     from {
       margin-bottom: 0px;
     } to {
-      margin-bottom: 70px; 
+      margin-bottom: 40px; 
   }}
   
 `
@@ -73,18 +73,18 @@ const Blocker = styled.div`
   height: 100%;
   background-color: orange ;
   
-  animation: animator 2s infinite linear;
+  animation: animator 2.4s infinite linear;
   @keyframes animator {
     0% {
-      transform: rotate(45deg);
+      transform: rotate(40deg);
     } 25% {
-      transform: rotate(135deg);
+      transform: rotate(130deg);
     } 50% {
-      transform: rotate(225deg);
+      transform: rotate(220deg);
     } 75% {
-      transform: rotate(315deg);
+      transform: rotate(310deg);
     } 100% {
-      transform: rotate(405deg);
+      transform: rotate(400deg);
     }
   }
   

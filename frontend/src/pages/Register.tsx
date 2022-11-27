@@ -49,7 +49,9 @@ export default function Register() {
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-
+    if (!formData.get('firstName') || !formData.get('lastName') || !formData.get('email') || !formData.get('password') ){
+      alert('Please fill in the missing field')
+    }
     dispatch(registerUser({
       firstName: formData.get('firstName')!, 
       lastName: formData.get('lastName')!, 
@@ -57,8 +59,6 @@ export default function Register() {
       password: formData.get('password')!
     }));
   };
-
-    console.log(onlyHeight)
 
   return (
       <Container  maxWidth="xs" 
