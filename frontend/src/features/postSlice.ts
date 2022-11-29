@@ -11,6 +11,7 @@ interface PostType {
   firstName:  string;
   lastName: string;
   isDraft: boolean;
+  profilePicture?: string; 
 }
 const initialState: Poster = {
   value: [],

@@ -33,7 +33,12 @@ export default function Post() {
     }
     // eslint-disable-next-line
   }, [])
-  
+
+  const [ localData , setLocalData ] = useState<any>({});
+  useEffect(() => {
+    setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
+  }, [])
+
 
   useEffect(() => {
     if(refFocus.current?.focus)
@@ -53,7 +58,8 @@ export default function Post() {
         body:  formData.get('content')!,
         firstName:  firstName,
         lastName:  lastName,
-        isDraft: false
+        isDraft: false,
+        profilePicture: localData.profilePicture,
       }))
     }
     else if (document.activeElement!.id === 'draft') {
@@ -65,6 +71,7 @@ export default function Post() {
         firstName:  firstName,
         lastName:  lastName,
         isDraft: true,
+        profilePicture: localData.profilePicture,
       }))
     }
     setPostFinish(true)

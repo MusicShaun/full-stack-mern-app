@@ -34,6 +34,10 @@
     isDraft: {
       type: Boolean, 
       required: true,
+    },
+    profilePicture: {
+      type: String, 
+      required: true, 
     }
   },
   {

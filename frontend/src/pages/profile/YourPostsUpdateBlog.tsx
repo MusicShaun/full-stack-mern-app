@@ -16,7 +16,7 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
   const [ header, setHeader ] = useState(usersPosts[updateNumber].header);
   const [ body, setBody ] = useState(usersPosts[updateNumber].body);
   const [ id, setId ] = useState(usersPosts[updateNumber]._id)
-
+  const [ local , setLocal ] = useState<any>();
   const navigate = useNavigate();
   const refFocus = useRef<any>(null);
   const dispatch = useAppDispatch();
@@ -25,6 +25,12 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
 
   useEffect(() => { setId(usersPosts[updateNumber]._id)}, [usersPosts, updateNumber])
 
+  useEffect(() => {      
+    if (localStorage.getItem('userInfo')){
+      setLocal(JSON.parse(localStorage.getItem('userInfo') || "")); 
+      }
+  }, [] ) 
+   
   async function handleUpdateBlog(event: React.FormEvent<HTMLFormElement>) { 
     event.preventDefault();
     dispatch(updateBlog({
@@ -33,10 +39,10 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
       tag2: tag2,
       header: header,
       body: body,
-      isDraft: false
+      isDraft: false,
+      // profilePicture: local.profilePicture
     }))
   }
-
 
 
   useEffect(() => {

@@ -83,7 +83,7 @@ function App() {
           <Route path='register' element={ <Register /> } /> 
           <Route path='post' element={ <Post /> } />
 
-          <Route path='profile' element={ <Profile /> }>
+          <Route path='profile' element={ <Profile  setBlogContent={setBlogContent} blogContent={blogContent} /> }>
             <Route path='' element={ <YourPosts setBlogContent={setBlogContent} blogContent={blogContent}/> }>
               <Route path='updatepost' element={ <YourPostsUpdateBlog   updateNumber={updateSelector.value.counter} /> } />
             </Route> 

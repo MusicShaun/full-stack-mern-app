@@ -1,16 +1,79 @@
-import { CssBaseline, Container, Box, Stack, Divider,Typography } 
+import { CssBaseline, Container, Box, Stack, Divider,Typography, Button } 
 from "@mui/material";
-import React from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
 import { useWindowSize} from "@react-hook/window-size";
 import ProfileMUIButtons from "./ProfileMUIButtons";
+import { useAppDispatch } from "../../app/hook";
+import { updateUser } from '../../actions/userActions';
+import { getWallPosts } from "../../features/wallPostsSlice";
+import axios from "axios";
 
+interface IProps {
+  setBlogContent: React.Dispatch<SetStateAction<any | null>>;
+  blogContent: object[];
+}
 
-export default function Profile() {
+export default function Profile( { setBlogContent, blogContent } : IProps ) {
+  
   const [onlyWidth, onlyHeight] = useWindowSize(); 
   let screenHeight = usePerfectWindowHeight(onlyHeight);
+  const dispatch = useAppDispatch() ; 
+  const [ localData , setLocalData ] = useState<any>({});
 
+  useEffect(() => { // SORT OUT WHERE THE PROFILE PICTURE IS LOCATED BECAUSE THIS IS A HACKY PILE OF SHIT NOW 
+    setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
+    if (!profilePicture && localData) {
+      setProfilePicture(localData.profilePicture)
+    }
+  }, [])
+  const [ profilePicture, setProfilePicture ] = useState<string>('');
+  
+  async function openWidget (e: React.SyntheticEvent) {
+    e.preventDefault();
+    const widget = await window.cloudinary.createUploadWidget({
+        cloudName: 'dyneqi48f',
+        uploadPreset: 'pnxfhczl',
+        sources: ['local', 'url', 'camera'],
+        secure: true
+    }, 
+     (error: any, result:  any) => {
+        try {
+          if (result.event === 'success' ) {
+            setProfilePicture(`https://res.cloudinary.com/dyneqi48f/image/upload/${result.info.path}`)
+        }
+      } catch {
+        console.log(error)
+      } finally {
+        if (result.event === 'close' ) {
+          dispatch(updateUser({
+            firstName: localData.firstName,
+            lastName: localData.lastName,
+            email: localData.email,
+            _id: localData._id,
+            password: '', 
+            profilePicture: profilePicture ? profilePicture : localData.profilePicture, 
+          })
+          )
+          getUpdatedWallPosts();
+        }
+      }
+    })
+    widget.open(); 
+  }
+
+  async function getUpdatedWallPosts() {
+    try { 
+      const data = await axios.get('/api/bloggers', {
+      }) 
+      dispatch(getWallPosts(data.data))
+      setBlogContent(data.data)
+    } catch (error) {
+      console.log(error)
+    } 
+  }
+  
 return (
   <React.Fragment>
   <CssBaseline />
@@ -42,7 +105,14 @@ return (
         <Typography variant='h1' 
           sx={{ color: 'text.secondary', width: '100%', p: 4 }}>
               YOUR PROFILE
-        </Typography>          
+        </Typography>       
+
+
+        <div style={{width: '100%', aspectRatio: '1/1', borderRadius: '50%', border: '1px solid lightgrey',
+        backgroundImage: `url(${localData.profilePicture})`, backgroundSize: 'contain'}}>
+          <Button variant='contained' onClick={openWidget}>Choose image </Button>
+        </div>
+        
           <ProfileMUIButtons text='YOUR POSTS' destination='/profile' />
           <ProfileMUIButtons text='PERSONAL DETAILS' destination='/profile/personal' />
           <ProfileMUIButtons text='DRAFT' destination='/profile/draft' />

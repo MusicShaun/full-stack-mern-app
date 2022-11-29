@@ -8,7 +8,9 @@ interface UpdateType {
   firstName: string;
   lastName: string; 
   email: string; 
+  _id?: string; 
   password?: string; 
+  profilePicture?: string; 
 }
 const initialState:Updater = {
   value: [],

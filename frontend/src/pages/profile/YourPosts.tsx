@@ -80,7 +80,6 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
           ? helper.push(item)
           : null)
       } 
-
       setUsersPost(helper)
     }, [ wallPostsSelector ])
 

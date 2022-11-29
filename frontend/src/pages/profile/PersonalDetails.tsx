@@ -16,6 +16,7 @@ export default function PersonalDetails() {
   const [ lastName, setLastName ] = useState(localData.lastName);
   const [ email, setEmail ] = useState(localData.email);
   const [ password, setPassword ] = useState("");
+  const [ profilePicture, setProfilePicture ] = useState('');
   const [ counter , setCounter ] = useState(0); 
   const dispatch = useAppDispatch();
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
@@ -38,6 +39,7 @@ export default function PersonalDetails() {
         email: email,
         _id: localData._id,
         password: password, 
+        profilePicture: profilePicture, 
       })
       )
       setPassword("")

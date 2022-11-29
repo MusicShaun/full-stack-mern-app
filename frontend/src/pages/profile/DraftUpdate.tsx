@@ -36,6 +36,7 @@ export default function DraftUpdate({ updateNumber  } : IProps) {
         header: header,
         body: body,
         isDraft: false,
+        // profilePicture: usersDrafts[updateNumber].profilePicture
       }))
     } else if (document.activeElement!.id === 'save') {
       dispatch(updateBlog({
@@ -45,6 +46,7 @@ export default function DraftUpdate({ updateNumber  } : IProps) {
         header: header,
         body: body,
         isDraft: true,
+        // profilePicture: usersDrafts[updateNumber].profilePicture
       }))
     }
   }

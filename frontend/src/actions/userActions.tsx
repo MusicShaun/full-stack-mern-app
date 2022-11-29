@@ -17,7 +17,7 @@ type RegisterProps = {
 }
 
 export const registerUser = ( {firstName, lastName, email, password } : RegisterProps) => async (dispatch: any)  => {
-
+  console.log('user Registering')
   try {
     const data = await axios.post('/api/users', { //api/users
       firstName,
@@ -88,8 +88,9 @@ type MakePost = {
   firstName:  string;
   lastName:  string;
   isDraft :boolean;
+  profilePicture: string; 
 }
-export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : MakePost) => async (dispatch: any) => {
+export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft, profilePicture} : MakePost) => async (dispatch: any) => {
 
   dispatch(loaderTrue({booly:true, message: ''}))
 
@@ -110,7 +111,8 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
         body,
         firstName,
         lastName,
-        isDraft
+        isDraft,
+        profilePicture
       }, config );
         dispatch(loaderTrue({booly:false, message: "Blog has posted successfully!"}))
     } catch (error: any) {
@@ -126,12 +128,12 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
     email: string;
     _id: string;
     password: string; 
+    profilePicture: string; 
   }
-  export const updateUser = ( { firstName,lastName, email, _id, password} : UpdateUser) => async (dispatch: any) => {
+  export const updateUser = ( { firstName,lastName, email, _id, password, profilePicture} : UpdateUser) => async (dispatch: any) => {
     console.log('useractions')
     let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
     dispatch(loaderTrue({booly:true, message: ''}))
-
       try {
         const config = {
           headers: {
@@ -145,7 +147,8 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
           lastName,
           email,
           _id, 
-          password
+          password,
+          profilePicture
         }, config );
         dispatch(loaderTrue({booly:false, message: "Details updated successfully!"}))
         dispatch(deleteUser()) 
@@ -165,9 +168,10 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
     header: string;
     body: string;
     isDraft: boolean;
+    // profilePicture: string; 
   }
-  export const updateBlog = ( {id, tag,tag2, header, body, isDraft} : UpdateBlog) => async (dispatch: any) => {
-    console.log('updateuser engaged')
+  export const updateBlog = ( {id, tag,tag2, header, body, isDraft, } : UpdateBlog) => async (dispatch: any) => {
+    console.log('updateblog engaged')
     dispatch(loaderTrue({booly:true, message: ''}))
     let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
     try {
@@ -185,6 +189,7 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
         header,
         body,
         isDraft,
+        // profilePicture
       }, config );
       dispatch(loaderTrue({booly:false, message: "Blog updated successfully!"}))
       dispatch(trueBoolean())

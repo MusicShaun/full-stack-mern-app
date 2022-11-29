@@ -15,7 +15,6 @@ type IProps = {
 
 export default function Card( {checkBodies, counter = 0,content, pinned }: IProps) {
 
-
   const [ showBody, setShowBody ] = useState<boolean>(false)
   const [ delayText, setDelayText ] = useState<boolean>(false)
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -109,11 +108,12 @@ export default function Card( {checkBodies, counter = 0,content, pinned }: IProp
         </Typography>
         :
         <Box >
-          <Typography variant='body1' sx={{mb: 1, color: 'text.primary', whiteSpace: 'pre' }}>{content.body}</Typography>
+          <Typography variant='body1' sx={{mb: 1, color: 'text.primary', whiteSpace: 'preline' }}>{content.body}</Typography>
         </Box>
         }
 
-        <Avatar  sx={{
+        <Avatar  alt="Remy Sharp" src={content.profilePicture} 
+          sx={{
             mt: '20px',
             mb: '10px',
             height: '34px',
