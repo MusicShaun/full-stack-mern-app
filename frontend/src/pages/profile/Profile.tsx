@@ -27,6 +27,7 @@ export default function Profile( { setBlogContent, blogContent } : IProps ) {
     if (!profilePicture && localData) {
       setProfilePicture(localData.profilePicture)
     }
+    // eslint-disable-next-line
   }, [])
   const [ profilePicture, setProfilePicture ] = useState<string>('');
   
@@ -62,6 +63,7 @@ export default function Profile( { setBlogContent, blogContent } : IProps ) {
     })
     widget.open(); 
   }
+
 
   async function getUpdatedWallPosts() {
     try { 

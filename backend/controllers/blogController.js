@@ -15,8 +15,9 @@ const getBlogs = asyncHandler(async (req, res) => {
 
 const blogEntry = asyncHandler(async(req, res) => {
   console.log('making a blog post')
-
   const {firstName, lastName, tag, tag2, header, body, isDraft, profilePicture} = req.body;
+  const profilePictureHelper = profilePicture || 'https://res.cloudinary.com/dyneqi48f/image/upload/v1669682290/bzl3k7qduyzfmgvyfijg.jpg'; 
+
   const newBlog = new Blogger({
     user: req.user._id,
     firstName,
@@ -26,7 +27,7 @@ const blogEntry = asyncHandler(async(req, res) => {
     header,
     body,
     isDraft,
-    profilePicture
+    profilePicture: profilePictureHelper
   });
   const createdBlog = await newBlog.save()
   res.status(201).json(createdBlog)
