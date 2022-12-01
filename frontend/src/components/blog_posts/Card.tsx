@@ -108,7 +108,7 @@ export default function Card( {checkBodies, counter = 0,content, pinned }: IProp
         </Typography>
         :
         <Box >
-          <Typography variant='body1' sx={{mb: 1, color: 'text.primary', whiteSpace: 'preline' }}>{content.body}</Typography>
+          <Typography variant='body1' sx={{mb: 1, color: 'text.primary', whiteSpace: 'pre-line' }}>{content.body}</Typography>
         </Box>
         }
 
