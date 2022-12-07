@@ -27,9 +27,9 @@ app.use('/api/users', userRoutes)
 app.use('/api/bloggers', blogRoutes)
 app.use('/api/profilePictures', profilePictures)
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev')) //* morgan displays each request in the console
-}
+// if (process.env.NODE_ENV === 'development') {
+//   app.use(morgan('dev')) //* morgan displays each request in the console
+// }
 
 // --------------- deployment ------------
 __dirname = path.resolve();
