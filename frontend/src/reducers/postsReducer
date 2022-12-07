@@ -1,9 +1,0 @@
-// export const postReducer = (state = { blogs: [] }, action ) => {
-//   switch (action.type) {
-//     case 'POSTS_LIST_REQUEST': 
-//     return {loading: true}
-
-//     case 'POSTS_LIST_SUCESS': 
-//       return { loading: false, blogs: action.payload };
-//   }
-// }

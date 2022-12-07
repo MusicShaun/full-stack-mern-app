@@ -28,7 +28,6 @@ interface Props {
 type IProps = {
   toggleLightDark: () => void;
   darkMode: boolean;
-  blogContent: any | null;
   setBlogFilter: React.Dispatch<React.SetStateAction<any | null>>;
   setClearListings: React.Dispatch<React.SetStateAction<any | null>>;
   clearListings:  boolean;
@@ -36,7 +35,7 @@ type IProps = {
 
 
 
-export default function Header( {toggleLightDark, darkMode, blogContent, setBlogFilter, setClearListings , clearListings} : IProps ) {
+export default function Header( {toggleLightDark, darkMode, setBlogFilter, setClearListings , clearListings} : IProps ) {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -44,6 +43,7 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
   const filterRef = useRef<HTMLInputElement>(null);
   const [ inputValue , setInputValue ] = useState('');
   const updateSelector = useAppSelector(state => state.showUpdateSlice)
+  const blogPostsArray = useAppSelector(state => state.getWallPostState.value)
 
   useEffect(() => {if (filterRef.current){filterRef.current.focus()}},[])
 
@@ -59,9 +59,9 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
     setClearListings(true)
     let helper = [];
 
-    for (let i =0; i < blogContent.length; i++) {
-      if ((Object.values(blogContent[i]).toString().toLowerCase()).includes(event.target.value.toLowerCase())) {
-        helper.push(blogContent[i])
+    for (let i =0; i < blogPostsArray.length; i++) {
+      if ((Object.values(blogPostsArray[i]).toString().toLowerCase()).includes(event.target.value.toLowerCase())) {
+        helper.push(blogPostsArray[i])
       }
     }
     setBlogFilter(helper)
@@ -79,8 +79,6 @@ export default function Header( {toggleLightDark, darkMode, blogContent, setBlog
     textDecoration: 'none',
     underline: 'none',
     color: 'inherit',
-    // width: '100%',
-    // height: '100%'
   }
 
 

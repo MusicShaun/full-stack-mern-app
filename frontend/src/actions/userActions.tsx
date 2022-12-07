@@ -3,8 +3,7 @@ import axios from "axios";
 import { loggedIn } from "../features/loggedInSlice";
 import { deleteUser, loginUser } from "../features/loginSlice";
 import { deleteRegisterUser } from "../features/registerSlice";
-import { loaderTrue } from "../features/loaderSlice";
-import { trueBoolean } from "../features/patheticBooleanSlice";
+import { loadingState } from "../features/loaderSlice";
 
 
 
@@ -55,72 +54,29 @@ type LoginProps = {
 
 export  const login = ({email, password}: LoginProps ) => async (dispatch: any) => { 
   
-    try {
-      const { data } = await axios.post(
-        '/api/users/login', //api/login
-        {
-          email,
-          password
-        }
-      );
-      dispatch(deleteUser()) // empty the state 
-      dispatch(loginUser(data))// includes first and last name
-      dispatch(loggedIn())
-      localStorage.setItem('userInfo', JSON.stringify(data))
+  try {
+    const { data } = await axios.post(
+      '/api/users/login', //api/login
+      {
+        email,
+        password
+      }
+    );
+    dispatch(deleteUser()) // empty the state 
+    dispatch(loginUser(data))// includes first and last name
+    dispatch(loggedIn())
+    localStorage.setItem('userInfo', JSON.stringify(data))
 
-    } catch (error: any) {
-        console.log(error.response.data.message)
-        console.log(error)
-        alert("Invalid email or password")
-    }
-  };
-
-
-
-
-
-
-type MakePost = {
-  tag: FormDataEntryValue;
-  tag2: FormDataEntryValue;
-  header:  FormDataEntryValue;
-  body:  FormDataEntryValue;
-  firstName:  string;
-  lastName:  string;
-  isDraft :boolean;
-  profilePicture: string; 
-}
-export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft, profilePicture} : MakePost) => async (dispatch: any) => {
-
-  dispatch(loaderTrue({booly:true, message: ''}))
-
-  let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
-        },
-      };
-  // eslint-disable-next-line 
-      const {data} = await axios.post(
-        '/api/bloggers/create', {
-        tag,
-        tag2,
-        header,
-        body,
-        firstName,
-        lastName,
-        isDraft,
-        profilePicture
-      }, config );
-        dispatch(loaderTrue({booly:false, message: "Blog has posted successfully!"}))
-    } catch (error: any) {
-        dispatch(loaderTrue({booly: false, message: error.response.data.message}))
-        alert('Something happened that wasn\'t supposed to. Please have another go.')
-    } 
+  } catch (error: any) {
+      console.log(error.response.data.message)
+      console.log(error)
+      alert("Invalid email or password")
   }
-  
+};
+
+
+
+
 
   type UpdateUser = {
     firstName: string;
@@ -128,12 +84,11 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft, pr
     email: string;
     _id: string;
     password: string; 
-    profilePicture: string; 
   }
-  export const updateUser = ( { firstName,lastName, email, _id, password, profilePicture} : UpdateUser) => async (dispatch: any) => {
+  export const updateUser = ( { firstName,lastName, email, _id, password} : UpdateUser) => async (dispatch: any) => {
     console.log('useractions')
     let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
-    dispatch(loaderTrue({booly:true, message: ''}))
+    dispatch(loadingState({booly:true, message: ''}))
       try {
         const config = {
           headers: {
@@ -148,75 +103,14 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft, pr
           email,
           _id, 
           password,
-          profilePicture
         }, config );
-        dispatch(loaderTrue({booly:false, message: "Details updated successfully!"}))
+        dispatch(loadingState({booly:false, message: "Details updated successfully!"}))
         dispatch(deleteUser()) 
         dispatch(loginUser(data))// includes first and last name
         localStorage.setItem("userInfo", JSON.stringify(data))
       } catch (error: any) {
         console.log(error.response.data.message)
-        dispatch(loaderTrue({booly: false, message: error.response.data.message}))
+        dispatch(loadingState({booly: false, message: error.response.data.message}))
       } 
   }
     
-
-  type UpdateBlog = {
-    id: number;
-    tag: string;
-    tag2: string;
-    header: string;
-    body: string;
-    isDraft: boolean;
-    // profilePicture: string; 
-  }
-  export const updateBlog = ( {id, tag,tag2, header, body, isDraft, } : UpdateBlog) => async (dispatch: any) => {
-    console.log('updateblog engaged')
-    dispatch(loaderTrue({booly:true, message: ''}))
-    let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
-        },
-      };
-  // eslint-disable-next-line 
-      const {data} = await axios.put(
-        `/api/bloggers/${id}`, {
-        tag,
-        tag2,
-        header,
-        body,
-        isDraft,
-        // profilePicture
-      }, config );
-      dispatch(loaderTrue({booly:false, message: "Blog updated successfully!"}))
-      dispatch(trueBoolean())
-      console.log(data)
-    } catch (error: any) {
-      console.log(error.response.data.message)
-      dispatch(loaderTrue({booly: false, message: error.response.data.message}))
-      dispatch(trueBoolean())
-    }
-  }
-
-
-
-  export const deleteBlog = ( id: any) => async (dispatch: any) => {
-    let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
-    console.log('Deleting Post')
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
-        },
-      };// eslint-disable-next-line 
-      const {data} = await axios.delete(`/api/bloggers/${id}`, config );
-    } catch (error: any) {
-      console.log(error.response.data.message)
-    } finally {
-    }
-
-  }

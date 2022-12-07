@@ -18,6 +18,7 @@ import { login } from '../actions/userActions';
 import { useWindowHeight } from '@react-hook/window-size';
 import usePerfectWindowHeight from '../hooks/usePerfectWindowHeight';
 import LoginBackground from '../components/LoginBackground';
+import Loader from '../components/Loader';
 
 
 function Copyright(props: any) {
@@ -44,6 +45,7 @@ export default function Login(  )  {
   const dispatch = useAppDispatch()
 
   const loggedInStatus = useAppSelector((state) => state.loggedInState);
+  const loading = useAppSelector(state => state.loadingState.value.booly)
 
   useEffect(() => {
     if (loggedInStatus.value) {
@@ -77,8 +79,8 @@ export default function Login(  )  {
           alignItems: 'center',
           // position: 'relative'
         }}>
-        {/* {loading && <Loader /> } */}
-        {/* {error && <Error setError={setError} />} */}
+      {loading && <Loader />}
+      
         <CssBaseline />
         <Box
           sx={{

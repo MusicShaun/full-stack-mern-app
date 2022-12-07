@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const User = require('../models/User');
+const User = require('../models/UserModel');
 const generateToken = require('../util/generateToken');
 
 
@@ -7,7 +7,7 @@ const generateToken = require('../util/generateToken');
 
 
 
-const registerUser = asyncHandler(async (req, res) => {
+exports.registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   const userExists = await User.findOne({ email });
     console.log('registerUser reached')
@@ -41,7 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 
-const authUser = asyncHandler(async (req, res) => {
+exports.authUser = asyncHandler(async (req, res) => {
 
   const { email , password  } = req.body;
   const user = await User.findOne({email});
@@ -67,7 +67,7 @@ const authUser = asyncHandler(async (req, res) => {
 
   
 
-  const updateUserProfile = asyncHandler(async (req, res) => {
+exports.updateUserProfile = asyncHandler(async (req, res) => {
     console.log('inside controller server')
     const user = await User.findById(req.user._id);
     const {password} = req.body;
@@ -114,6 +114,3 @@ const authUser = asyncHandler(async (req, res) => {
   })
 
 
-
-
-module.exports =  {registerUser, authUser, updateUserProfile} 

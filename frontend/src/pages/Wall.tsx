@@ -4,60 +4,42 @@ import Container from '@mui/material/Container';
 import * as React from 'react';
 import { Typography, Box, Button, Paper } from '@mui/material';
 import { useState, useEffect } from 'react';
-import axios from "axios";
-import { useAppDispatch } from "../app/hook";
-import { deleteWallPosts, getWallPosts } from "../features/wallPostsSlice";
+import { useAppDispatch, useAppSelector } from "../app/hook";
+import { deleteWallPosts } from "../features/wallPostsSlice";
 import Footer from "../components/Footer";
 import WallBtn from "../components/WallBtn";
 import Loading from "../components/Loading";
+import { getPictures } from "../actions/pictureActions";
+import { deletePictures } from "../features/picturesSlice";
+import { getBlogs } from "../actions/blogActions";
 
 type IProps = { 
-  setBlogContent: React.Dispatch<React.SetStateAction<any | null>>;
-  blogContent: any | null;
   blogFilter: any;
   setBlogFilter: React.Dispatch<React.SetStateAction<any | null>>;
   clearListings: boolean;
   setClearListings: React.Dispatch<React.SetStateAction<any | null>>;
 }
 
-export default function Wall( {setBlogContent, blogContent, blogFilter, setBlogFilter, clearListings , setClearListings}: IProps) {
+export default function Wall( {blogFilter, setBlogFilter, clearListings , setClearListings}: IProps) {
 
   const [ counter, setCounter ] = useState<number>(0);
-  const [ loader , setLoader ] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   function checkBodies() {//TRIGGERS RERENDER ON CARD COMPONENT
     setCounter(prev => prev += 1 )
   }
 
+  const blogPostsArray = useAppSelector(state => state.getWallPostState.value)
+  const loading = useAppSelector(state => state.loadingState.value.booly)
 
-async function getPosts()  {
-  setLoader(true)
-  const controller = new AbortController()
-  try {
-    const data = await axios.get('/api/bloggers', {
-      signal: controller.signal
-    }) 
-    let helper = data.data.filter(function( obj:any ) { // remove any that belong with the drafts
-      return obj.isDraft !== true || obj.isDraft === null;
-    });
-    dispatch(getWallPosts(helper))
-    setBlogContent(helper)
-    console.log('Blog content retrieved')
-    setLoader(false)
-    return () => {
-      controller.abort()
-    }
-  } catch (error) {
-    console.log(error)
-    setLoader(false)
-  }
-}
 // CLEARS STATE AND RUNS GET REQUEST
   useEffect(() => {
+    dispatch(deletePictures())
+    dispatch(getPictures())
     dispatch(deleteWallPosts())
-    getPosts()
+    dispatch(getBlogs())
     // eslint-disable-next-line
   }, [])
+
   
   // escapes search results
   useEffect(() => {
@@ -77,28 +59,32 @@ async function getPosts()  {
   function handleTagClick(str: string) { // SEARCH VIA TAG
     setClearListings(true)
     let helper = [];
-    for (let i =0; i < blogContent.length; i++) {
-      if (blogContent[i].tag.toString().toLowerCase().includes(str.toLowerCase()) || 
-      blogContent[i].tag2.toString().toLowerCase().includes(str.toLowerCase())) {
-        helper.push(blogContent[i])
+    for (let i =0; i < blogPostsArray.length; i++) {
+      if (blogPostsArray[i].tag.toString().toLowerCase().includes(str.toLowerCase()) || 
+      blogPostsArray[i].tag2.toString().toLowerCase().includes(str.toLowerCase())) {
+        helper.push(blogPostsArray[i])
       }
     }
     setBlogFilter(helper)
     helper = [];
   }
 
+
+
   return (
     <React.Fragment >
       <CssBaseline />
+      {loading && <Loading />}
       <Container maxWidth="lg" sx={{minHeight: 'calc(100vh - 136px)'}}>
 
-      {loader && <Loading />}
+      
 
         <Box sx={{ 
             transition: 'background-color 0.2s',
             position: 'relative'
           }}>
-            
+
+          
           {clearListings && <Button 
                 variant="contained"
                 sx={{bgcolor:'error.main',
@@ -140,28 +126,33 @@ async function getPosts()  {
             </Typography>
           </Box>
 
-    {blogContent &&  // PINNED CONTENT - FROM [0] & [1] 
+    {blogPostsArray &&  // PINNED CONTENT - FROM [0] & [1] 
       <Box sx={{
         display: clearListings ? 'none':'grid',
         gap: 4,
         mb: 10,
         gridTemplateColumns: `repeat(auto-fit, minmax(min(100%/1, max(300px, 100%/3)), 1fr))`  
       }}>
-      {!clearListings && blogContent 
-        .filter((item: any, index: number) => index <= 1)
-        .map((item: object) => {
-          return <Card  
-                checkBodies={checkBodies}
-                counter={counter}
-                content={item}
-                pinned={true}
-              />
-            }
-          )
+      {!clearListings && blogPostsArray[1] &&
+        <Card
+          key={2001}
+          checkBodies={checkBodies}
+          counter={counter}
+          content={blogPostsArray[0]}
+          pinned={false}
+        />}
+      {!clearListings && blogPostsArray[1] &&
+        <Card
+          key={2002}
+          checkBodies={checkBodies}
+          counter={counter}
+          content={blogPostsArray[1]}
+          pinned={false}
+        />
         }
       </Box>
     }  
-    {blogContent &&  // REMAINING CONTENT
+    {blogPostsArray &&  // REMAINING CONTENT
       <Box sx={{ //COLUMN 1111111
         display: 'flex',
         columnGap: {xs: '0', md: '80px'},
@@ -182,15 +173,19 @@ async function getPosts()  {
         ? <Typography variant='h1'>Search has 0 results</Typography>
         :
         (!clearListings ? 
-          [...blogContent].filter((item: any, index: number) => index > 1) 
+        [...blogPostsArray]
+          .filter((item: any, index: number) => index > 1) 
           : [...blogFilter])
-          .reverse().map((item: object) => {
-            return <Card  
-            checkBodies={checkBodies}
-            counter={counter}
-            content={item}
-            pinned={false}
-          />
+          .reverse()
+          .filter((item: any) => item.isDraft === false)
+          .map((item: object, index: number) => {
+            return <Card
+              key={index + 2000}
+              checkBodies={checkBodies}
+              counter={counter}
+              content={item}
+              pinned={false}
+            />
           })
         }
         </Box>

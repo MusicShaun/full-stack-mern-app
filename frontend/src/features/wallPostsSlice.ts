@@ -12,7 +12,7 @@ export const wallPostSlice = createSlice({
   initialState,
   reducers: {
     getWallPosts: (state, action: PayloadAction<any>) => {
-      state.value = {...action.payload}
+      state.value = [...action.payload]
     },
     deleteWallPosts: (state) => {
       state.value = [{}];

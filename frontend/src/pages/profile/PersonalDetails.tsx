@@ -16,11 +16,10 @@ export default function PersonalDetails() {
   const [ lastName, setLastName ] = useState(localData.lastName);
   const [ email, setEmail ] = useState(localData.email);
   const [ password, setPassword ] = useState("");
-  const [ profilePicture, setProfilePicture ] = useState('');
   const [ counter , setCounter ] = useState(0); 
   const dispatch = useAppDispatch();
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
-  const loading = useAppSelector((state: any) => state.loaderState.value[0]);
+  const loading = useAppSelector(state => state.loadingState.value.booly)
 
   let screenHeight = usePerfectWindowHeight(onlyHeight);
 
@@ -39,7 +38,6 @@ export default function PersonalDetails() {
         email: email,
         _id: localData._id,
         password: password, 
-        profilePicture: profilePicture, 
       })
       )
       setPassword("")
@@ -60,7 +58,7 @@ export default function PersonalDetails() {
         }}> 
   <CssBaseline />
 
-  {loading && loading.booly && <Loader /> }
+  {loading  && <Loader /> }
   {postFinish && 
       <PostFinish setPostFinish={setPostFinish}
       />}

@@ -11,9 +11,11 @@ import getWallPostState from '../features/wallPostsSlice';
 import updateUserState from '../features/updateUserSlice';
 import patheticBoolean from '../features/patheticBooleanSlice';
 import showUpdateSlice from '../features/showUpdateSlice';
-import loaderState from '../features/loaderSlice';
+import loadingState from '../features/loaderSlice';
 import getDraftPostsState from '../features/draftPostsSlice';
-
+import profileBlogState from '../features/profileBlogSlice';
+import picturesState from '../features/picturesSlice';
+  
 const persistConfig = {
   key: 'root',
   storage,
@@ -29,7 +31,10 @@ const rootReducer = combineReducers({
   updateUserState: updateUserState, 
   patheticBoolean: patheticBoolean,
   showUpdateSlice: showUpdateSlice,
-  loaderState: loaderState
+  loadingState: loadingState,
+  profileBlogState: profileBlogState,
+  picturesState: picturesState,
+
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

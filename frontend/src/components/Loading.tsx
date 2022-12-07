@@ -19,7 +19,7 @@ export default function Loading () {
   return (
 
     <Wrapper 
-      style={{width: `100%`, height: `${onlyHeight - 160}px`, transform: `translateY(${antiScroll}px)`}}>
+      style={{width: `100%`, height: `${onlyHeight - 80}px`, transform: `translateY(${antiScroll}px)`}}>
       <Loader>
         <Spinner>
         <Blocker></Blocker>
@@ -40,14 +40,15 @@ const Wrapper = styled.div`
   transform: scale(1.1);
   background-color: rgba(255, 255, 255, 0.4);
   left: 0;
-
+  min-height: 90vh;
+  min-width: 100%;
 `;
 
 const Loader = styled.div`
 position: relative;
   width: 140px; 
   height: 150px; 
-  /* border: 1px grey solid; */
+  min-height: 150px; 
   border-bottom-right-radius: 50%;
   border-bottom-left-radius: 50%;
   overflow: hidden;

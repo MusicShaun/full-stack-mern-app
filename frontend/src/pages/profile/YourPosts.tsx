@@ -1,31 +1,35 @@
-import { SetStateAction, useEffect, useState } from 'react'
+import { useEffect  } from 'react'
 import { Typography, Button, Box } 
 from "@mui/material";
 import Card from "../../components/blog_posts/Card";
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import YourPostsFinish from './YourPostsCloser';
 import { showUpdateFalse, showUpdateTrue } from '../../features/showUpdateSlice';
-import { deleteBlog } from '../../actions/userActions';
-import { deleteWallPosts, getWallPosts } from '../../features/wallPostsSlice';
-import axios from 'axios';
+import { deleteBlog } from '../../actions/blogActions';
+import { deleteWallPosts  } from '../../features/wallPostsSlice';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Loading from '../../components/Loading';
+import { getBlogByID } from '../../actions/blogActions';
+import { deletePictures } from '../../features/picturesSlice';
+import { getPictures } from '../../actions/pictureActions';
 
 
-interface IProps {
-  setBlogContent: React.Dispatch<SetStateAction<any | null>>;
-  blogContent: object[];
-}
-
-export default function YourPosts({setBlogContent, blogContent}: IProps ) {
+export default function YourPosts() {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const finishSelector = useAppSelector(state => state.patheticBoolean);
   const updateSelector = useAppSelector(state => state.showUpdateSlice)
-  const loading = useAppSelector((state: any) => state.loaderState.value);
-  const wallPostsSelector = useAppSelector(state => state.getWallPostState.value)
+  const loading = useAppSelector(state => state.loadingState.value.booly)
+  const profileBlogs = useAppSelector(state => state.profileBlogState.value)
 
+
+  useEffect(() => {
+    dispatch(getBlogByID())
+    dispatch(deletePictures())
+    dispatch(getPictures())
+    // eslint-disable-next-line 
+  }, [])
 
   async function handleUpdaterButton(index: number) {
     navigate('updatepost')
@@ -33,62 +37,35 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
   }
 
   async function handleDeletePost(postID: any) {
-    dispatch(deleteBlog(postID))
-    dispatch(deleteWallPosts())
-
-      setTimeout(() => { // GET REQ WAS OVERLAPPING DELETE REQ
-        getUpdatedWallPosts()
-      }, 100)
+    try {
+      dispatch(deleteBlog(postID))
+      dispatch(deleteWallPosts())
+    } catch (err) {
+      console.log(err)
+    } finally {
+      dispatch(getBlogByID())
+    }
   }
 
-  async function getUpdatedWallPosts() {
-    try { 
-      const data = await axios.get('/api/bloggers', {
-      }) 
-      dispatch(getWallPosts(data.data))
-      setBlogContent(data.data)
-    } catch (error) {
-      console.log(error)
-    } 
-  }
 
-    // escape key
-    useEffect(() => {
-      function escape(e: any){
-        if (e.key === 'Escape'){
-          dispatch(showUpdateFalse())
-        }
+  // escape key
+  useEffect(() => {
+    function escape(e: any){
+      if (e.key === 'Escape'){
+        dispatch(showUpdateFalse())
       }
-      window.addEventListener('keyup', (e) => escape(e)) ;
-      return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
-      // eslint-disable-next-line
-    }, [] )
-
-  
-    // FILTER BLOG POSTS BASED ON localStorage lastName// should probaby change it to email
-    const [ usersPosts, setUsersPost ] = useState<object[]>([]);
-    useEffect(() => {
-      setUsersPost([]) // creates a shallow update
-      let local: any; 
-      if (localStorage.getItem('userInfo')){
-      local = JSON.parse(localStorage.getItem('userInfo') || ""); 
-      }
-      let helper: object[] = [];
-      if (wallPostsSelector){
-      Object.values(wallPostsSelector)
-        .filter((item: any )=> item.lastName === local.lastName 
-          ? helper.push(item)
-          : null)
-      } 
-      setUsersPost(helper)
-    }, [ wallPostsSelector ])
-
+    }
+    window.addEventListener('keyup', (e) => escape(e)) ;
+    return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
+    // eslint-disable-next-line
+  }, [] )
 
 
   return (
-    <Box sx={{position: 'relative', width: '92%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column'}} >
+    <Box sx={{ position: 'relative', width: '92%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' }} >
 
-  {loading && loading.booly && <Loading /> }
+
+  {loading && <Loading /> }
   {finishSelector.value && <YourPostsFinish />}
 
     <Typography variant='h1' textAlign='center' 
@@ -96,9 +73,8 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
             mt: {xs: 1, md: 4}, 
             mb: {xs: 1, md: 4},
             }}>
-        {usersPosts.length > 0 ? 'Your Posts' : 'You havent made any posts'}
+        {profileBlogs ? 'Your Posts' : 'You havent made any posts'}
       </Typography>
-
       <Box sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -107,15 +83,16 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
               mb: !updateSelector.value.bool ? 10 : 0,
               }}>
 
-      {usersPosts && !updateSelector.value.bool && 
-        usersPosts.map((item: any, index: number) => {
-          return (<Box sx={{display: 'flex', flexDirection: 'column'}}>
-                <Card  key={index} 
-                content={item}
-                pinned={false}
-                
+      {Object.keys(profileBlogs).length !== 0 && !updateSelector.value.bool && //* Check if object empty then hide if updating
+        profileBlogs.filter((item:any) => item.isDraft === false)  // check if draft
+                    .map((item: any, index: number) => {
+          return (<Box key={index + 500} sx={{display: 'flex', flexDirection: 'column'}}>
+                <Card
+                   
+                  content={item}
+                  pinned={false}
                 />
-                <Box  key={index + 1000} sx={{display: 'flex', justifyContent: 'space-between', mb: 6, mt: 1, }}>
+                <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 6, mt: 1, }}>
 
                   <Button variant='contained'
                     onClick={() => handleUpdaterButton(index)} 
@@ -136,7 +113,7 @@ export default function YourPosts({setBlogContent, blogContent}: IProps ) {
         })
       }
       </Box>
-      <Outlet context={{usersPosts }}/>
+      <Outlet context={{profileBlogs}}/>
   </Box>
   )
 }

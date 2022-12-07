@@ -18,18 +18,6 @@ import usePerfectWindowHeight from '../hooks/usePerfectWindowHeight';
 import { useWindowHeight } from '@react-hook/window-size';
 import LoginBackground from '../components/LoginBackground';
 
-// function Copyright(props: any) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
 
 
 export default function Register() {

@@ -2,7 +2,7 @@ import { Box, Button, Typography } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom';
-import { deleteBlog } from '../../actions/userActions';
+import { deleteBlog } from '../../actions/blogActions';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import Card from '../../components/blog_posts/Card';
 import Loader from '../../components/Loader';
@@ -17,7 +17,7 @@ export default function Draft() {
   const navigate = useNavigate();
   const draftsSelector = useAppSelector(state => state.getDraftPostsState.value)
   const finishSelector = useAppSelector(state => state.patheticBoolean);
-  const loading = useAppSelector((state: any) => state.loaderState.value);
+  const loading = useAppSelector(state => state.loadingState.value.booly)
 
   const [ localDraft, setLocalDraft ] = useState([]);
 
@@ -26,15 +26,17 @@ export default function Draft() {
     getUpdatedDraftsPosts();
     // eslint-disable-next-line
   }, [])
+  
   async function getUpdatedDraftsPosts() {
     try { 
       const data = await axios.get('/api/bloggers', {
       }) 
-      let helper = data.data.filter(function( obj:any ) { // remove any that belong with the drafts
+      let helper = data.data.blogs.filter(function( obj:any ) { // remove any that belong with the drafts
         return obj.isDraft === true;
       });
       dispatch(getDraftPosts(helper))
       setLocalDraft(helper)
+      console.log(data)
     } catch (error) {
       console.log(error)
     } 

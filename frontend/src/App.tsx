@@ -24,7 +24,6 @@ import { loggedIn } from './features/loggedInSlice';
 
 function App() {
   const [ onlyWidth, onlyHeight ] = useWindowSize();
-  const [ blogContent, setBlogContent ] = useState<any | null>();
   const [ blogFilter , setBlogFilter ] = useState<any>();
   const [ darkMode, setDarkMode ] = useState(false);
   const [ clearListings, setClearListings ] = useState(false);
@@ -40,6 +39,7 @@ function App() {
     if (isLoggedIn) {
       dispatch(loggedIn())
     }
+        // eslint-disable-next-line
   }, [])
   
 
@@ -59,7 +59,6 @@ function App() {
         <Header 
           toggleLightDark={toggleLightDark}
           darkMode={darkMode}
-          blogContent={blogContent}
           setBlogFilter={setBlogFilter}
           setClearListings={setClearListings}
           clearListings={clearListings}
@@ -67,24 +66,23 @@ function App() {
 
         
         <Routes>
-          <Route path='/' element={ <Landing/> } >   
-            <Route path='wall' element={ <Wall 
-              setBlogContent={setBlogContent}
-              blogContent={blogContent}
+            <Route path='/' element={<Landing />} />
+
+          <Route path='wall' element={ <Wall 
               blogFilter={blogFilter}
               setBlogFilter={setBlogFilter}
               clearListings={clearListings}
               setClearListings={setClearListings}
             /> } 
-          /> 
-          </Route>
+          />   
+          
 
           <Route path='login' element={ <Login  /> } /> 
           <Route path='register' element={ <Register /> } /> 
           <Route path='post' element={ <Post /> } />
 
-          <Route path='profile' element={ <Profile  setBlogContent={setBlogContent} blogContent={blogContent} /> }>
-            <Route path='' element={ <YourPosts setBlogContent={setBlogContent} blogContent={blogContent}/> }>
+          <Route path='profile' element={ <Profile /> }>
+            <Route path='' element={ <YourPosts /> }>
               <Route path='updatepost' element={ <YourPostsUpdateBlog   updateNumber={updateSelector.value.counter} /> } />
             </Route> 
 

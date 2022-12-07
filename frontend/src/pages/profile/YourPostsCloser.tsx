@@ -27,15 +27,18 @@ export default function YourPosts_Finish( ) {
   }
 async function getUpdatedWallPosts () {
   try { 
-    const data = await axios.get('/api/bloggers', {
+    const res = await axios.get('/api/bloggers', {
     }) 
-    dispatch(getWallPosts(data.data))
+    dispatch(getWallPosts(res.data.blogs))
     console.log('Post update complete')
     navigate('./')
   } catch (error) {
     console.log(error)
   } 
 }
+  
+
+
   return (
 
       <Container  

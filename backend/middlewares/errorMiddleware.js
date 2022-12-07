@@ -1,6 +1,10 @@
 const notFound = (req, res, next) => {
-  const error = new Error(`Not found - ${req.originalURL}`);
+  const error = new Error(`Not found - ${req.pathName}`);
   res.status(404);
+  console.log({
+    File: 'errorMiddleware',
+    Message: 'error handling tripped. The url must be broken'
+  })
   next(error);
 };
 

@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState, useEffect, useRef } from 'react'; 
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import PostFinish from "../../components/PostFinish";
-import { postBlog } from "../../actions/userActions";
+import { postBlog } from "../../actions/blogActions";
 import { useWindowSize} from "@react-hook/window-size";
 import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
 import AreYouSure from "./AreYouSure";
@@ -18,7 +18,7 @@ export default function Post() {
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
   const refFocus = useRef<any>(null);
   const dispatch = useAppDispatch();
-  const loading = useAppSelector((state: any) => state.loaderState.value);
+  const loading = useAppSelector(state => state.loadingState.value.booly)
   const navigate = useNavigate();
   let screenHeight = usePerfectWindowHeight(onlyHeight);
 
@@ -32,11 +32,6 @@ export default function Post() {
       setLastName(helper.lastName)
     }
     // eslint-disable-next-line
-  }, [])
-
-  const [ localData , setLocalData ] = useState<any>({});
-  useEffect(() => {
-    setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
   }, [])
 
 
@@ -59,7 +54,6 @@ export default function Post() {
         firstName:  firstName,
         lastName:  lastName,
         isDraft: false,
-        profilePicture: localData.profilePicture,
       }))
     }
     else if (document.activeElement!.id === 'draft') {
@@ -71,7 +65,6 @@ export default function Post() {
         firstName:  firstName,
         lastName:  lastName,
         isDraft: true,
-        profilePicture: localData.profilePicture,
       }))
     }
     setPostFinish(true)
@@ -85,7 +78,7 @@ export default function Post() {
   return (
   <React.Fragment>
   <CssBaseline />
-    {loading && loading.booly && <Loading /> }
+    {loading && <Loading /> }
 
     <Container maxWidth="xl" sx={{
         display: 'flex',

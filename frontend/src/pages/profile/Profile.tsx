@@ -1,38 +1,69 @@
 import { CssBaseline, Container, Box, Stack, Divider,Typography, Button } 
 from "@mui/material";
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
 import { useWindowSize} from "@react-hook/window-size";
 import ProfileMUIButtons from "./ProfileMUIButtons";
-import { useAppDispatch } from "../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { updateUser } from '../../actions/userActions';
-import { getWallPosts } from "../../features/wallPostsSlice";
-import axios from "axios";
+import { getPictures, postPicture } from "../../actions/pictureActions";
+import { deletePictures } from "../../features/picturesSlice";
+import { getBlogs } from "../../actions/blogActions";
+import { deleteWallPosts } from "../../features/wallPostsSlice";
 
-interface IProps {
-  setBlogContent: React.Dispatch<SetStateAction<any | null>>;
-  blogContent: object[];
-}
 
-export default function Profile( { setBlogContent, blogContent } : IProps ) {
-  
+export default function Profile() {
+
+
   const [onlyWidth, onlyHeight] = useWindowSize(); 
   let screenHeight = usePerfectWindowHeight(onlyHeight);
   const dispatch = useAppDispatch() ; 
   const [ localData , setLocalData ] = useState<any>({});
+  const wallPostState = useAppSelector(state => state.getWallPostState.value)
+  const picturesForUsers = useAppSelector(state => state.picturesState.value)
+  const [match, setMatch] = useState('');
+  const [resetProfilePic, setResetProfilePic] = useState(0);
+  const [disableWidgetButton, setDisableWidgetButton] = useState(false);
 
-  useEffect(() => { // SORT OUT WHERE THE PROFILE PICTURE IS LOCATED BECAUSE THIS IS A HACKY PILE OF SHIT NOW 
+  useEffect(() => { 
     setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
-    if (!profilePicture && localData) {
-      setProfilePicture(localData.profilePicture)
-    }
+    dispatch(deletePictures())
+    dispatch(getPictures())
+    dispatch(deleteWallPosts())
+    dispatch(getBlogs())
     // eslint-disable-next-line
-  }, [])
-  const [ profilePicture, setProfilePicture ] = useState<string>('');
+  }, [resetProfilePic])
+
+  useEffect(() => {
+    getProfilePicture()
+        // eslint-disable-next-line
+  }, [localData, wallPostState, picturesForUsers])
+
+
+  function getProfilePicture() { //* FINDS PROFILE PICTURE MATCH
+    let helper = wallPostState.find((item: any) => {
+      return item.firstName === localData.firstName && item;
+    })
+    if (Object.keys(picturesForUsers).length === 0 || picturesForUsers.length === 0 || !helper) {
+      console.log('empty object refused')
+      return;
+    }
+    if (Object.keys(helper).length !== 0 && helper) {
+      picturesForUsers.pictures.find((pic: any) => {
+        return pic.user === helper.user && setMatch(pic.profilePicture.toString());
+      })
+    } else {
+      return setMatch('alt');
+    }
+    return match
+  }
   
+
+
   async function openWidget (e: React.SyntheticEvent) {
     e.preventDefault();
+    setDisableWidgetButton(true)
     const widget = await window.cloudinary.createUploadWidget({
         cloudName: 'dyneqi48f',
         uploadPreset: 'pnxfhczl',
@@ -42,7 +73,11 @@ export default function Profile( { setBlogContent, blogContent } : IProps ) {
      (error: any, result:  any) => {
         try {
           if (result.event === 'success' ) {
-            setProfilePicture(`https://res.cloudinary.com/dyneqi48f/image/upload/${result.info.path}`)
+            dispatch(postPicture({
+              profilePicture: `https://res.cloudinary.com/dyneqi48f/image/upload/${result.info.path}`,
+              id: localData._id
+            })
+          )
         }
       } catch {
         console.log(error)
@@ -54,11 +89,11 @@ export default function Profile( { setBlogContent, blogContent } : IProps ) {
             email: localData.email,
             _id: localData._id,
             password: '', 
-            profilePicture: profilePicture ? profilePicture : localData.profilePicture, 
           })
           )
           getUpdatedWallPosts();
         }
+        setDisableWidgetButton(false)
       }
     })
     widget.open(); 
@@ -66,14 +101,8 @@ export default function Profile( { setBlogContent, blogContent } : IProps ) {
 
 
   async function getUpdatedWallPosts() {
-    try { 
-      const data = await axios.get('/api/bloggers', {
-      }) 
-      dispatch(getWallPosts(data.data))
-      setBlogContent(data.data)
-    } catch (error) {
-      console.log(error)
-    } 
+    dispatch(getBlogs())
+    setResetProfilePic(prev => prev +=1 )
   }
   
 return (
@@ -94,7 +123,6 @@ return (
         maxWidth: '400px',
         display: { xs: 'none', md: 'flex' } ,
       }}>
-
         <Stack
           direction="column"
           justifyContent="flex-start"
@@ -111,8 +139,10 @@ return (
 
 
         <div style={{width: '100%', aspectRatio: '1/1', borderRadius: '50%', border: '1px solid lightgrey',
-        backgroundImage: `url(${localData.profilePicture})`, backgroundSize: 'contain'}}>
-          <Button variant='contained' onClick={openWidget}>Choose image </Button>
+            backgroundImage: `url(${match})`,
+             backgroundSize: 'contain'
+          }}>
+          <Button variant='contained' onClick={openWidget} disabled={disableWidgetButton}>Choose image </Button>
         </div>
         
           <ProfileMUIButtons text='YOUR POSTS' destination='/profile' />
@@ -135,8 +165,6 @@ return (
       }}>
         <Outlet />
       </Box>
-
-
 
     </Container>
   </React.Fragment>

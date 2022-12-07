@@ -1,8 +1,8 @@
 import { Box, Button, TextField } from '@mui/material'
 import React , {useState, useRef, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hook';
-import { updateBlog } from "../../actions/userActions";
-import { useNavigate, useOutletContext  } from 'react-router-dom';
+import { updateBlog } from "../../actions/blogActions";
+import { useNavigate  } from 'react-router-dom';
 import { showUpdateFalse } from '../../features/showUpdateSlice';
 
 interface IProps  {
@@ -10,7 +10,8 @@ interface IProps  {
 }
 
 export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
-  const {usersPosts} = useOutletContext<{ usersPosts: any[]}>();
+  // const { profileBlogs } = useOutletContext<{ profileBlogs: any[] }>();
+  const usersPosts = useAppSelector(state => state.profileBlogState.value)
   const [ tag, setTag ] = useState(usersPosts[updateNumber].tag);
   const [ tag2, setTag2 ] = useState(usersPosts[updateNumber].tag2);
   const [ header, setHeader ] = useState(usersPosts[updateNumber].header);
@@ -40,7 +41,6 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
       header: header,
       body: body,
       isDraft: false,
-      // profilePicture: local.profilePicture
     }))
   }
 

@@ -10,7 +10,7 @@ interface IProps  {
 
 export default function PostFinish( {setPostFinish, name}:IProps) {
 
-  const loading = useAppSelector((state: any) => state.loaderState.value);
+  const loading = useAppSelector(state => state.loadingState.value)
   const navigate = useNavigate();
 
   async function finishButton(){

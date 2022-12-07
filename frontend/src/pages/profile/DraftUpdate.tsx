@@ -1,7 +1,7 @@
 import { Box, Button, TextField } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { updateBlog } from '../../actions/userActions';
+import { updateBlog } from '../../actions/blogActions';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import { showUpdateFalse } from '../../features/showUpdateSlice';
 

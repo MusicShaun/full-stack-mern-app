@@ -13,15 +13,15 @@ const initialState = {
 }
 
 export const loaderSlice = createSlice({
-  name: 'loginUserState',
+  name: 'loadingState',
   initialState,
   reducers: {
-    loaderTrue: (state, action: PayloadAction<second>) => {
+    loadingState: (state, action: PayloadAction<second>) => {
       state.value = {...action.payload}
     },
   }
 })
 
-export const { loaderTrue } = loaderSlice.actions; 
+export const { loadingState } = loaderSlice.actions; 
 
 export default loaderSlice.reducer; 
