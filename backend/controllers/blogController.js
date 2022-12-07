@@ -5,7 +5,6 @@ const Blogger = require('../models/blogPostsModel');
 
 
 
-
 exports.getBlogs = asyncHandler(async (req, res) => {
 
   try {
