@@ -17,7 +17,8 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
   const [ header, setHeader ] = useState(usersPosts[updateNumber].header);
   const [ body, setBody ] = useState(usersPosts[updateNumber].body);
   const [ id, setId ] = useState(usersPosts[updateNumber]._id)
-  const [ local , setLocal ] = useState<any>();
+  // const [local, setLocal] = useState<any>();
+  
   const navigate = useNavigate();
   const refFocus = useRef<any>(null);
   const dispatch = useAppDispatch();
@@ -26,11 +27,11 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
 
   useEffect(() => { setId(usersPosts[updateNumber]._id)}, [usersPosts, updateNumber])
 
-  useEffect(() => {      
-    if (localStorage.getItem('userInfo')){
-      setLocal(JSON.parse(localStorage.getItem('userInfo') || "")); 
-      }
-  }, [] ) 
+  // useEffect(() => {      
+  //   if (localStorage.getItem('userInfo')){
+  //     setLocal(JSON.parse(localStorage.getItem('userInfo') || "")); 
+  //     }
+  // }, [] ) 
    
   async function handleUpdateBlog(event: React.FormEvent<HTMLFormElement>) { 
     event.preventDefault();
@@ -62,7 +63,8 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
         handleCancel()}
     }
     window.addEventListener('keyup', (e) => escape(e)) ;
-    return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
+    return () => window.removeEventListener('keyup', (e) => escape(e));
+  // eslint-disable-next-line
   }, [] )
 
   return (

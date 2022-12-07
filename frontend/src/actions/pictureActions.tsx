@@ -24,7 +24,7 @@ export const getPictureByID = () => async (dispatch: any) => {
   try {
     const res = await axios.get(`/api/bloggers/${userInfo._id}`);
     // dispatch(getProfileBlogs(res.data.blog))
-
+    console.log(res)
   } catch (error: any) {
     console.log(error.response.data.message)
     // dispatch(loaderTrue({booly: false, message: error.response.data.message}))
