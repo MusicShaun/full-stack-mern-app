@@ -66,7 +66,7 @@ export default function Register() {
             flexDirection: 'column',
             alignItems: 'center',
             p: '2rem',
-            height: '60%',
+            height: { xs: '94%', md: '60%' },
             minHeight: '480px',
             bgcolor: 'primary.contrastText',
             borderRadius: '10px',
