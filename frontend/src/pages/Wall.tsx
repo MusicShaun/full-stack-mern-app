@@ -12,6 +12,7 @@ import Loading from "../components/Loading";
 import { getPictures } from "../actions/pictureActions";
 import { deletePictures } from "../features/picturesSlice";
 import { getBlogs } from "../actions/blogActions";
+import { useWindowHeight } from '@react-hook/window-size';
 
 type IProps = { 
   blogFilter: any;
@@ -27,6 +28,7 @@ export default function Wall( {blogFilter, setBlogFilter, clearListings , setCle
   function checkBodies() {//TRIGGERS RERENDER ON CARD COMPONENT
     setCounter(prev => prev += 1 )
   }
+  const onlyHeight = useWindowHeight();
 
   const blogPostsArray = useAppSelector(state => state.getWallPostState.value)
   const loading = useAppSelector(state => state.loadingState.value.booly)
@@ -70,12 +72,11 @@ export default function Wall( {blogFilter, setBlogFilter, clearListings , setCle
   }
 
 
-
   return (
     <React.Fragment >
       <CssBaseline />
       {loading && <Loading />}
-      <Container maxWidth="lg" sx={{minHeight: 'calc(100vh - 136px)'}}>
+      <Container maxWidth="lg" sx={{minHeight: `calc(${onlyHeight}px - 80px)`, mt: 10}}>
 
       
 
@@ -172,12 +173,11 @@ export default function Wall( {blogFilter, setBlogFilter, clearListings , setCle
         {clearListings && blogFilter.length === 0 
         ? <Typography variant='h1'>Search has 0 results</Typography>
         :
-        (!clearListings ? 
-        [...blogPostsArray]
+        ((!clearListings ? [...blogPostsArray]
           .filter((item: any, index: number) => index > 1) 
-          : [...blogFilter])
+          : [...blogFilter]))
           .reverse()
-          .filter((item: any) => item.isDraft === false)
+          .filter((item: any) => item.isDraft === false || !('isDraft' in item) )
           .map((item: object, index: number) => {
             return <Card
               key={index + 2000}
@@ -205,10 +205,10 @@ export default function Wall( {blogFilter, setBlogFilter, clearListings , setCle
             <Box sx={{pl: 2, display: 'flex', flexWrap: 'wrap'}}>
               <div onClick={() => handleTagClick('ninja')}><WallBtn text={'Ninja'} /></div>
               <div onClick={() => handleTagClick('MUI')}><WallBtn text={'MUI'} /></div>
-              <div onClick={() => handleTagClick('twitter')}><WallBtn text={'twitter'} /></div>
+              <div onClick={() => handleTagClick('Shaun')}><WallBtn text={'Shaun'} /></div>
               <div onClick={() => handleTagClick('Development')}><WallBtn text={'Development'} /></div>
               <div onClick={() => handleTagClick('blog')}><WallBtn text={'blog'} /></div>
-              <div onClick={() => handleTagClick('How To')}><WallBtn text={'How To'} /></div>
+              <div onClick={() => handleTagClick('Rules')}><WallBtn text={'Rules'} /></div>
             </Box>
           </Paper>
         </Box>
