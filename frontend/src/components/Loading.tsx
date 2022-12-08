@@ -19,14 +19,19 @@ export default function Loading () {
   return (
 
     <Wrapper 
-      style={{width: `100%`, height: `${onlyHeight - 80}px`, transform: `translateY(${antiScroll}px)`}}>
+      style={{width: `100%`, height: `${onlyHeight}px`, transform: `translateY(${antiScroll}px)`}}>
+      
+      <Container >
       <Loader>
         <Spinner>
-        <Blocker></Blocker>
+          <Blocker></Blocker>
         </Spinner>
-
       </Loader>
-      
+
+      <Loader2>
+      <Base />
+      </Loader2>
+      </Container>
     </Wrapper>
   )
 }
@@ -44,28 +49,34 @@ const Wrapper = styled.div`
   min-width: 100%;
 `;
 
-const Loader = styled.div`
-position: relative;
+const Container = styled.div`
+  position: relative;
   width: 140px; 
   height: 150px; 
   min-height: 150px; 
-  border-bottom-right-radius: 50%;
-  border-bottom-left-radius: 50%;
+`
+const Loader = styled.div`
+position: absolute;
+  width: 100%; 
+  height: 100%; 
+  border-radius: 55% 45% 50% 50% / 68% 68% 32% 32% ;
   overflow: hidden;
-
+  /* border: 1px solid black; */
 `
 const Spinner = styled.div`
   position: absolute;
   bottom: -7%;
-  left: 25%;
+  left: 50%;
+  transform: translateX(-50%);
   width: 70px; 
   height: 70px;
-  animation: bouncing 0.3s infinite ease-out alternate;
+  animation: bouncing 0.33s infinite 0.33s cubic-bezier(0.28, 0.52, 0.57, 0.99) alternate;
+
   @keyframes bouncing {
     from {
-      margin-bottom: 0px;
+      margin-bottom: -10px;
     } to {
-      margin-bottom: 40px; 
+      margin-bottom: 50px; 
   }}
   
 `
@@ -73,8 +84,8 @@ const Blocker = styled.div`
   width: 100%;
   height: 100%;
   background-color: orange ;
-  
-  animation: animator 2.4s infinite linear;
+
+  animation: animator 2.64s infinite 0s linear;
   @keyframes animator {
     0% {
       transform: rotate(40deg);
@@ -89,4 +100,20 @@ const Blocker = styled.div`
     }
   }
   
+`
+const Loader2 = styled.div`
+position: absolute;
+  width: 100%; 
+  height: 100%; 
+  overflow: hidden;
+`
+const Base = styled.div`
+  position: absolute;
+  bottom: 0; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 5px;
+  background-color: #7b7760c4;
+  border-radius: 100%;
 `

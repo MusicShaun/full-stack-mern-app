@@ -3,7 +3,7 @@ from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
-import { useWindowSize} from "@react-hook/window-size";
+import { useWindowHeight} from "@react-hook/window-size";
 import ProfileMUIButtons from "./ProfileMUIButtons";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { getPictures, postPicture } from "../../actions/pictureActions";
@@ -15,7 +15,7 @@ import { deleteWallPosts } from "../../features/wallPostsSlice";
 export default function Profile() {
 
 
-  const [onlyWidth, onlyHeight] = useWindowSize(); 
+  const onlyHeight = useWindowHeight(); 
   let screenHeight = usePerfectWindowHeight(onlyHeight);
   const dispatch = useAppDispatch() ; 
   const [ localData , setLocalData ] = useState<any>({});
@@ -112,13 +112,15 @@ return (
         display: 'flex',
         bgcolor: 'background',
         flexDirection: {xs: 'column', md: 'row' },
-        p: onlyWidth > 600 ? "lg" : 0,
+        p: { xs: 0, md: 0 },
         transition: 'all 0.1s', ///// WHY ARE THERE WEIRD SLOW TRANSITIONS?!
       }}>
       <Box sx={{
         width: '30%',
         maxWidth: '400px',
-        display: { xs: 'none', md: 'flex' } ,
+        display: { xs: 'none', md: 'flex' },
+        borderRight: '1px solid lightgrey',
+        borderRightColor: 'secondary.main'
       }}>
         <Stack
           direction="column"
@@ -135,7 +137,12 @@ return (
         </Typography>       
 
 
-        <div style={{width: '100%', aspectRatio: '1/1', borderRadius: '50%', border: '1px solid lightgrey',
+          <div style={{
+            width: '100%',
+            aspectRatio: '1/1',
+            borderRadius: '50%',
+            border: '1px solid lightgrey',
+            borderColor: 'secondary.main',
             backgroundImage: `url(${match})`,
              backgroundSize: 'contain'
           }}>
@@ -145,7 +152,7 @@ return (
           <ProfileMUIButtons text='YOUR POSTS' destination='/profile' />
           <ProfileMUIButtons text='PERSONAL DETAILS' destination='/profile/personal' />
           <ProfileMUIButtons text='DRAFT' destination='/profile/draft' />
-          <div style={{flexGrow: 1}}></div>
+          <ProfileMUIButtons text='' destination='/profile/' flexer={true}  />
         </Stack>
       </Box>
 

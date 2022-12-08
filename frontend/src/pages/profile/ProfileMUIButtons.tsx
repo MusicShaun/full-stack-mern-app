@@ -7,8 +7,9 @@ import { showUpdateFalse } from "../../features/showUpdateSlice";
 interface IProps {
   text: string;
   destination: string;
+  flexer?: boolean;
 }
-export default function ProfileMUIButtons( {text, destination} : IProps) {
+export default function ProfileMUIButtons( {text, destination, flexer} : IProps) {
   
   const dispatch = useAppDispatch();
   
@@ -29,8 +30,9 @@ export default function ProfileMUIButtons( {text, destination} : IProps) {
   
   return (
     <Button sx={{height: '15%', 
-                maxHeight: '80px', 
+                maxHeight: flexer ? '100%' : '80px', 
                 display: 'flex', 
+                flexGrow: flexer ? 1 : 0, 
                 alignItems: 'center', 
                 color: 'text.main',
                 borderTopRightRadius: '0px',  

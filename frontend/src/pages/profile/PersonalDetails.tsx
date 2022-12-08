@@ -50,11 +50,11 @@ export default function PersonalDetails() {
     <Container  
         maxWidth='xl'
       sx={{position: 'relative', 
-          height: `${screenHeight - 40}px`,
+          height: `${screenHeight}px`,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          bgcolor: 'primary.contrastText',
+        bgcolor: 'primary.contrastText',
         }}> 
   <CssBaseline />
 
@@ -76,14 +76,14 @@ export default function PersonalDetails() {
       borderWidth: '0px 0px 1px 0px',
       borderStyle: 'solid',
       borderRadius: '0px',
-      pt: 1,
+      pt: 0,
     }}
     >
     <Typography variant='h1' 
         sx={{ color: 'text.secondary', width: '100%', 
           borderColor: 'text.primary',
           borderWidth: '0px 0px 1px 0px',
-          borderStyle: 'solid', pb: 4}}>
+          borderStyle: 'solid', pb: 4, pt: 4}}>
       Personal Details
     </Typography>
 

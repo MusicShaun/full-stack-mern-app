@@ -197,7 +197,8 @@ export default function Wall( {blogFilter, setBlogFilter, clearListings , setCle
               width: '100%',
               flexWrap: 'wrap',
               borderRadius: '20px',
-              border: '1px solid lightgrey',
+                    border: '1px solid lightgrey',
+              borderColor: 'secondary.main',
               flexDirection: 'column',
             }}
           > 

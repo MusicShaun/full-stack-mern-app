@@ -1,4 +1,5 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { useWindowHeight } from "@react-hook/window-size";
 import { Link as RouterLink } from 'react-router-dom';
 
 
@@ -7,14 +8,16 @@ interface IProps {
 }
 
 
-export default function AreYouSure({resetFormInputs} : IProps) {
+export default function AreYouSure({ resetFormInputs }: IProps) {
+  const onlyHeight = useWindowHeight();
+
   return (
 
     <Container  maxWidth={false}
     sx={{
     position: 'absolute',
     width: '100%',
-    height: '100%',
+    height: `calc(${onlyHeight}px - 80px)`,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -24,9 +27,9 @@ export default function AreYouSure({resetFormInputs} : IProps) {
 }}>
   <Paper elevation={3} sx={{
     position: 'relative',
-    width: `80%`, 
-    minWidth: '400px',
-    height: '86%',
+    width: {xs: '95%', md: '80%'}, 
+    minWidth: '300px',
+    height: '60%',
     maxHeight: '700px',
     p: 3, 
     borderRadius: 3, 
@@ -42,7 +45,7 @@ export default function AreYouSure({resetFormInputs} : IProps) {
     }}
     >
     <Typography variant='h1' 
-            sx={{ maxWidth: '400px',
+            sx={{ maxWidth: '400px', textAlign: 'center'
               
             }}>
         Are you sure you want to delete your progress? <br /><br/> It will not delete the draft.
@@ -64,9 +67,11 @@ export default function AreYouSure({resetFormInputs} : IProps) {
             sx={{
               backgroundColor: 'error.main', 
               fontWeight: 600,
+              width: '100px',
+              mb: 2
             }}
         >
-      Okay
+      DELETE
     </Button>
     <Button 
             // onClick={finishButton}
@@ -75,6 +80,7 @@ export default function AreYouSure({resetFormInputs} : IProps) {
             sx={{
               backgroundColor: 'primary.light', 
               fontWeight: 600,
+              width: '100px'
             }}
         
         >

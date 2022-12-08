@@ -1,4 +1,4 @@
-import { USER_LOGIN_FAIL} from "../constants/userConstants";
+
 import axios from "axios";
 import { loggedIn } from "../features/loggedInSlice";
 import { deleteUser, loginUser } from "../features/loginSlice";
@@ -32,7 +32,6 @@ export const registerUser = ( {firstName, lastName, email, password } : Register
 
   } catch (error: any) {
     dispatch({
-      type: USER_LOGIN_FAIL,
       payload: 
       error.response && error.response.data.message
       ? error.response.data.message 

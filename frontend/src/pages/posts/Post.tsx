@@ -96,11 +96,11 @@ export default function Post() {
 
       <Paper elevation={3} sx={{
         position: 'relative',
-        width: onlyWidth > 500 ? `80%` : '95%', 
+        width: { xs:  `92%` , md: '80%'}, 
         minWidth: '350px',
-        height: '90%',
+        height: { xs:  '70%' , md: '90%'},
         minHeight: '550px',
-        p: onlyWidth > 500 ? 3 : 0, 
+        p: { xs:  0 , md: 3}, 
         borderRadius: 3, 
         color: '#1A2027', 
         display: 'flex', 
@@ -135,7 +135,7 @@ export default function Post() {
             flexDirection: 'column',
             alignItems: 'center',
             minWidth: '300px',
-            width: onlyWidth > 500 ? `70%` : '95%', 
+            width: { xs: `95%`, md: '70%' }, 
           }}>
 
         <Box sx={{
