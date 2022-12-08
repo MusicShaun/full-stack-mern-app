@@ -60,7 +60,6 @@ export default function YourPosts() {
     // eslint-disable-next-line
   }, [] )
 
-
   return (
     <Box sx={{ position: 'relative', width: '92%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' }} >
 
@@ -73,7 +72,7 @@ export default function YourPosts() {
             mt: {xs: 1, md: 4}, 
             mb: {xs: 1, md: 4},
             }}>
-        {profileBlogs ? 'Your Posts' : 'You havent made any posts'}
+        {Object.keys(profileBlogs).length !== 0  ? 'Your Posts' : 'You havent made any posts'}
       </Typography>
       <Box sx={{
               display: 'flex',

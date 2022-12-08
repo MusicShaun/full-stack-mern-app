@@ -35,9 +35,11 @@ export const getPictureByID = () => async (dispatch: any) => {
 
 type MakePost = {
   profilePicture: string; 
-  id:  string;
+  id: string;
+  email: string; 
 }
-export const postPicture = ( { profilePicture, id} : MakePost) => async (dispatch: any) => {
+export const postPicture = ({ profilePicture, id, email }: MakePost) => async (dispatch: any) => {
+
   let userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
   try {
       const config = {
@@ -49,6 +51,7 @@ export const postPicture = ( { profilePicture, id} : MakePost) => async (dispatc
     const res = await axios.post(
       '/api/profilePictures', {
         profilePicture,
+        email
     }, config);
     console.log(res)
   } catch (error: any) {

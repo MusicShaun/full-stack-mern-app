@@ -24,11 +24,12 @@ exports.getPictures = asyncHandler(async (req, res) => {
 
 
 exports.createPicture = asyncHandler(async (req, res) => {
-
+  console.log('post new profile image')
   try {
     const newPicture = await ProfilePicture.create({
       profilePicture: req.body.profilePicture,
-      user: req.user.id
+      user: req.user.id,
+      email: req.body.email
     });
     res
       .status(201)
@@ -73,6 +74,7 @@ exports.deletePicture = asyncHandler(async (req, res) => {
 
 
 exports.updatePicture = asyncHandler(async (req, res) => {
+  console.log('update profile image')
   try {
     const newPicture = await ProfilePicture.findByIdAndUpdate(req.params.id, req.body, {
       new: true

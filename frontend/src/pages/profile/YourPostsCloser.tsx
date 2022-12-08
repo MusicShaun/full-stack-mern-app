@@ -13,7 +13,7 @@ export default function YourPosts_Finish( ) {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate(); 
-  const finalMessage = useAppSelector(state => state.loaderState.value.message)
+  const finalMessage = useAppSelector(state => state.loadingState.value.message)
 
   async function handleFinish() {
     dispatch(falseBoolean())

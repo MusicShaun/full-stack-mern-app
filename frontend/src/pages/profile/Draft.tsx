@@ -36,7 +36,6 @@ export default function Draft() {
       });
       dispatch(getDraftPosts(helper))
       setLocalDraft(helper)
-      console.log(data)
     } catch (error) {
       console.log(error)
     } 
@@ -95,13 +94,12 @@ export default function Draft() {
 
     {localDraft && !updateSelector.value.bool &&
     localDraft.map((item: any, index: number) => {
-      return (<Box sx={{display: 'flex', flexDirection: 'column', width: '100%'}}>
+      return (<Box sx={{display: 'flex', flexDirection: 'column', width: '100%'}} key={index}>
           <Card  
-            key={index} 
             content={item}
             pinned={false}   
             />
-            <Box  key={index + 1000} sx={{display: 'flex', justifyContent: 'space-between', mb: 6, mt: 1, }}>
+            <Box  sx={{display: 'flex', justifyContent: 'space-between', mb: 6, mt: 1, }}>
 
             <Button variant='contained'
               onClick={() => handleUpdaterButton(index)} 

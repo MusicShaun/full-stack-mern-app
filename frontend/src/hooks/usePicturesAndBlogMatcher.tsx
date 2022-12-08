@@ -17,7 +17,6 @@ export default function usePicturesAndBlogMatcher({ content }: IProps) {
 
   useEffect(() => {
     if (Object.keys(picturesForUsers).length === 0 || picturesForUsers.length === 0 || !content) {
-      console.log('empty object refused')
       return;
     }
 

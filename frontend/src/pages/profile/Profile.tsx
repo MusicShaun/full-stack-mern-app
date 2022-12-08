@@ -6,7 +6,6 @@ import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
 import { useWindowSize} from "@react-hook/window-size";
 import ProfileMUIButtons from "./ProfileMUIButtons";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
-import { updateUser } from '../../actions/userActions';
 import { getPictures, postPicture } from "../../actions/pictureActions";
 import { deletePictures } from "../../features/picturesSlice";
 import { getBlogs } from "../../actions/blogActions";
@@ -30,6 +29,7 @@ export default function Profile() {
     setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
     dispatch(deletePictures())
     dispatch(getPictures())
+    getProfilePicture()
     dispatch(deleteWallPosts())
     dispatch(getBlogs())
     // eslint-disable-next-line
@@ -45,15 +45,20 @@ export default function Profile() {
     let helper = wallPostState.find((item: any) => {
       return item.firstName === localData.firstName && item;
     })
-    if (Object.keys(picturesForUsers).length === 0 || picturesForUsers.length === 0 || !helper) {
-      console.log('empty object refused')
+    if (Object.keys(picturesForUsers).length === 0 || picturesForUsers.length === 0 ) {//* remove falsys
       return;
     }
-    if (Object.keys(helper).length !== 0 && helper) {
+    if (JSON.parse(localStorage.getItem('userInfo') || '{}')) { //* check email match first 
+      picturesForUsers.pictures.find((pic: any) => {
+        return pic.email === JSON.parse(localStorage.getItem('userInfo') || '{}').email && setMatch(pic.profilePicture.toString())
+      })
+    }
+    else if (Object.keys(helper).length !== 0 && helper) { //* check blog post match 2nd. This will be redundant once db updated
       picturesForUsers.pictures.find((pic: any) => {
         return pic.user === helper.user && setMatch(pic.profilePicture.toString());
       })
-    } else {
+    }
+    else {
       return setMatch('alt');
     }
     return match
@@ -75,7 +80,8 @@ export default function Profile() {
           if (result.event === 'success' ) {
             dispatch(postPicture({
               profilePicture: `https://res.cloudinary.com/dyneqi48f/image/upload/${result.info.path}`,
-              id: localData._id
+              id: localData._id,
+              email: localData.email
             })
           )
         }
@@ -83,14 +89,6 @@ export default function Profile() {
         console.log(error)
       } finally {
         if (result.event === 'close' ) {
-          dispatch(updateUser({
-            firstName: localData.firstName,
-            lastName: localData.lastName,
-            email: localData.email,
-            _id: localData._id,
-            password: '', 
-          })
-          )
           getUpdatedWallPosts();
         }
         setDisableWidgetButton(false)
@@ -98,7 +96,6 @@ export default function Profile() {
     })
     widget.open(); 
   }
-
 
   async function getUpdatedWallPosts() {
     dispatch(getBlogs())
