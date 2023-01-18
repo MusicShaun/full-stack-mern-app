@@ -1,63 +1,42 @@
 import { Box, Button, TextField } from '@mui/material'
 import React , {useState, useRef, useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../../app/hook';
-import { updateBlog } from "../../actions/blogActions";
+import { useAppDispatch, useAppSelector } from '../../../app/hook';
+import { updateBlog } from "../../../actions/blogActions";
 import { useNavigate  } from 'react-router-dom';
-import { showUpdateFalse } from '../../features/showUpdateSlice';
+import { showUpdateFalse } from '../../../features/showUpdateSlice';
 
-interface IProps  {
-  updateNumber: number;
-}
 
-export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
-  // const { profileBlogs } = useOutletContext<{ profileBlogs: any[] }>();
-  const usersPosts = useAppSelector(state => state.profileBlogState.value)
-  const [ tag, setTag ] = useState(usersPosts[updateNumber].tag);
-  const [ tag2, setTag2 ] = useState(usersPosts[updateNumber].tag2);
-  const [ header, setHeader ] = useState(usersPosts[updateNumber].header);
-  const [ body, setBody ] = useState(usersPosts[updateNumber].body);
-  const [ id, setId ] = useState(usersPosts[updateNumber]._id)
-  // const [local, setLocal] = useState<any>();
-  
+export default function YourPosts_UpdateBlog() {
+  const postUpdateSelector = useAppSelector(state => state.showUpdateSlice.value)
   const navigate = useNavigate();
+
+  const usersPosts = useAppSelector(state => state.profileBlogState.value)
+  if (!usersPosts) navigate('../')
+  const [tag, setTag] = useState<string | undefined>()
+  const [ tag2, setTag2 ] = useState<string | undefined>()
+  const [ header, setHeader ] = useState<string | undefined>()
+  const [ body, setBody ] = useState<string | undefined>()
+  const [ id, setId ] = useState<number | undefined>()
+  
+
   const refFocus = useRef<any>(null);
   const dispatch = useAppDispatch();
-  const finishSelector = useAppSelector(state => state.patheticBoolean);
-  const updateSelector = useAppSelector(state => state.showUpdateSlice)
-
-  useEffect(() => { setId(usersPosts[updateNumber]._id)}, [usersPosts, updateNumber])
-
-  // useEffect(() => {      
-  //   if (localStorage.getItem('userInfo')){
-  //     setLocal(JSON.parse(localStorage.getItem('userInfo') || "")); 
-  //     }
-  // }, [] ) 
-   
-  async function handleUpdateBlog(event: React.FormEvent<HTMLFormElement>) { 
-    event.preventDefault();
-    dispatch(updateBlog({
-      id: id,
-      tag: tag,
-      tag2: tag2,
-      header: header,
-      body: body,
-      isDraft: false,
-    }))
-  }
-
+  const finishSelector = useAppSelector(state => state.booleanPopUpWindow);
 
   useEffect(() => {
+    if (usersPosts.length !== 0 ) {
+      setId(usersPosts[postUpdateSelector.counter]['id' as keyof typeof usersPosts[0]])
+    }
+  }, [usersPosts, postUpdateSelector.counter])
+
+
+  useEffect(() => {// escapes search results // auto focus   // redirects if refreshed 
     if(refFocus.current?.focus) {
       refFocus.current?.focus();
-      }
-  }, [])
-
-  function handleCancel() {
-    navigate('../')
-    dispatch(showUpdateFalse())
-  }
-  // escapes search results // TURN THIS INTO A HOOK      
-  useEffect(() => {
+    }
+    if (Object.keys(usersPosts).length === 0 || usersPosts.length ===0) {
+      navigate('../')
+    }  
     function escape(e: any){
       if (e.key === 'Escape'){
         handleCancel()}
@@ -65,11 +44,32 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
     window.addEventListener('keyup', (e) => escape(e)) ;
     return () => window.removeEventListener('keyup', (e) => escape(e));
   // eslint-disable-next-line
-  }, [] )
+  }, [])
+
+
+  
+  async function handleUpdateBlog(event: React.FormEvent<HTMLFormElement>) { 
+    event.preventDefault();
+    dispatch(updateBlog({
+      id,
+      tag,
+      tag2,
+      header,
+      body,
+      isDraft: false,
+    }))
+  }
+
+
+  function handleCancel() {
+    navigate('../')
+    dispatch(showUpdateFalse())
+  }
+
 
   return (
     <Box component="form"  onSubmit={handleUpdateBlog}  sx={{
-      marginTop: !updateSelector.value.bool ? 4 : 0,
+      marginTop: !postUpdateSelector.bool ? 4 : 0,
       position: 'relative',
       display: 'flex',
       flexDirection: 'column',
@@ -89,7 +89,7 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
     <TextField
     inputRef={refFocus}
     onChange={(e) => setTag(e.target.value)}
-    defaultValue={usersPosts[updateNumber].tag}
+    defaultValue={usersPosts.length > 0 && usersPosts[postUpdateSelector.counter]['tag' as keyof typeof usersPosts[0]]}
     type="text"
     name="tag"
     variant="outlined"
@@ -99,7 +99,7 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
   />
   <TextField
     onChange={(e) => setTag2(e.target.value)}
-    defaultValue={usersPosts[updateNumber].tag2}
+    defaultValue={usersPosts.length > 0 && usersPosts[postUpdateSelector.counter]['tag2' as keyof typeof usersPosts[0]]}
     type="text"
     name="tag2"
     variant="outlined"
@@ -111,7 +111,7 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
 <br />
   <TextField
     onChange={(e) => setHeader(e.target.value)}
-    defaultValue={usersPosts[updateNumber].header}
+    defaultValue={usersPosts.length > 0 && usersPosts[postUpdateSelector.counter]['header' as keyof typeof usersPosts[0]]}
     type="text"
     name='header'
     variant="outlined"
@@ -123,7 +123,7 @@ export default function YourPosts_UpdateBlog({updateNumber, }: IProps ) {
   <br />
   <TextField
     onChange={(e) => setBody(e.target.value)}
-    defaultValue={usersPosts[updateNumber].body}
+    defaultValue={usersPosts.length > 0 && usersPosts[postUpdateSelector.counter]['body' as keyof typeof usersPosts[0]]}
     type="text"
     name="content"
     variant="outlined"    

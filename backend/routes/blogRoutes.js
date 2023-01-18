@@ -1,19 +1,23 @@
 const express = require('express');
-const { getBlogs, blogEntry, getBlogById, updateBlog, deleteBlog } = require('../controllers/blogController');
-const { protect } = require('../middlewares/authMiddleWare');
+const { getBlogs, blogEntry, getBlogsByUserId, updateBlog, deleteBlog, getBlogStats } = require('../controllers/blogController');
+const { protect } = require('../controllers/authController')
 const router = express.Router();
 
 
 router
+  .route('/tour-stats')
+  .get(getBlogStats)
+
+router
   .route('/')
   .get(getBlogs)
-  .post(protect, blogEntry); // put protect back in when finished with making stydfrsdf
+  .post(protect, blogEntry)
 
 router
   .route("/:id")
-  .get(getBlogById)
+  .get(getBlogsByUserId)
   .delete(deleteBlog)
-  .patch(updateBlog); // does this one need protect as well?
+  .patch(protect, updateBlog)
 
 
 module.exports = router;

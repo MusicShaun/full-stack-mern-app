@@ -12,13 +12,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import {  useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../app/hook';
-import { login } from '../actions/userActions';
+import { useAppDispatch, useAppSelector } from '../../app/hook';
+import { login } from '../../actions/userActions';
 import { useWindowHeight } from '@react-hook/window-size';
-import usePerfectWindowHeight from '../hooks/usePerfectWindowHeight';
-import LoginBackground from '../components/LoginBackground';
-import Loader from '../components/Loader';
+import usePerfectWindowHeight from '../../hooks/usePerfectWindowHeight';
+import LoginBackground from './LoginBackground';
+import Loader from '../../components/Loader';
+import { useEffect } from 'react';
 
 
 function Copyright(props: any) {
@@ -44,16 +44,9 @@ export default function Login(  )  {
   let navigate = useNavigate();
   const dispatch = useAppDispatch()
 
-  const loggedInStatus = useAppSelector((state) => state.loggedInState);
   const loading = useAppSelector(state => state.loadingState.value.booly)
-
-  useEffect(() => {
-    if (loggedInStatus.value) {
-      navigate('/wall')
-    }
-    // eslint-disable-next-line
-  }, [loggedInStatus.value])
-
+  const isLoggedInOrOut = useAppSelector(state => state.loggedInOrOut.value)
+  
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -62,9 +55,15 @@ export default function Login(  )  {
     dispatch(login({
       email: formData.get('email')!, 
       password: formData.get('password')!
-    }));
+    }))
   }
 
+
+  useEffect(() => { // Check store & localStorage if logged in
+    let userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+    if (isLoggedInOrOut.isLoggedIn || userInfo.isUserLoggedIn) navigate('/wall')
+        // eslint-disable-next-line
+  }, [isLoggedInOrOut.isLoggedIn])
 
 
   return (

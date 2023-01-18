@@ -5,9 +5,9 @@ interface Updater {
   value: UpdateType[];
 }
 interface UpdateType {
-  firstName: string;
-  lastName: string; 
-  email: string; 
+  firstName?: string;
+  lastName?: string; 
+  email?: string; 
   _id?: string; 
   password?: string; 
   profilePicture?: string; 

@@ -1,41 +1,26 @@
 
 import { Typography,Button,Box, Container, Paper } from "@mui/material";
-import axios from "axios";
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from "../../app/hook";
-import { falseBoolean } from "../../features/patheticBooleanSlice";
-import { showUpdateFalse } from "../../features/showUpdateSlice";
-import { deleteWallPosts, getWallPosts } from "../../features/wallPostsSlice";
+import { Link as RouterLink } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import { booleanPopUpWindow } from "../../../features/booleanPopUpWindowSlice";
+import { showUpdateFalse } from "../../../features/showUpdateSlice";
+import { deleteWallPosts } from "../../../features/wallPostsSlice";
+import { getBlogByID } from "../../../actions/blogActions";
 
 
 
 export default function YourPosts_Finish( ) {
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate(); 
   const finalMessage = useAppSelector(state => state.loadingState.value.message)
 
   async function handleFinish() {
-    dispatch(falseBoolean())
+    dispatch(booleanPopUpWindow(false))
     dispatch(showUpdateFalse())
     dispatch(deleteWallPosts())
-
-    setTimeout(() => {
-      getUpdatedWallPosts()
-    }, 50)
-
+    dispatch(getBlogByID())
   }
-async function getUpdatedWallPosts () {
-  try { 
-    const res = await axios.get('/api/bloggers', {
-    }) 
-    dispatch(getWallPosts(res.data.blogs))
-    console.log('Post update complete')
-    navigate('./')
-  } catch (error) {
-    console.log(error)
-  } 
-}
+
   
 
 

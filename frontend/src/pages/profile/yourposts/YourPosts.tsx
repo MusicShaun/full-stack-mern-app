@@ -1,24 +1,21 @@
 import { useEffect  } from 'react'
-import { Typography, Button, Box } 
-from "@mui/material";
-import Card from "../../components/blog_posts/Card";
-import { useAppDispatch, useAppSelector } from '../../app/hook';
+import { Typography, Button, Box } from "@mui/material";
+import Card from "../../../components/Card";
+import { useAppDispatch, useAppSelector } from '../../../app/hook';
 import YourPostsFinish from './YourPostsCloser';
-import { showUpdateFalse, showUpdateTrue } from '../../features/showUpdateSlice';
-import { deleteBlog } from '../../actions/blogActions';
-import { deleteWallPosts  } from '../../features/wallPostsSlice';
+import { showUpdateFalse, showUpdateTrue } from '../../../features/showUpdateSlice';
+import { deleteBlog } from '../../../actions/blogActions';
 import { Outlet, useNavigate } from 'react-router-dom';
-import Loading from '../../components/Loading';
-import { getBlogByID } from '../../actions/blogActions';
-import { deletePictures } from '../../features/picturesSlice';
-import { getPictures } from '../../actions/pictureActions';
+import Loading from '../../../components/Loading';
+import { getBlogByID } from '../../../actions/blogActions';
+
 
 
 export default function YourPosts() {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const finishSelector = useAppSelector(state => state.patheticBoolean);
+  const closePopUpWindow = useAppSelector(state => state.booleanPopUpWindow);
   const updateSelector = useAppSelector(state => state.showUpdateSlice)
   const loading = useAppSelector(state => state.loadingState.value.booly)
   const profileBlogs = useAppSelector(state => state.profileBlogState.value)
@@ -26,8 +23,6 @@ export default function YourPosts() {
 
   useEffect(() => {
     dispatch(getBlogByID())
-    dispatch(deletePictures())
-    dispatch(getPictures())
     // eslint-disable-next-line 
   }, [])
 
@@ -39,7 +34,6 @@ export default function YourPosts() {
   async function handleDeletePost(postID: any) {
     try {
       dispatch(deleteBlog(postID))
-      dispatch(deleteWallPosts())
     } catch (err) {
       console.log(err)
     } finally {
@@ -49,7 +43,7 @@ export default function YourPosts() {
 
 
   // escape key
-  useEffect(() => {
+  useEffect(() => { //! this somehow brings me to draft posts nauyght
     function escape(e: any){
       if (e.key === 'Escape'){
         dispatch(showUpdateFalse())
@@ -65,10 +59,10 @@ export default function YourPosts() {
 
 
   {loading && <Loading /> }
-  {finishSelector.value && <YourPostsFinish />}
+  {closePopUpWindow.value && <YourPostsFinish />}
 
     <Typography variant='h1' textAlign='center' 
-        sx={{filter: finishSelector.value ? 'blur(5px)' : 'null', 
+        sx={{filter: closePopUpWindow.value ? 'blur(5px)' : 'null', 
             mt: {xs: 1, md: 4}, 
             mb: {xs: 1, md: 4},
             }}>

@@ -6,64 +6,26 @@ import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
 import { useWindowHeight} from "@react-hook/window-size";
 import ProfileMUIButtons from "./ProfileMUIButtons";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
-import { getPictures, postPicture } from "../../actions/pictureActions";
-import { deletePictures } from "../../features/picturesSlice";
 import { getBlogs } from "../../actions/blogActions";
 import { deleteWallPosts } from "../../features/wallPostsSlice";
+import { getUserPicture } from "../../actions/pictureActions";
+import { updateUser } from '../../actions/userActions'
 
 
 export default function Profile() {
-
-
+  
   const onlyHeight = useWindowHeight(); 
   let screenHeight = usePerfectWindowHeight(onlyHeight);
   const dispatch = useAppDispatch() ; 
-  const [ localData , setLocalData ] = useState<any>({});
-  const wallPostState = useAppSelector(state => state.getWallPostState.value)
-  const picturesForUsers = useAppSelector(state => state.picturesState.value)
-  const [match, setMatch] = useState('');
-  const [resetProfilePic, setResetProfilePic] = useState(0);
+  const userProfilePicture = useAppSelector(state => state.userProfilePicture.value)
   const [disableWidgetButton, setDisableWidgetButton] = useState(false);
 
   useEffect(() => { 
-    setLocalData(JSON.parse(localStorage.getItem('userInfo') || ""))
-    dispatch(deletePictures())
-    dispatch(getPictures())
-    getProfilePicture()
+    dispatch(getUserPicture())
     dispatch(deleteWallPosts())
     dispatch(getBlogs())
     // eslint-disable-next-line
-  }, [resetProfilePic])
-
-  useEffect(() => {
-    getProfilePicture()
-        // eslint-disable-next-line
-  }, [localData, wallPostState, picturesForUsers])
-
-
-  function getProfilePicture() { //* FINDS PROFILE PICTURE MATCH
-    let helper = wallPostState.find((item: any) => {
-      return item.firstName === localData.firstName && item;
-    })
-    if (Object.keys(picturesForUsers).length === 0 || picturesForUsers.length === 0 ) {//* remove falsys
-      return;
-    }
-    if (JSON.parse(localStorage.getItem('userInfo') || '{}')) { //* check email match first 
-      picturesForUsers.pictures.find((pic: any) => {
-        return pic.email === JSON.parse(localStorage.getItem('userInfo') || '{}').email && setMatch(pic.profilePicture.toString())
-      })
-    }
-    else if (Object.keys(helper).length !== 0 && helper) { //* check blog post match 2nd. This will be redundant once db updated
-      picturesForUsers.pictures.find((pic: any) => {
-        return pic.user === helper.user && setMatch(pic.profilePicture.toString());
-      })
-    }
-    else {
-      return setMatch('alt');
-    }
-    return match
-  }
-  
+  }, [])
 
 
   async function openWidget (e: React.SyntheticEvent) {
@@ -76,31 +38,20 @@ export default function Profile() {
         secure: true
     }, 
      (error: any, result:  any) => {
-        try {
-          if (result.event === 'success' ) {
-            dispatch(postPicture({
-              profilePicture: `https://res.cloudinary.com/dyneqi48f/image/upload/${result.info.path}`,
-              id: localData._id,
-              email: localData.email
-            })
-          )
+       try {
+         if (result.event === 'success') {
+            dispatch(updateUser({ profilePicture: `https://res.cloudinary.com/dyneqi48f/image/upload/${result.info.path}`}))
         }
       } catch {
         console.log(error)
       } finally {
-        if (result.event === 'close' ) {
-          getUpdatedWallPosts();
-        }
         setDisableWidgetButton(false)
       }
     })
     widget.open(); 
   }
 
-  async function getUpdatedWallPosts() {
-    dispatch(getBlogs())
-    setResetProfilePic(prev => prev +=1 )
-  }
+
   
 return (
   <React.Fragment>
@@ -143,7 +94,7 @@ return (
             borderRadius: '50%',
             border: '1px solid lightgrey',
             borderColor: 'secondary.main',
-            backgroundImage: `url(${match})`,
+            backgroundImage: `url(${userProfilePicture})`, 
              backgroundSize: 'contain'
           }}>
           <Button variant='contained' onClick={openWidget} disabled={disableWidgetButton}>Choose image </Button>

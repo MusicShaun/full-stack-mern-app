@@ -1,20 +1,26 @@
-const express = require('express');
-const  { registerUser , authUser, updateUserProfile}  = require('../controllers/userControllers');
-const router = express.Router();
-const { protect } = require('../middlewares/authMiddleWare');
+const express = require('express')
+const router = express.Router()
+const { updateUser, getUser, getUsers, deleteUser, getUserPicture, uploadUserPicture}  = require('../controllers/userControllers')
+const { signup, login, protect } = require('../controllers/authController')
+
+
+router.post('/signup', signup)
+
+router.post('/login', login)
+
+router.route('/').get(protect, getUsers)
 
 router
-  .route('/')
-  .post(registerUser);
+  .route('/:id')
+  .get(protect, getUser) 
+  .patch(protect, updateUser)
+  .delete(deleteUser);
 
 router
-  .route("/login")
-  .post(authUser);
+  .route('/picture/:id')
+  .get(protect, getUserPicture)
 
-router
-  .route('/profile')
-  .post(protect, updateUserProfile)
+  
 
 module.exports = router
 
-//* there isnt a user id route 

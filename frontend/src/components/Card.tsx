@@ -3,7 +3,7 @@ import Chip from '@mui/material/Chip';
 import { Avatar, Typography, Box, Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState , useEffect, useRef } from 'react'; 
-import useMatchPicture from '../../hooks/usePicturesAndBlogMatcher';
+import useMatchPicture from '../hooks/usePicturesAndBlogMatcher';
 
 
 type IProps = {
@@ -16,10 +16,9 @@ type IProps = {
 
 export default function Card( { checkBodies, counter = 0,content, pinned }: IProps) {
 
-  const [ showBody, setShowBody ] = useState<boolean>(false)
+  const [showBody, setShowBody] = useState<boolean>(false)
   const [ delayText, setDelayText ] = useState<boolean>(false)
   const scrollRef = useRef<HTMLDivElement>(null);
-
   const match = useMatchPicture({ content })
 
   function handleExpandPost() {
@@ -29,13 +28,13 @@ export default function Card( { checkBodies, counter = 0,content, pinned }: IPro
     // eslint-disable-next-line 
     const renderAfteruseEffect = setTimeout(() => {
       setShowBody(prev => !prev)
-    }, 5) 
+    }, 0) 
 
     if (!delayText) {
       const timer = setTimeout(() => {
         setDelayText(prev => !prev)
         scrollRef.current?.scrollIntoView({behavior: 'smooth'})
-    }, 250);
+    }, 1250);
     return () => clearTimeout(timer);
     } else {
       setDelayText(prev => !prev)
@@ -140,7 +139,7 @@ export default function Card( { checkBodies, counter = 0,content, pinned }: IPro
               fontSize: '0.75rem',
               color: 'text.secondary',
             }}>
-              {content.createdAt.substring(0, 10)}
+              {content.createdAt && content.createdAt.substring(0, 10)}
             </Typography>
           </Box>
           <Button

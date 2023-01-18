@@ -1,17 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Login {
-  value: LoginState[];
+  value: LoginState;
 }
 interface LoginState {
   firstName?: string;
   lastName?: string;
   email: string; 
   password: string; 
+  // isUserLoggedIn: boolean;
   
 }
 const initialState: Login = {
-  value: [],
+  value: {
+    firstName: '',
+    lastName:'' ,
+    email: '',
+    password: '',
+    // isUserLoggedIn: false
+  },
 }
 
 export const loginSlice = createSlice({
@@ -19,14 +26,11 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     loginUser: (state, action: PayloadAction<LoginState>) => {
-      state.value.push(action.payload)
-    },
-    deleteUser: (state) => {
-      state.value.splice(0, 1)
+      state.value = {...state.value, ...action.payload }
     },
   }
 })
 
-export const { loginUser, deleteUser } = loginSlice.actions; 
+export const { loginUser } = loginSlice.actions; 
 
 export default loginSlice.reducer; 

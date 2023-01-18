@@ -14,7 +14,7 @@ const pictureSchema = mongoose.Schema(
     type: String,
     required: true,
   },
-  },
+  }, {strict: "throw"}
 
 );
 

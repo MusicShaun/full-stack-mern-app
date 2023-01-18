@@ -5,13 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../art/logo.png';
 import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
-import { logOutUser } from '../../features/loggedInSlice';
-import { deleteUser } from '../../features/loginSlice';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import LoggedOutNav from './LoggedOutNav';
 import LoggedInNav from './LoggedInNav';
 import { useRef, useEffect, useState } from 'react';
+import { changeLoggedInOrOut } from '../../features/loggedInOrOutSlice';
 
 
 //HIDE APPBAR
@@ -38,21 +37,32 @@ type IProps = {
 export default function Header( {toggleLightDark, darkMode, setBlogFilter, setClearListings , clearListings} : IProps ) {
 
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const loggedInStatus = useAppSelector((state) => state.loggedInState);
   const filterRef = useRef<HTMLInputElement>(null);
   const [ inputValue , setInputValue ] = useState('');
   const updateSelector = useAppSelector(state => state.showUpdateSlice)
   const blogPostsArray = useAppSelector(state => state.getWallPostState.value)
+  const isLoggedInOrOut = useAppSelector(state => state.loggedInOrOut.value)
+  const dispatch = useAppDispatch()
 
-  useEffect(() => {if (filterRef.current){filterRef.current.focus()}},[])
+  useEffect(() => {
+    if (filterRef.current) { filterRef.current.focus() }
+  }, [])
+  
+  useEffect(() => { // Check store & localStorage if logged in and redirect
+    let userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+    if (userInfo.isUserLoggedIn) {
+      dispatch(changeLoggedInOrOut({ isLoggedIn: true }))
+    } else if (window.location.pathname !== '/register' && window.location.pathname !== '/') {
+      navigate('/login')
+    }
+    // eslint-disable-next-line
+  }, [isLoggedInOrOut.isLoggedIn])
+
 
   function handleLogout() {
     localStorage.removeItem('userInfo')
-    dispatch(logOutUser())
-    dispatch(deleteUser())
+    dispatch(changeLoggedInOrOut({ isLoggedIn: false }))
     navigate('/login')
-    console.log('logged out')
   }
 
   function handleSearch(event: any) {
@@ -124,7 +134,7 @@ export default function Header( {toggleLightDark, darkMode, setBlogFilter, setCl
 
 {/* NOT LOGGED IN  */}
       <Box sx={{  display: { xs: 'none', md: 'flex' } }}>
-        {!loggedInStatus.value && 
+        {!isLoggedInOrOut.isLoggedIn && 
           <Link to='login' style={killLinkStyle}>
             <Button variant="text" size="large"
                   sx={{fontSize: 16, fontWeight: 600, }} 
@@ -133,7 +143,7 @@ Login
             </Button>
           </Link>
         }
-        {!loggedInStatus.value && 
+        {!isLoggedInOrOut.isLoggedIn && 
         <Link to='register' style={killLinkStyle}>
           <Button variant="outlined"  size="large"
                   sx={{fontSize: 16, fontWeight: 600, }} 
@@ -144,7 +154,7 @@ Create Account
         }
 
 {/* LOGGED IN */}
-        {loggedInStatus.value && 
+        {isLoggedInOrOut.isLoggedIn && 
         <Link to='wall' style={killLinkStyle}>
           <Button variant={window.location.href.includes('wall') ? "contained" : "outlined"} 
                   size="large"
@@ -156,7 +166,7 @@ Create Account
           </Button>
           </Link> 
         }
-        {loggedInStatus.value && 
+        {isLoggedInOrOut.isLoggedIn && 
         <Link to='post' style={killLinkStyle}>
           <Button variant={window.location.href.includes('post') ? "contained" : "outlined"} 
                   size="large"
@@ -168,7 +178,7 @@ Create Account
           </Button>
           </Link>  
         }
-        {loggedInStatus.value && 
+        {isLoggedInOrOut.isLoggedIn && 
         <Link to='profile' style={killLinkStyle}>
           <Button variant={window.location.href.includes('profile') ? "contained" : "outlined"} size="large" 
           sx={window.location.href.includes('profile') ?
@@ -180,7 +190,7 @@ Create Account
           </Button>
         </Link>  
         }
-        {loggedInStatus.value && 
+        {isLoggedInOrOut.isLoggedIn && 
           <Button variant="text" size="large"  sx={{color: 'secondary.light' }}
                   onClick={handleLogout}
                   >Logout
@@ -190,11 +200,11 @@ Create Account
       </Box>
 
         {/* // CHANGE TO HAMBURGER */}
-       {!loggedInStatus.value && 
+       {!isLoggedInOrOut.isLoggedIn && 
         <LoggedOutNav 
         />
        }
-        {loggedInStatus.value && 
+        {isLoggedInOrOut.isLoggedIn && 
         <LoggedInNav 
         handleLogout={handleLogout}
         />

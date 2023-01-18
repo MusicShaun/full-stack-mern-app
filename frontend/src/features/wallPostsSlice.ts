@@ -15,7 +15,7 @@ export const wallPostSlice = createSlice({
       state.value = [...action.payload]
     },
     deleteWallPosts: (state) => {
-      state.value = [{}];
+      state.value = []
     },
   }
 })

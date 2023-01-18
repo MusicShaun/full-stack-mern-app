@@ -1,25 +1,22 @@
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from "./pages/Login";
+import Login from "./pages/login/Login";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Header from "./components/header/Header";
-import Wall from './pages/Wall';
+import Wall from './pages/wall/Wall';
 import Post from './pages/posts/Post';
 import Profile from './pages/profile/Profile';
 import { ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
-import {  useEffect, useState } from 'react'; 
-import PersonalDetails from './pages/profile/PersonalDetails';
+import {   useLayoutEffect, useState } from 'react'; 
+import PersonalDetails from './pages/profile/personal/PersonalDetails';
 import darkTheme  from './mui-themes/DARK_THEMES';
 import  theme  from './mui-themes/LIGHT_THEMES';
-import YourPosts from './pages/profile/YourPosts';
-import { useAppDispatch, useAppSelector } from "./app/hook";
-import Draft from './pages/profile/Draft';
-import YourPostsUpdateBlog from './pages/profile/YourPostsUpdateBlog';
+import YourPosts from './pages/profile/yourposts/YourPosts';
+import Draft from './pages/profile/drafts/Draft';
+import YourPostsUpdateBlog from './pages/profile/yourposts/YourPostsUpdateBlog';
 import { useWindowSize } from '@react-hook/window-size';
-import DraftUpdate from './pages/profile/DraftUpdate';
-import { loggedIn } from './features/loggedInSlice';
-
+import DraftUpdate from './pages/profile/drafts/DraftUpdate';
 
 
 function App() {
@@ -27,19 +24,22 @@ function App() {
   const [ blogFilter , setBlogFilter ] = useState<any>();
   const [ darkMode, setDarkMode ] = useState(false);
   const [ clearListings, setClearListings ] = useState(false);
-  const updateSelector = useAppSelector(state => state.showUpdateSlice)
-  const dispatch = useAppDispatch();
+
+  const [ managePageSize, setManagePageSize ] = useState<boolean>(false)
   
   function toggleLightDark() {
     setDarkMode(prev => !prev)
   }
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem('userInfo');
-    if (isLoggedIn) {
-      dispatch(loggedIn())
-    }
-        // eslint-disable-next-line
+
+
+  useLayoutEffect(() => { //* getting page size and applying on load 
+    let help = window.location.pathname.includes(
+      'login'
+      || 'register'
+      || 'post'
+      || 'profile/personal')
+      setManagePageSize(help)
   }, [])
   
 
@@ -48,10 +48,8 @@ function App() {
     <Wrapper 
       style={{
         width: `${onlyWidth}px`, 
-        height: window.location.href.includes('login' || 'register' || 'post' || 'profile/personal')
-          ? `${onlyHeight}px` : '100%',
-        overflowY: window.location.href.includes('login' || 'register' || 'post' || 'profile/personal')
-        ? 'hidden' : 'auto', 
+        height: managePageSize ? `${onlyHeight}px` : '100%',
+        overflowY: managePageSize ? 'hidden' : 'auto', 
         
         }}>
       <Router>
@@ -83,12 +81,12 @@ function App() {
 
           <Route path='profile' element={ <Profile /> }>
             <Route path='' element={ <YourPosts /> }>
-              <Route path='updatepost' element={ <YourPostsUpdateBlog   updateNumber={updateSelector.value.counter} /> } />
+              <Route path='updatepost' element={ <YourPostsUpdateBlog /> } />
             </Route> 
 
             <Route path='personal' element={ <PersonalDetails /> } /> 
             <Route path='draft' element={ <Draft /> }>
-              <Route path='updatepost' element={ <DraftUpdate  updateNumber={updateSelector.value.counter}  /> } /> 
+              <Route path='updatepost' element={ <DraftUpdate   /> } /> 
             </Route> 
 
           </Route> 

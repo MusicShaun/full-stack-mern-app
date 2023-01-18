@@ -16,7 +16,7 @@ import { useAppDispatch , useAppSelector } from '../app/hook';
 import { registerUser } from '../actions/userActions';
 import usePerfectWindowHeight from '../hooks/usePerfectWindowHeight';
 import { useWindowHeight } from '@react-hook/window-size';
-import LoginBackground from '../components/LoginBackground';
+import LoginBackground from './login/LoginBackground';
 
 
 
@@ -24,19 +24,23 @@ export default function Register() {
   const onlyHeight = useWindowHeight(); 
   let navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const loggedInStatus = useAppSelector((state) => state.loggedInState);
+  const isLoggedInOrOut = useAppSelector(state => state.loggedInOrOut.value)
+
 
   useEffect(() => {
-    if (loggedInStatus.value) {
+    if (isLoggedInOrOut.isLoggedIn) {
       navigate('/wall')
     }
     // eslint-disable-next-line
-  }, [loggedInStatus])
+  }, [isLoggedInOrOut])
 
 
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    if (formData.get('password') !== null && formData.get('password')!.toString().length < 8) {
+        return alert('Password must be at least 8 characters')
+    }
     if (!formData.get('firstName') || !formData.get('lastName') || !formData.get('email') || !formData.get('password') ){
       alert('Please fill in the missing field')
     }
@@ -123,7 +127,8 @@ export default function Register() {
                   label="Password"
                   type="password"
                   id="password"
-                  autoComplete="new-password"
+                autoComplete="new-password"
+                
                 />
               </Grid>
             </Grid>

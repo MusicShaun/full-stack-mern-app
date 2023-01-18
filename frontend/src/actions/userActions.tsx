@@ -1,9 +1,7 @@
-
 import axios from "axios";
-import { loggedIn } from "../features/loggedInSlice";
-import { deleteUser, loginUser } from "../features/loginSlice";
-import { deleteRegisterUser } from "../features/registerSlice";
+import { loginUser } from "../features/loginSlice";
 import { loadingState } from "../features/loaderSlice";
+import { changeLoggedInOrOut } from "../features/loggedInOrOutSlice";
 
 
 
@@ -15,29 +13,21 @@ type RegisterProps = {
   password: FormDataEntryValue; 
 }
 
-export const registerUser = ( {firstName, lastName, email, password } : RegisterProps) => async (dispatch: any)  => {
-  console.log('user Registering')
+export const registerUser = ({ firstName, lastName, email, password }: RegisterProps) => async (dispatch: any) => {
   try {
-    const data = await axios.post('/api/users', { //api/users
+    const {data} = await axios.post('/api/users/signup', { 
       firstName,
       lastName,
       email,
-      password 
+      password,
+      passwordChangedAt: Date.now()
       } 
     );
-    dispatch(deleteRegisterUser()) /// remove any old content
-    dispatch(loginUser(data.data)) // renew login information for the app to use
-    dispatch(loggedIn()) // set logged in state for header
-    localStorage.setItem("userInfo", JSON.stringify(data.data))
-
+    dispatch(loginUser({ ...data, isUserLoggedIn: true }))
+    dispatch(changeLoggedInOrOut({ isLoggedIn: true }))
+    localStorage.setItem('userInfo', JSON.stringify({ ...data, isUserLoggedIn: true }))
   } catch (error: any) {
-    dispatch({
-      payload: 
-      error.response && error.response.data.message
-      ? error.response.data.message 
-      : error.message, 
-    })
-  } finally {
+    console.log(error.message)
   }
 }
 
@@ -52,23 +42,19 @@ type LoginProps = {
 }
 
 export  const login = ({email, password}: LoginProps ) => async (dispatch: any) => { 
-  
   try {
-    const { data } = await axios.post(
-      '/api/users/login', //api/login
+    const { data } = await axios.post('/api/users/login', 
       {
         email,
         password
       }
     );
-    dispatch(deleteUser()) // empty the state 
-    dispatch(loginUser(data))// includes first and last name
-    dispatch(loggedIn())
-    localStorage.setItem('userInfo', JSON.stringify(data))
+    dispatch(loginUser({ ...data, isUserLoggedIn: true }))
+    dispatch(changeLoggedInOrOut({ isLoggedIn: true }))
+    localStorage.setItem('userInfo', JSON.stringify({ ...data, isUserLoggedIn: true }))
 
   } catch (error: any) {
       console.log(error.response.data.message)
-      console.log(error)
       alert("Invalid email or password")
   }
 };
@@ -77,39 +63,42 @@ export  const login = ({email, password}: LoginProps ) => async (dispatch: any) 
 
 
 
-  type UpdateUser = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    _id: string;
-    password: string; 
-  }
-  export const updateUser = ( { firstName,lastName, email, _id, password} : UpdateUser) => async (dispatch: any) => {
-    console.log('useractions')
-    let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
-    dispatch(loadingState({booly:true, message: ''}))
-      try {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
-          },
-        };
-        const {data} = await axios.post(
-          '/api/users/profile', {
-          firstName,
-          lastName,
-          email,
-          _id, 
-          password,
-        }, config );
-        dispatch(loadingState({booly:false, message: "Details updated successfully!"}))
-        dispatch(deleteUser()) 
-        dispatch(loginUser(data))// includes first and last name
-        localStorage.setItem("userInfo", JSON.stringify(data))
-      } catch (error: any) {
-        console.log(error.response.data.message)
-        dispatch(loadingState({booly: false, message: error.response.data.message}))
-      } 
-  }
+type UpdateUser = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string; 
+  profilePicture?: string;
+}
+export const updateUser = ( { firstName,lastName, email, password, profilePicture} : UpdateUser) => async (dispatch: any) => {
+  let userInfo = JSON.parse(localStorage.getItem('userInfo') ||  '{}');
+  dispatch(loadingState({ booly: true, message: '' }))
     
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
+        },
+      };
+      const { data } = await axios.patch(`/api/users/${userInfo.id}`, {
+        firstName,
+        lastName,
+        email,
+        password,
+        profilePicture
+      }, config)
+
+      dispatch(loadingState({booly:false, message: "Details updated successfully!"}))
+      dispatch(loginUser({...data, isUserLoggedIn: true}))
+      localStorage.setItem("userInfo", JSON.stringify({ ...userInfo, ...data.data}))
+
+    } catch (error: any) {
+      console.log(error.response)
+      dispatch(loadingState({booly: false, message: error.response}))
+    } 
+}
+    
+
+
+

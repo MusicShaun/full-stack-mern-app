@@ -4,27 +4,26 @@ import React, { SetStateAction, useEffect, useState } from 'react'
 
 
 interface IProps {
-  setFirstName?: React.Dispatch<SetStateAction<string>>;
-  setLastName?: React.Dispatch<SetStateAction<string>>;
-  setEmail?: React.Dispatch<SetStateAction<string>>;
   attribute: string;
   textFieldString: string;
   counter: number;
   type?: string;
-
+  handlePatchUpdate: (updatedItem: any) => void
 }
 
 export default function DetailSlots( 
-  {setFirstName, setLastName, setEmail, attribute, textFieldString,  counter ,type
+  { attribute, textFieldString,  counter ,type, handlePatchUpdate
   } : IProps) {
 
   const [ openWindow, setOpenWindow ] = useState<boolean>(false);
+  const [fieldState, setFieldState ] = useState('')
 
   useEffect(() => { //close the pop ups 
     setOpenWindow(false)
   }, [counter])
 
-  useEffect(() => {
+
+  useEffect(() => { // escapes out of window
     function escape(e: any){
       if (e.key === 'Escape'){
       setOpenWindow(false)}
@@ -33,16 +32,11 @@ export default function DetailSlots(
     return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
   }, [] )
 
-  function handleDataInput(e: any) {
-    if (attribute === 'First Name' && setFirstName){
-      setFirstName(e.currentTarget.value)
-    } else if (attribute === 'Last Name' && setLastName){
-      setLastName(e.currentTarget.value)
-    } else if (attribute === 'Email' && setEmail){
-      setEmail(e.currentTarget.value)
-    } 
+  function sortAttributeNames(attribute: string) {
+    if (attribute === 'First Name') return {firstName: fieldState}
+    if (attribute === 'Last Name') return {lastName: fieldState}
+    if (attribute === 'email') return {email: fieldState}
   }
-
 
   return (
     <>
@@ -79,7 +73,7 @@ export default function DetailSlots(
           display: 'flex', flex: 1
       }}>
       <TextField
-        onChange={(e) => handleDataInput(e)}
+        onChange={(e) => setFieldState(e.currentTarget.value)}
         placeholder={textFieldString}
         autoComplete={type}
         name={attribute}
@@ -90,6 +84,9 @@ export default function DetailSlots(
       />
       <Button onClick={() => setOpenWindow(false)}  
       >undo
+    </Button> 
+      <Button onClick={() => handlePatchUpdate(sortAttributeNames(attribute))} 
+      >save
     </Button> 
 
     </Grid>

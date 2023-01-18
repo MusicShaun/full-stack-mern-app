@@ -1,5 +1,4 @@
-import { Typography,TextField,Button,Box,Container,CssBaseline, Paper
-} from "@mui/material";
+import { Typography,TextField,Button,Box,Container,CssBaseline, Paper} from "@mui/material";
 import * as React from "react";
 import { useState, useEffect, useRef } from 'react'; 
 import { useAppDispatch, useAppSelector } from '../../app/hook';
@@ -10,6 +9,8 @@ import usePerfectWindowHeight from "../../hooks/usePerfectWindowHeight";
 import AreYouSure from "./AreYouSure";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
+import BackGround from './PostBackground'
+
 
 export default function Post() {
   const [onlyWidth, onlyHeight] = useWindowSize(); 
@@ -79,12 +80,12 @@ export default function Post() {
   <React.Fragment>
   <CssBaseline />
     {loading && <Loading /> }
-
+      
+      
     <Container maxWidth="xl" sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        bgcolor: 'background',
         height: `${screenHeight}px`,
         mt: 10
         
@@ -106,7 +107,8 @@ export default function Post() {
         display: 'flex', 
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+          alignItems: 'center',
+        zIndex: 1,
         
         ":hover": {
           boxShadow: 8,
@@ -227,7 +229,8 @@ export default function Post() {
       </Paper>
 
     {areYouSure && <AreYouSure resetFormInputs={resetFormInputs}/> }
-
+    <BackGround onlyHeight={onlyHeight} />
+    
   </Container>
   </React.Fragment>
   );

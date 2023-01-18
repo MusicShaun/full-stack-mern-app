@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node backend/server.js",
     "client": "npm start --prefix frontend",
-    "server": "nodemon server",
+    "server": "nodemon backend/server",
     "dev": "concurrently \"npm start\" \"npm run client\"",
     "build": "npm install --prefix frontend && npm run build --prefix frontend",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
@@ -20,15 +20,18 @@
   "license": "ISC",
   "dependencies": {
     "@types/cors": "^2.8.12",
+    "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
     "concurrently": "^7.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

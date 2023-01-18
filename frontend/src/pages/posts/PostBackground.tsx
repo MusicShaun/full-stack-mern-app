@@ -1,7 +1,7 @@
 import { CardMedia, useTheme } from '@mui/material';
-import paintStuff from '../components/art/paint-utensils.jpg';
+import paintStuff from '../../components/art/arts-paper.webp';
 import { Container } from '@mui/material'
-import usePerfectWindowHeight from '../hooks/usePerfectWindowHeight';
+import usePerfectWindowHeight from '../../hooks/usePerfectWindowHeight';
 
 interface WTF {
   onlyHeight: number;
@@ -26,20 +26,18 @@ export default function LoginBackground({onlyHeight}: WTF) {
       p: '0 !important',
       zIndex: 0,
       left: 0,
-      top: 0
+      top: 0,
     }}>
 
 <CardMedia src={paintStuff} 
         component="img"
         height="100%"
-        sx={{filter: `blur(6px)
-                      ${isDarkTheme ? 'grayscale(50%)' : 'grayscale(0%)'}  
-                      ${isDarkTheme ? 'brightness(0.5)' : 'brightness(1.2)'}  
-                      `}}
+        sx={{filter: `blur(2px)
+              ${isDarkTheme ? 'grayscale(50%)' : 'grayscale(0%)'}  
+              ${isDarkTheme ? 'brightness(0.5)' : 'brightness(1.2)'}`,
+        
+        }}
         /> 
-
-
-
       </Container>
   )
 }

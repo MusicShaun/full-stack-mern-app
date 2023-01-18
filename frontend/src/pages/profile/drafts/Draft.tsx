@@ -2,13 +2,13 @@ import { Box, Button, Typography } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom';
-import { deleteBlog } from '../../actions/blogActions';
-import { useAppDispatch, useAppSelector } from '../../app/hook';
-import Card from '../../components/blog_posts/Card';
-import Loader from '../../components/Loader';
-import { deleteDraftPosts, getDraftPosts } from '../../features/draftPostsSlice';
-import { showUpdateTrue } from '../../features/showUpdateSlice';
-import YourPostsFinish from './YourPostsCloser';
+import { deleteBlog } from '../../../actions/blogActions';
+import { useAppDispatch, useAppSelector } from '../../../app/hook';
+import Card from '../../../components/Card';
+import Loader from '../../../components/Loader';
+import { deleteDraftPosts, getDraftPosts } from '../../../features/draftPostsSlice';
+import { showUpdateTrue } from '../../../features/showUpdateSlice';
+import YourPostsFinish from '../yourposts/YourPostsCloser';
 
 export default function Draft() {
 
@@ -16,24 +16,29 @@ export default function Draft() {
   const updateSelector = useAppSelector(state => state.showUpdateSlice)
   const navigate = useNavigate();
   const draftsSelector = useAppSelector(state => state.getDraftPostsState.value)
-  const finishSelector = useAppSelector(state => state.patheticBoolean);
+  const closePopUpWindow = useAppSelector(state => state.booleanPopUpWindow);
   const loading = useAppSelector(state => state.loadingState.value.booly)
-
+  const [ usersDrafts, setUsersDrafts ] = useState<object[]>([]);
   const [ localDraft, setLocalDraft ] = useState([]);
 
-
+  
   useEffect(() => {
     getUpdatedDraftsPosts();
     // eslint-disable-next-line
   }, [])
+  useEffect(() => {
+    usersDraftedBlogs()
+    // eslint-disable-next-line
+  }, [  draftsSelector ])
+
   
   async function getUpdatedDraftsPosts() {
     try { 
       const data = await axios.get('/api/bloggers', {
       }) 
-      let helper = data.data.blogs.filter(function( obj:any ) { // remove any that belong with the drafts
+      let helper = data.data.data.filter(function( obj:any ) { // remove any that belong with the drafts
         return obj.isDraft === true;
-      });
+      })
       dispatch(getDraftPosts(helper))
       setLocalDraft(helper)
     } catch (error) {
@@ -54,27 +59,33 @@ export default function Draft() {
     dispatch(showUpdateTrue(index))
   }
 
-  const [ usersDrafts, setUsersDrafts ] = useState<object[]>([]);
-  useEffect(() => {
-    setUsersDrafts([]) // creates a shallow update
-    let local: any; 
+
+  function usersDraftedBlogs() {
+    setUsersDrafts([]) 
+    sieveDrafts(getLocalStorage())
+  }
+  function getLocalStorage(){
     if (localStorage.getItem('userInfo')){
-    local = JSON.parse(localStorage.getItem('userInfo') || ""); 
+      return JSON.parse(localStorage.getItem('userInfo') || ""); 
     }
+  }
+  function sieveDrafts(local: any) {
     let helperDraft: object[] = [];
-    if (draftsSelector){ // check drafts 
+    if (draftsSelector){ 
       Object.values(draftsSelector)
-      .filter((item: any )=> item.lastName === local.lastName 
+      .filter((item: any  )=> item.lastName === local.lastName 
         ? helperDraft.push(item)
         : null)
     }
     setUsersDrafts(helperDraft)
-  }, [  draftsSelector ])
+  }
+
+
 
   return (
     <Box sx={{width: '92%', height: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column'}} >
     <Typography variant='h1' textAlign='center' 
-        sx={{filter: finishSelector.value ? 'blur(5px)' : 'null', 
+        sx={{filter: closePopUpWindow.value ? 'blur(5px)' : 'null', 
             mt: {xs: 1, md: 4}, 
             mb: {xs: 1, md: 4},
             }}>
@@ -89,8 +100,8 @@ export default function Draft() {
       mb: !updateSelector.value.bool ? 10 : 0,
       width: '100%'
       }}>
-  {loading && loading.booly && <Loader /> }
-  {finishSelector.value && <YourPostsFinish />}
+  {loading && <Loader /> }
+  {closePopUpWindow.value && <YourPostsFinish />}
 
     {localDraft && !updateSelector.value.bool &&
     localDraft.map((item: any, index: number) => {

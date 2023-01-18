@@ -1,80 +1,75 @@
 import { Box, Button, TextField } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { updateBlog } from '../../actions/blogActions';
-import { useAppDispatch, useAppSelector } from '../../app/hook';
-import { showUpdateFalse } from '../../features/showUpdateSlice';
-
-interface IProps  {
-  updateNumber: number;
-}
+import { updateBlog } from '../../../actions/blogActions';
+import { useAppDispatch, useAppSelector } from '../../../app/hook';
+import { showUpdateFalse } from '../../../features/showUpdateSlice';
 
 
-export default function DraftUpdate({ updateNumber  } : IProps) {
-
+export default function DraftUpdate() {
   const {usersDrafts} = useOutletContext<{ usersDrafts: any[]}>();
-  const [ tag, setTag ] = useState(usersDrafts[updateNumber].tag);
-  const [ tag2, setTag2 ] = useState(usersDrafts[updateNumber].tag2);
-  const [ header, setHeader ] = useState(usersDrafts[updateNumber].header);
-  const [ body, setBody ] = useState(usersDrafts[updateNumber].body);
-  const [ id, setId ] = useState(usersDrafts[updateNumber]._id)
+  const [ tag, setTag ] = useState<string | undefined>()
+  const [ tag2, setTag2 ] = useState<string | undefined>()
+  const [ header, setHeader ] = useState<string | undefined>()
+  const [ body, setBody ] = useState<string | undefined>()
+  const [ id, setId ] = useState<number | undefined>()
 
   const dispatch = useAppDispatch();
-  const finishSelector = useAppSelector(state => state.patheticBoolean);
-  const updateSelector = useAppSelector(state => state.showUpdateSlice)
+  const closePopUpWindow = useAppSelector(state => state.booleanPopUpWindow);
+  const draftUpdateSelector = useAppSelector(state => state.showUpdateSlice.value)
   const refFocus = useRef<any>(null);
   const navigate = useNavigate();
-  useEffect(() => { setId(usersDrafts[updateNumber]._id)}, [usersDrafts, updateNumber])
+
+
+  useEffect(() => {
+    if (usersDrafts.length > 0) {
+      setId(usersDrafts[draftUpdateSelector.counter]._id)
+    }
+  }, [usersDrafts, draftUpdateSelector.counter])
+
+  function handleCancel() {
+    navigate('../')
+    dispatch(showUpdateFalse())
+  }
 
   function handleUpdateDraft(event: React.FormEvent<HTMLFormElement>) { 
     event.preventDefault();
     if (document.activeElement!.id === 'post') {
       dispatch(updateBlog({
-        id: id,
-        tag: tag,
-        tag2: tag2,
-        header: header,
-        body: body,
-        isDraft: false,
-        // profilePicture: usersDrafts[updateNumber].profilePicture
+        id, tag, tag2, header, body, isDraft: false,
       }))
     } else if (document.activeElement!.id === 'save') {
       dispatch(updateBlog({
-        id: id,
-        tag: tag,
-        tag2: tag2,
-        header: header,
-        body: body,
-        isDraft: true,
-        // profilePicture: usersDrafts[updateNumber].profilePicture
+        id, tag, tag2,  header, body, isDraft: true,
       }))
     }
   }
-  function handleCancel() {
-    navigate('../')
-    dispatch(showUpdateFalse())
-  }
-    // escapes search results // TURN THIS INTO A HOOK      
-    useEffect(() => {
-      function escape(e: any){
-        if (e.key === 'Escape'){
-          handleCancel()}
-      }
-      window.addEventListener('keyup', (e) => escape(e)) ;
-      return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
-      // eslint-disable-next-line
-    }, [] )
 
+    // escapes search results // Also checks if the blogcontents are empty 
+  useEffect(() => {
+    if (Object.keys(usersDrafts).length === 0 || usersDrafts.length ===0) {
+      navigate('../')
+    }  
+    function escape(e: any){
+      if (e.key === 'Escape'){
+        handleCancel()}
+    }
+    window.addEventListener('keyup', (e) => escape(e)) ;
+    return () => window.removeEventListener('keyup',  (e) => escape(e)) ;
+    // eslint-disable-next-line
+  }, [] )
+
+  
   return (
     <Box component="form"  onSubmit={handleUpdateDraft}  sx={{
-      marginTop: !updateSelector.value.bool ? 4 : 0,
+      marginTop: !draftUpdateSelector.bool ? 4 : 0,
       position: 'relative',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       minWidth: '300px',
       width: '70%',
-      filter: finishSelector.value ? 'blur(5px)' : 'null',
+      filter: closePopUpWindow.value ? 'blur(5px)' : 'null',
 
     }}>
 
@@ -88,7 +83,7 @@ export default function DraftUpdate({ updateNumber  } : IProps) {
     <TextField
     inputRef={refFocus}
     onChange={(e) => setTag(e.target.value)}
-    defaultValue={usersDrafts[updateNumber].tag}
+    defaultValue={usersDrafts.length > 0 && usersDrafts[draftUpdateSelector.counter]['tag' as keyof typeof usersDrafts[0]]}
     type="text"
     name="tag"
     variant="outlined"
@@ -98,7 +93,7 @@ export default function DraftUpdate({ updateNumber  } : IProps) {
   />
   <TextField
     onChange={(e) => setTag2(e.target.value)}
-    defaultValue={usersDrafts[updateNumber].tag2}
+    defaultValue={usersDrafts.length > 0 && usersDrafts[draftUpdateSelector.counter]['tag2' as keyof typeof usersDrafts[0]]}
     type="text"
     name="tag2"
     variant="outlined"
@@ -110,7 +105,7 @@ export default function DraftUpdate({ updateNumber  } : IProps) {
 <br />
   <TextField
     onChange={(e) => setHeader(e.target.value)}
-    defaultValue={usersDrafts[updateNumber].header}
+    defaultValue={usersDrafts.length > 0 && usersDrafts[draftUpdateSelector.counter]['header' as keyof typeof usersDrafts[0]] }
     type="text"
     name='header'
     variant="outlined"
@@ -122,7 +117,7 @@ export default function DraftUpdate({ updateNumber  } : IProps) {
   <br />
   <TextField
     onChange={(e) => setBody(e.target.value)}
-    defaultValue={usersDrafts[updateNumber].body}
+    defaultValue={usersDrafts.length > 0 && usersDrafts[draftUpdateSelector.counter]['body'  as keyof typeof usersDrafts[0]]}
     type="text"
     name="content"
     variant="outlined"    
