@@ -11,7 +11,7 @@ export const getBlogs = () => async (dispatch: any) => {
   dispatch(loadingState({booly: true, message: 'Loading'}))
   try {
     const { data } = await axios.get('/api/bloggers') 
-    console.log(data.data)
+    console.log(data)
     dispatch(getWallPosts(data.data))
     dispatch(loadingState({booly: false, message: 'finished load'}))
   } catch (error: any) {
@@ -128,11 +128,11 @@ export const getBlogByID = () => async (dispatch: any) => {
   try {
     const { data } = await axios.get(`/api/bloggers/${userInfo.id}`)
     dispatch(getProfileBlogs(data.data))
-    console.log(data.data)
+    console.log(data)
 
   } catch (error: any) {
     console.log(error)
-    dispatch(loadingState({booly: false, message: error.response.data}))
+    dispatch(loadingState({booly: false, message: error.response}))
 
   }
 }

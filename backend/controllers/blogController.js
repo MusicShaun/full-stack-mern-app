@@ -7,7 +7,7 @@ const factory = require('../controllers/handlerFactory')
 
 
 exports.blogEntry = ash(async (req, res) => {
-  const newBlog = await Blogger.create({
+  const data = await Blogger.create({
     user: req.user.id,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -20,7 +20,7 @@ exports.blogEntry = ash(async (req, res) => {
 
   res.status(201).json({
       status: 'blogentry success',
-      data: newBlog
+      data
     })
 });
 
@@ -30,12 +30,12 @@ exports.deleteBlog = factory.deleteOne(Blogger)
 
 
 exports.getBlogsByUserId = ash(async (req, res, next) => {
-    const doc = await Blogger.find({ "user": req.params.id })
-  if (!doc) return next(new AppError('No document found with that ID', 404))
-  
-    res.status(200).json({
+    const data = await Blogger.find({ "user": req.params.id })
+  if (!data) return next(new AppError('No document found with that ID', 404))
+
+  res.status(200).json({
       status: 'success',
-      data: doc
+      data
     })
   })
 
