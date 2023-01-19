@@ -11,11 +11,9 @@ export const getBlogs = () => async (dispatch: any) => {
   dispatch(loadingState({booly: true, message: 'Loading'}))
   try {
     const { data } = await axios.get('/api/bloggers') 
-    console.log(data)
     dispatch(getWallPosts(data.data))
     dispatch(loadingState({booly: false, message: 'finished load'}))
   } catch (error: any) {
-    console.log(error)
     dispatch(loadingState({booly: false, message: error.response}))
   } 
 }
@@ -56,8 +54,8 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
       isDraft,
       
     }, config)
+    console.log(data)
     dispatch(loadingState({ booly: false, message: "Blog has posted successfully!" }))
-      console.log(data)
   } catch (error: any) {
       dispatch(loadingState({booly: false, message: error.response}))
       alert('Something happened that wasn\'t supposed to. Please have another go.')
@@ -114,7 +112,7 @@ export const deleteBlog = (id: any) => async (dispatch: any) => {
     };// eslint-disable-next-line 
     const {data} = await axios.delete(`/api/bloggers/${id}`, config);
   } catch (error: any) {
-    console.log(error.response)
+    dispatch(loadingState({booly: false, message: error.response}))
   }
 }
   
@@ -128,12 +126,8 @@ export const getBlogByID = () => async (dispatch: any) => {
   try {
     const { data } = await axios.get(`/api/bloggers/${userInfo.id}`)
     dispatch(getProfileBlogs(data.data))
-    console.log(data)
-
   } catch (error: any) {
-    console.log(error)
     dispatch(loadingState({booly: false, message: error.response}))
-
   }
 }
 

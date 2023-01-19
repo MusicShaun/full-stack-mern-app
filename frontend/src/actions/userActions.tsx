@@ -14,6 +14,7 @@ type RegisterProps = {
 }
 
 export const registerUser = ({ firstName, lastName, email, password }: RegisterProps) => async (dispatch: any) => {
+  dispatch(loadingState({booly: true, message: 'Loading'}))
   try {
     const {data} = await axios.post('/api/users/signup', { 
       firstName,
@@ -25,9 +26,10 @@ export const registerUser = ({ firstName, lastName, email, password }: RegisterP
     )
     dispatch(loginUser({ ...data, isUserLoggedIn: true }))
     dispatch(changeLoggedInOrOut({ isLoggedIn: true }))
+    dispatch(loadingState({booly: false, message: 'finished load'}))
     localStorage.setItem('userInfo', JSON.stringify({ ...data, isUserLoggedIn: true }))
   } catch (error: any) {
-    console.log(error.message)
+    dispatch(loadingState({ booly: false, message: error.response }))
   }
 }
 

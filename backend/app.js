@@ -1,4 +1,5 @@
-const express = require("express");
+const express = require("express")
+const compression = require('compression')
 const cors = require('cors')
 const userRoutes = require('./routes/userRoutes');
 const blogRoutes = require('./routes/blogRoutes');
@@ -14,6 +15,7 @@ const allowedOrigins = '*';
 const options = { origin: allowedOrigins }
 app.use(cors(options));
 app.use(express.json());
+app.use(compression())
 
 
 if (process.env.NODE_ENV === 'development') {

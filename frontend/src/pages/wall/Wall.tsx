@@ -35,7 +35,6 @@ export default function Wall( {blogFilter, setBlogFilter, clearListings , setCle
     // eslint-disable-next-line
   }, [])
 
-  console.log(blogPostsArray)
   
   useEffect(() => { // ESCAPES SEARCH RESULTS
     function escape(e: any){

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getPictureState } from "../features/userProfilePictureSlice";
+import { loadingState } from "../features/loaderSlice";
 
 
 export const getUserPicture = () => async (dispatch: any) => {
@@ -14,7 +15,7 @@ export const getUserPicture = () => async (dispatch: any) => {
     const data = await axios.get(`/api/users/picture/${userInfo.id}`, config)
     dispatch(getPictureState(data.data.data))
   } catch (error: any) {
-    console.log(error)
+    dispatch(loadingState({booly: false, message: error.response}))
   }
 }
 

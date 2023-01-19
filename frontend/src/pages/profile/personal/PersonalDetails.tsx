@@ -12,7 +12,6 @@ export default function PersonalDetails() {
   const [ onlyWidth, onlyHeight] = useWindowSize(); 
 
   const [ localData , setLocalData ] = useState<any>({});
-  const [ password, setPassword ] = useState("");
   const [ counter , setCounter ] = useState(0); 
   const dispatch = useAppDispatch();
   const [ postFinish, setPostFinish ] = useState<boolean>(false);
