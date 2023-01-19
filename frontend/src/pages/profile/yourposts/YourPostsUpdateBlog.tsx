@@ -25,9 +25,10 @@ export default function YourPosts_UpdateBlog() {
 
   useEffect(() => {
     if (usersPosts.length !== 0 ) {
-      setId(usersPosts[postUpdateSelector.counter]['id' as keyof typeof usersPosts[0]])
+      setId(usersPosts[postUpdateSelector.counter]['_id' as keyof typeof usersPosts[0]])
     }
   }, [usersPosts, postUpdateSelector.counter])
+
 
 
   useEffect(() => {// escapes search results // auto focus   // redirects if refreshed 

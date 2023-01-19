@@ -33,7 +33,7 @@ function App() {
 
 
 
-  useLayoutEffect(() => { //* getting page size and applying on load 
+  useLayoutEffect(() => { //* SEPARATE NON-SCROLLING PAGES
     let help = window.location.pathname.includes(
       'login'
       || 'register'

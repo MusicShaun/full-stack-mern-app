@@ -71,7 +71,6 @@ type UpdateBlog = {
   header?: string;
   body?: string;
   isDraft: boolean;
-  // profilePicture: string; 
 }
 export const updateBlog = ( {id, tag,tag2, header, body, isDraft, } : UpdateBlog) => async (dispatch: any) => {
   dispatch(loadingState({booly:true, message: ''}))

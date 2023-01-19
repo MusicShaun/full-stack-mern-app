@@ -10,6 +10,15 @@ export default function Landing() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  function handleEnterWebsite() {
+    let userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
+    if (userInfo.isUserLoggedIn) {
+      navigate('/wall')
+    } else {
+      navigate('/login')
+    }
+  }
+
   return (
     <Container
       
@@ -66,7 +75,7 @@ export default function Landing() {
           }}>
           This site is for example purposes only. <br /><br />
       Please do not enter your personal contact information.
-            <Button variant='outlined' sx={{p: 5, fontSize: '2rem', border: 2}} onClick={() => navigate('/wall')}>Enter</Button>
+            <Button variant='outlined' sx={{p: 5, fontSize: '2rem', border: 2}} onClick={handleEnterWebsite}>Enter</Button>
         </Typography>
 
       </Paper>
