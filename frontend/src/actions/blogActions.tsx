@@ -44,8 +44,8 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
           Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
         },
       };
-// eslint-disable-next-line 
-    const data  = await axios.post(
+
+    const { data }  = await axios.post(
       '/api/bloggers', {
       tag,
       tag2,
@@ -57,7 +57,7 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
       
     }, config)
     dispatch(loadingState({ booly: false, message: "Blog has posted successfully!" }))
-    
+      console.log(data)
   } catch (error: any) {
       dispatch(loadingState({booly: false, message: error.response}))
       alert('Something happened that wasn\'t supposed to. Please have another go.')
@@ -112,9 +112,9 @@ export const deleteBlog = (id: any) => async (dispatch: any) => {
         Authorization: `Bearer ${userInfo.token ? userInfo.token : userInfo.data.token}`,
       },
     };// eslint-disable-next-line 
-    const data = await axios.delete(`/api/bloggers/${id}`, config);
+    const {data} = await axios.delete(`/api/bloggers/${id}`, config);
   } catch (error: any) {
-    console.log(error.response.data.message)
+    console.log(error.response)
   }
 }
   
