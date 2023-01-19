@@ -9,24 +9,19 @@ process.on('uncaughtException', err => {
   process.exit(1)
 })
 
-
-const app = require('./app')
 dotenv.config()
+const app = require('./app')
+
 
 //CONNECT TO MONGO
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, { 
+mongoose
+  .connect(process.env.MONGO_URI, { 
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
-    console.log(`Mongo connected : ${conn.connection.host}`)
-  } catch (error){
-    console.log(error.message);
-    process.exit();
-  }
-}
-connectDB()
+  .then(() =>  console.log(`Mongo connected `))
+
+
 
 
 const PORT = process.env.PORT || 80;

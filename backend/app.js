@@ -15,26 +15,32 @@ const options = { origin: allowedOrigins }
 app.use(cors(options));
 app.use(express.json());
 
+
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev')) //* morgan displays each request in the console
 }
 
 
 // DEPLOYMENT 
-__dirname = path.resolve();
+// __dirname = path.resolve()
+
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/frontend/build')))
+  app.use(express.static(path.join(__dirname, `/frontend/build`)))
 
   app.get('*', (req,res) => {
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
   })
+} 
 
-} else {
-  app.get('/', (req, res) => {
-    res.send("API is running.")
-  })
-}
+app.get('/', (req, res) => {
+  res.send("HELLO FROM THE SERVER")
+})
 
+// Test middleware
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next()
+})
 
 // ROUTES 
 app.use('/api/users', userRoutes)
