@@ -20,12 +20,14 @@ exports.signup = ash(async (req, res) => {
       password,
       passwordChangedAt,
     })
-
-    const token = signToken(newUser._id)
+  const token = signToken(newUser._id)
     res.status(200).json({
       status: 'success',
-      token,
-      data:  newUser 
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      id: newUser._id,
+      email: newUser.email,
+      token
     })
 
 })

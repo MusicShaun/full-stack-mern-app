@@ -23,9 +23,9 @@ export const registerUser = ({ firstName, lastName, email, password }: RegisterP
       passwordChangedAt: Date.now()
       } 
     )
-    dispatch(loginUser({ ...data.data, isUserLoggedIn: true }))
+    dispatch(loginUser({ ...data, isUserLoggedIn: true }))
     dispatch(changeLoggedInOrOut({ isLoggedIn: true }))
-    localStorage.setItem('userInfo', JSON.stringify({ ...data.data, isUserLoggedIn: true }))
+    localStorage.setItem('userInfo', JSON.stringify({ ...data, isUserLoggedIn: true }))
   } catch (error: any) {
     console.log(error.message)
   }
