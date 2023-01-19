@@ -21,6 +21,11 @@ export default function Card( { checkBodies, counter = 0,content, pinned }: IPro
   const scrollRef = useRef<HTMLDivElement>(null);
   const match = useMatchPicture({ content })
 
+  useEffect(() => {
+    setShowBody(false)
+    setDelayText(false)
+  }, [counter])
+
   function handleExpandPost() {
     if (!showBody && checkBodies) {
       checkBodies();
@@ -34,17 +39,14 @@ export default function Card( { checkBodies, counter = 0,content, pinned }: IPro
       const timer = setTimeout(() => {
         setDelayText(prev => !prev)
         scrollRef.current?.scrollIntoView({behavior: 'smooth'})
-    }, 1250);
+    }, 1);
     return () => clearTimeout(timer);
     } else {
       setDelayText(prev => !prev)
     }
   }
 
-  useEffect(() => {
-    setShowBody(false)
-    setDelayText(false)
-  }, [counter])
+
   
   return (
     <>{Object.keys(content).length !== 0  && // 

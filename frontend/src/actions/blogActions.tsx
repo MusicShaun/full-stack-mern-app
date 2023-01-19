@@ -8,7 +8,7 @@ import { getWallPosts } from "../features/wallPostsSlice";
 
 
 export const getBlogs = () => async (dispatch: any) => {
-  dispatch(loadingState({booly: true, message: 'Loading'}))
+  dispatch(loadingState({ booly: true, message: 'Loading' }))
   try {
     const { data } = await axios.get('/api/bloggers') 
     dispatch(getWallPosts(data.data))
@@ -42,7 +42,7 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
           Authorization: `Bearer ${userInfo.token ? userInfo.token  : userInfo.data.token }`,
         },
       };
-
+// eslint-disable-next-line 
     const { data }  = await axios.post(
       '/api/bloggers', {
       tag,
@@ -54,7 +54,6 @@ export const postBlog = ( { tag,tag2,header,body,firstName,lastName, isDraft} : 
       isDraft,
       
     }, config)
-    console.log(data)
     dispatch(loadingState({ booly: false, message: "Blog has posted successfully!" }))
   } catch (error: any) {
       dispatch(loadingState({booly: false, message: error.response}))

@@ -28,7 +28,6 @@ export default function Wall( {blogFilter, setBlogFilter, clearListings , setCle
   const blogPostsArray = useAppSelector(state => state.getWallPostState.value)
   const loading = useAppSelector(state => state.loadingState.value.booly)
 
-
   useEffect(() => {// CLEARS STATE AND RUNS GET BLOGS REQUEST
     dispatch(deleteWallPosts())
     dispatch(getBlogs())
