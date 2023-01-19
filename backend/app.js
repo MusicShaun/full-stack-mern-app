@@ -21,31 +21,34 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 
+// ROUTES 
+app.use('/api/users', userRoutes)
+app.use('/api/bloggers', blogRoutes)
+
+
+
+
 // DEPLOYMENT 
 __dirname = path.resolve()
-
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, `/frontend/build`)))
 
   app.get('*', (req,res) => {
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
   })
-} 
+} else {
+  app.get('/', (req, res) => {
+    res.send("HELLO FROM THE SERVER")
+  })
+}
 
-app.get('/', (req, res) => {
-  res.send("HELLO FROM THE SERVER")
-})
+
 
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next()
 })
-
-// ROUTES 
-app.use('/api/users', userRoutes)
-app.use('/api/bloggers', blogRoutes)
-
 
 
 
