@@ -10,10 +10,12 @@ import { getWallPosts } from "../features/wallPostsSlice";
 export const getBlogs = () => async (dispatch: any) => {
   dispatch(loadingState({booly: true, message: 'Loading'}))
   try {
-    const {data} = await axios.get('/api/bloggers') 
+    const { data } = await axios.get('/api/bloggers') 
+    console.log(data.data)
     dispatch(getWallPosts(data.data))
     dispatch(loadingState({booly: false, message: 'finished load'}))
   } catch (error: any) {
+    console.log(error)
     dispatch(loadingState({booly: false, message: error.response}))
   } 
 }
@@ -124,10 +126,12 @@ export const getBlogByID = () => async (dispatch: any) => {
   let userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
   
   try {
-    const res = await axios.get(`/api/bloggers/${userInfo.id}`)
-    dispatch(getProfileBlogs(res.data.data))
+    const { data } = await axios.get(`/api/bloggers/${userInfo.id}`)
+    dispatch(getProfileBlogs(data.data))
+    console.log(data.data)
 
   } catch (error: any) {
+    console.log(error)
     dispatch(loadingState({booly: false, message: error.response.data}))
 
   }
