@@ -7,9 +7,9 @@ const AppError = require('../util/AppError')
 
 const signToken = (id) => {
   return jwt.sign(
-    { id },
+    { id: id },
     process.env.JWT_SECRET,
-    { 
+    { //expiresIn omitted because herokku is a piece of shit 
   })
 }
 

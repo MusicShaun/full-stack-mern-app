@@ -10,11 +10,11 @@ import { getWallPosts } from "../features/wallPostsSlice";
 export const getBlogs = () => async (dispatch: any) => {
   dispatch(loadingState({booly: true, message: 'Loading'}))
   try {
-    const res = await axios.get('/api/bloggers') 
-    dispatch(getWallPosts(res.data.data))
+    const {data} = await axios.get('/api/bloggers') 
+    dispatch(getWallPosts(data.data))
     dispatch(loadingState({booly: false, message: 'finished load'}))
   } catch (error: any) {
-    dispatch(loadingState({booly: false, message: error.response.data}))
+    dispatch(loadingState({booly: false, message: error.response}))
   } 
 }
 
