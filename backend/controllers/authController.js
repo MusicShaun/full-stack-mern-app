@@ -50,7 +50,8 @@ exports.login = ash(async (req, res, next) => {
     lastName: user.lastName,
     id: user._id,
     email: user.email,
-    token
+    token,
+    profilePicture: user.profilePicture
   })
 })
 
