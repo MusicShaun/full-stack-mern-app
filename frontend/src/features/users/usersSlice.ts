@@ -56,8 +56,8 @@ export const registerUser = createAsyncThunk('/users/register', async (initialPo
 export const updateUser = createAsyncThunk('/users/updateUser', async (initialPost: UserType) => {
   const { _id, token, ...rest } = initialPost
   const { data } = await axios.put(`/api/users/${_id}`, rest, config(token)) 
-  localStorage.setItem('userInfo', JSON.stringify(data.data))
-  return data.data
+  localStorage.setItem('userInfo', JSON.stringify({...data.data, token}))
+  return {...data.data, token}
 })
 
 
