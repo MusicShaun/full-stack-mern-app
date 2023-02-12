@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch } from '../app/hook';
+import { useAppDispatch, useAppSelector } from '../app/hook';
 import axios from 'axios';
+import { selectUser } from '../features/users/usersSlice';
 interface IProps {
   content: any;
 }
@@ -8,32 +9,27 @@ interface IProps {
 export default function usePicturesAndBlogMatcher({ content }: IProps) {
   
   const dispatch = useAppDispatch()
+  const user = useAppSelector(selectUser)
+
   const [output, setOutput] = useState<string>();
   const alt = 'https://res.cloudinary.com/dyneqi48f/image/upload/v1669686479/qqsmbl9quuhnvbrs7daw.jpg';
   
-  let userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
-
   useEffect(() => {
     dispatch(getEveryUsersPicture())
-  }, [])
-  
+  }, [dispatch])
 
-  const getEveryUsersPicture = () => async (dispatch: any) => {
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token ? userInfo.token : userInfo.data.token}`,
-        },
-      }
-      if (content.user) {
-        const { data } = await axios.get(`/api/users/picture/${content.user}`, config)
-        if (data) setOutput(data.data)
-      }
-    } catch {
-      // ignore errors, its all good
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${user.token ? user.token : ''}`,
+    }
+  }
+
+  const getEveryUsersPicture = () => async () => {
+    if (content.user) {
+      const { data } = await axios.get(`https://mern-project-main.herokuapp.com/api/users/picture/${content.user}`, config)
+      if (data) setOutput(data.data)
     }
   }
   return output ? output : alt
-
 }

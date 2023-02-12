@@ -1,21 +1,24 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
 import { store }from './app/store';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { fetchBlogs } from './features/wall/wallSlice';
 
+store.dispatch(fetchBlogs())
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-    <Provider 
-      store={store}
-    >
-      <App />
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </Router>
     </Provider>
 
 );
 
-// data key = im8pIEUKwNN59iRowAFwClbXrzpwgISkhdcEYcjK4EuQI0TGNq35N7Pk6Slo0Ouz

@@ -1,37 +1,29 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux'
-import loginUserState from "../features/loginSlice";
-import registerState from '../features/registerSlice';
-import postState from '../features/postSlice';
-import getWallPostState from '../features/wallPostsSlice';
-import updateUserState from '../features/updateUserSlice';
-import booleanPopUpWindow from '../features/booleanPopUpWindowSlice';
-import showUpdateSlice from '../features/showUpdateSlice';
-import loadingState from '../features/loaderSlice';
-import getDraftPostsState from '../features/draftPostsSlice';
-import profileBlogState from '../features/profileBlogSlice';
-import userProfilePicture from '../features/userProfilePictureSlice';
-import loggedInOrOut from '../features/loggedInOrOutSlice'
+import wallReducer from '../features/wall/wallSlice';
+import searchBarReducer from '../features/searchBarSlice'
+import userReducer from '../features/users/usersSlice'
+import logger  from 'redux-logger';
 
 
 const rootReducer = combineReducers({ 
-  loginUserState: loginUserState,
-  registerState: registerState,
-  postState: postState,
-  getWallPostState: getWallPostState, 
-  getDraftPostsState: getDraftPostsState,
-  updateUserState: updateUserState, 
-  booleanPopUpWindow: booleanPopUpWindow,
-  showUpdateSlice: showUpdateSlice,
-  loadingState: loadingState,
-  profileBlogState: profileBlogState,
-  userProfilePicture: userProfilePicture,
-  loggedInOrOut:loggedInOrOut,
+
+  blogs: wallReducer,         
+  searchBar: searchBarReducer, 
+  user: userReducer, 
+
 })
 
 
 export const store = configureStore({
+
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware()
+    .prepend(//middleware if you have it 
+    )
+    // prepend and concat calls can be chained
+    .concat(logger),
 
 })
 

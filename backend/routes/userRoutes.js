@@ -13,7 +13,7 @@ router.route('/').get(protect, getUsers)
 router
   .route('/:id')
   .get(protect, getUser) 
-  .patch(protect, updateUser)
+  .put(protect, updateUser)
   .delete(deleteUser);
 
 router

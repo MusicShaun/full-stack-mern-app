@@ -1,37 +1,25 @@
-import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from "./pages/login/Login";
-import Landing from "./pages/Landing";
-import Register from "./pages/Register";
-import Header from "./components/header/Header";
-import Wall from './pages/wall/Wall';
-import Post from './pages/posts/Post';
-import Profile from './pages/profile/Profile';
-import { ThemeProvider } from '@mui/material/styles';
+import {Routes, Route, useNavigate } from 'react-router-dom';
+import Login from "./features/login/Login";
+import Landing from "./features/Landing";
+import Register from "./features/login/Register";
+import Wall from './features/wall/Wall';
+import Post from './features/posts/Post';
+import Profile from './features/profile/Profile';
 import styled from 'styled-components';
 import {   useLayoutEffect, useState } from 'react'; 
-import PersonalDetails from './pages/profile/personal/PersonalDetails';
-import darkTheme  from './mui-themes/DARK_THEMES';
-import  theme  from './mui-themes/LIGHT_THEMES';
-import YourPosts from './pages/profile/yourposts/YourPosts';
-import Draft from './pages/profile/drafts/Draft';
-import YourPostsUpdateBlog from './pages/profile/yourposts/YourPostsUpdateBlog';
+import PersonalDetails from './features/profile/personal/PersonalDetails';
+import YourPosts from './features/profile/yourposts/YourPosts';
+import Draft from './features/profile/drafts/Draft';
+import YourPostsUpdateBlog from './features/profile/yourposts/YourPostsUpdateBlog';
 import { useWindowSize } from '@react-hook/window-size';
-import DraftUpdate from './pages/profile/drafts/DraftUpdate';
+import DraftUpdate from './features/profile/drafts/DraftUpdate';
+import Layout from './components/Layout';
 
 
 function App() {
   const [ onlyWidth, onlyHeight ] = useWindowSize();
-  const [ blogFilter , setBlogFilter ] = useState<any>();
-  const [ darkMode, setDarkMode ] = useState(false);
-  const [ clearListings, setClearListings ] = useState(false);
-
-  const [ managePageSize, setManagePageSize ] = useState<boolean>(false)
-  
-  function toggleLightDark() {
-    setDarkMode(prev => !prev)
-  }
-
-
+  const [managePageSize, setManagePageSize] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   useLayoutEffect(() => { //* SEPARATE NON-SCROLLING PAGES
     let help = window.location.pathname.includes(
@@ -39,64 +27,48 @@ function App() {
       || 'register'
       || 'post'
       || 'profile/personal')
-      setManagePageSize(help)
-  }, [])
+    setManagePageSize(help)
+  }, [navigate])
   
 
   return (
-  <ThemeProvider theme={darkMode ? darkTheme : theme}>
+ 
     <Wrapper 
       style={{
         width: `${onlyWidth}px`, 
         height: managePageSize ? `${onlyHeight}px` : '100%',
-        overflowY: managePageSize ? 'hidden' : 'auto', 
-        
+        overflowY: managePageSize ? 'hidden' : 'auto',     
         }}>
-      <Router>
 
-        <Header 
-          toggleLightDark={toggleLightDark}
-          darkMode={darkMode}
-          setBlogFilter={setBlogFilter}
-          setClearListings={setClearListings}
-          clearListings={clearListings}
-        /> 
-
-        
-        <Routes>
-            <Route path='/' element={<Landing />} />
-
-          <Route path='wall' element={ <Wall 
-              blogFilter={blogFilter}
-              setBlogFilter={setBlogFilter}
-              clearListings={clearListings}
-              setClearListings={setClearListings}
-            /> } 
-          />   
-          
-
+      
+      <Routes>
+        <Route path='/' element={<Layout />}>
+          <Route index element={<Landing />} /> 
+          <Route path='wall' element={ <Wall /> } />   
           <Route path='login' element={ <Login  /> } /> 
           <Route path='register' element={ <Register /> } /> 
           <Route path='post' element={ <Post /> } />
 
           <Route path='profile' element={ <Profile /> }>
-            <Route path='' element={ <YourPosts /> }>
-              <Route path='updatepost' element={ <YourPostsUpdateBlog /> } />
+            <Route path='your-posts' element={ <YourPosts /> } /> 
+            <Route path='your-posts/update-post' element={<YourPostsUpdateBlog />} />
+            
+                
+            <Route path='personal' element={<PersonalDetails />} /> 
+              
+            <Route path='draft'>
+              <Route index element={<Draft />} />
+              <Route path='update-post' element={ <DraftUpdate   /> } /> 
             </Route> 
 
-            <Route path='personal' element={ <PersonalDetails /> } /> 
-            <Route path='draft' element={ <Draft /> }>
-              <Route path='updatepost' element={ <DraftUpdate   /> } /> 
-            </Route> 
-
-          </Route> 
-
-        </Routes> 
+          </Route>  
+                        
+        </Route>
+          
+      </Routes> 
 
 
-      </Router>
     </Wrapper>
-  </ThemeProvider>
   );
 }
 

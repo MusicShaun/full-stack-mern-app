@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { TextField, Button, AppBar, useScrollTrigger, Slide, IconButton, Box, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import logo from '../art/logo.png';
+import logo from '../../art/logo.png';
 import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hook';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -10,7 +10,10 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import LoggedOutNav from './LoggedOutNav';
 import LoggedInNav from './LoggedInNav';
 import { useRef, useEffect, useState } from 'react';
-import { changeLoggedInOrOut } from '../../features/loggedInOrOutSlice';
+import { filterBlogs } from '../../features/wall/wallSlice';
+import { useSelector } from 'react-redux';
+import { beginSearch, searchBarState } from '../../features/searchBarSlice';
+import { selectUser } from '../../features/users/usersSlice';
 
 
 //HIDE APPBAR
@@ -27,63 +30,56 @@ interface Props {
 type IProps = {
   toggleLightDark: () => void;
   darkMode: boolean;
-  setBlogFilter: React.Dispatch<React.SetStateAction<any | null>>;
-  setClearListings: React.Dispatch<React.SetStateAction<any | null>>;
-  clearListings:  boolean;
 }
 
 
 
-export default function Header( {toggleLightDark, darkMode, setBlogFilter, setClearListings , clearListings} : IProps ) {
+export default function Header( {toggleLightDark, darkMode} : IProps ) {
 
-  const navigate = useNavigate();
-  const filterRef = useRef<HTMLInputElement>(null);
-  const [ inputValue , setInputValue ] = useState('');
-  const updateSelector = useAppSelector(state => state.showUpdateSlice)
-  const blogPostsArray = useAppSelector(state => state.getWallPostState.value)
-  const isLoggedInOrOut = useAppSelector(state => state.loggedInOrOut.value)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  const user = useAppSelector(selectUser)
+  const searchBarEngaged = useSelector(searchBarState)
+
+  const filterRef = useRef<HTMLInputElement>(null);
+  
+  const [searchEntry, setSearchEntry] = useState('')
+  const [storedToken, setStoredToken] = useState(false)
+
+  useEffect(() => { // FOCUS 
     if (filterRef.current) { filterRef.current.focus() }
   }, [])
-  
-  useEffect(() => { // Check store & localStorage if logged in and redirect
+  useEffect(() => { // KEEP LOCAL STORAGE UP TO DATE
+    window.localStorage.setItem('userInfo', JSON.stringify({...user}))
+    console.log('localStorage set')
+  }, [user])
+  useEffect(() => { // CHECK LOGGED ON
     let userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}')
-    if (userInfo.isUserLoggedIn) {
-      dispatch(changeLoggedInOrOut({ isLoggedIn: true }))
+    if (userInfo.token) {
+      setStoredToken(true)
     } else if (window.location.pathname !== '/register' && window.location.pathname !== '/') {
       navigate('/login')
     }
-    // eslint-disable-next-line
-  }, [isLoggedInOrOut.isLoggedIn])
-
+  }, [navigate])
+  useEffect(() => { 
+    if (!searchBarEngaged && filterRef.current) {
+      setSearchEntry('')
+      filterRef.current.focus()
+    }
+  }, [searchBarEngaged])
 
   function handleLogout() {
     localStorage.removeItem('userInfo')
-    dispatch(changeLoggedInOrOut({ isLoggedIn: false }))
+    setStoredToken(false)
     navigate('/login')
   }
 
-  function handleSearch(event: any) {
-    setClearListings(true)
-    let helper = [];
-
-    for (let i =0; i < blogPostsArray.length; i++) {
-      if ((Object.values(blogPostsArray[i]).toString().toLowerCase()).includes(event.target.value.toLowerCase())) {
-        helper.push(blogPostsArray[i])
-      }
-    }
-    setBlogFilter(helper)
-    helper = [];
+  function handleSearch() {
+    dispatch(beginSearch())
+    dispatch(filterBlogs(searchEntry))
   }
-
-  useEffect(() => { 
-    if (!clearListings && filterRef.current) {
-      setInputValue('')
-      filterRef.current.focus()
-    }
-  }, [clearListings])
+  
 
   const killLinkStyle = {
     textDecoration: 'none',
@@ -107,14 +103,10 @@ export default function Header( {toggleLightDark, darkMode, setBlogFilter, setCl
         <Logo />
         <TextField id="outlined-basic" label="Search. . . " 
           variant="outlined" size="small" 
-          value={inputValue}
+          value={searchEntry}
           inputRef={filterRef}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyUp={(event) => {
-            if (event) {
-              handleSearch(event);
-            }
-          }} 
+          onChange={(e) => setSearchEntry(e.target.value)}
+          onKeyUp={() => handleSearch()} 
           sx={{
               width: 350, 
               fontSize: 16, 
@@ -134,7 +126,7 @@ export default function Header( {toggleLightDark, darkMode, setBlogFilter, setCl
 
 {/* NOT LOGGED IN  */}
       <Box sx={{  display: { xs: 'none', md: 'flex' } }}>
-        {!isLoggedInOrOut.isLoggedIn && 
+        {!storedToken && 
           <Link to='login' style={killLinkStyle}>
             <Button variant="text" size="large"
                   sx={{fontSize: 16, fontWeight: 600, }} 
@@ -143,7 +135,7 @@ Login
             </Button>
           </Link>
         }
-        {!isLoggedInOrOut.isLoggedIn && 
+        {!storedToken && 
         <Link to='register' style={killLinkStyle}>
           <Button variant="outlined"  size="large"
                   sx={{fontSize: 16, fontWeight: 600, }} 
@@ -154,7 +146,7 @@ Create Account
         }
 
 {/* LOGGED IN */}
-        {isLoggedInOrOut.isLoggedIn && 
+        {storedToken && 
         <Link to='wall' style={killLinkStyle}>
           <Button variant={window.location.href.includes('wall') ? "contained" : "outlined"} 
                   size="large"
@@ -166,11 +158,11 @@ Create Account
           </Button>
           </Link> 
         }
-        {isLoggedInOrOut.isLoggedIn && 
+        {storedToken && 
         <Link to='post' style={killLinkStyle}>
-          <Button variant={window.location.href.includes('post') ? "contained" : "outlined"} 
+          <Button variant={window.location.href.endsWith('post') ? "contained" : "outlined"} 
                   size="large"
-                  sx={window.location.href.includes('post') ?
+                  sx={window.location.href.endsWith('post') ?
                    {fontWeight: 600, mr: '0.5rem', backgroundColor: 'secondary.light' }
                   : {fontWeight: 600, mr: '0.5rem', color: 'secondary.light' }
                   }
@@ -178,8 +170,8 @@ Create Account
           </Button>
           </Link>  
         }
-        {isLoggedInOrOut.isLoggedIn && 
-        <Link to='profile' style={killLinkStyle}>
+        {storedToken && 
+        <Link to='profile/your-posts' style={killLinkStyle}>
           <Button variant={window.location.href.includes('profile') ? "contained" : "outlined"} size="large" 
           sx={window.location.href.includes('profile') ?
           {fontWeight: 600, mr: '0.5rem', backgroundColor: 'secondary.light' }
@@ -190,7 +182,7 @@ Create Account
           </Button>
         </Link>  
         }
-        {isLoggedInOrOut.isLoggedIn && 
+        {storedToken && 
           <Button variant="text" size="large"  sx={{color: 'secondary.light' }}
                   onClick={handleLogout}
                   >Logout
@@ -200,22 +192,22 @@ Create Account
       </Box>
 
         {/* // CHANGE TO HAMBURGER */}
-       {!isLoggedInOrOut.isLoggedIn && 
+       {!storedToken && 
         <LoggedOutNav 
         />
        }
-        {isLoggedInOrOut.isLoggedIn && 
+        {storedToken && 
         <LoggedInNav 
         handleLogout={handleLogout}
         />
        }
 
-    {!updateSelector.value.bool && window.location.href.includes('profile') && 
+    {window.location.href.includes('profile') && 
       <AppBar position="fixed"  
               sx={{display: { xs: 'flex', md: 'none' }, mt: '80px', height: '40px'}} >
         <Container maxWidth={false} sx={{display: 'flex', flexDirection: 'row', 
         justifyContent: 'space-around' ,  alignItems: 'center', height: '100%'}}>
-        <Button  onClick={() => navigate('/profile')}
+        <Button  onClick={() => navigate('/profile/')}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               > Post        
         </Button>

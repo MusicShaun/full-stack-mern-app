@@ -7,14 +7,13 @@ import useMatchPicture from '../hooks/usePicturesAndBlogMatcher';
 
 
 type IProps = {
-  checkBodies?: () => void; 
-  counter?: number;
+
   content: any;
   pinned: boolean;
 }
 
 
-export default function Card( { checkBodies, counter = 0,content, pinned }: IProps) {
+export default function Card( { content, pinned }: IProps) {
 
   const [showBody, setShowBody] = useState<boolean>(false)
   const [ delayText, setDelayText ] = useState<boolean>(false)
@@ -24,12 +23,10 @@ export default function Card( { checkBodies, counter = 0,content, pinned }: IPro
   useEffect(() => {
     setShowBody(false)
     setDelayText(false)
-  }, [counter])
+  }, [])
 
   function handleExpandPost() {
-    if (!showBody && checkBodies) {
-      checkBodies();
-    }
+
     // eslint-disable-next-line 
     const renderAfteruseEffect = setTimeout(() => {
       setShowBody(prev => !prev)

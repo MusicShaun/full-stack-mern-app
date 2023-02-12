@@ -27,7 +27,7 @@ exports.signup = ash(async (req, res) => {
       status: 'success',
       firstName: newUser.firstName,
       lastName: newUser.lastName,
-      id: newUser._id,
+      _id: newUser._id,
       email: newUser.email,
       token
     })
@@ -48,9 +48,10 @@ exports.login = ash(async (req, res, next) => {
     status: 'success',
     firstName: user.firstName,
     lastName: user.lastName,
-    id: user._id,
+    _id: user._id,
     email: user.email,
-    token
+    token,
+    profilePicture: user.profilePicture 
   })
 })
 
