@@ -23,7 +23,9 @@ export const store = configureStore({
     .prepend(//middleware if you have it 
     )
     // prepend and concat calls can be chained
-    .concat(logger),
+      .concat(
+        // logger
+      ),
 
 })
 

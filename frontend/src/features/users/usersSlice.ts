@@ -30,7 +30,7 @@ const user: UserType = {
   email:  userStorage.email || '',
   password: '',
   profilePicture:  userStorage.profilePicture || '',
-  token:  userStorage.token || ''
+  token: userStorage.token || '',
 }
 interface ISType {
   user: UserType,

@@ -10,7 +10,6 @@ export default function ProfileMenuColumn() {
   const [disableWidgetButton, setDisableWidgetButton] = useState(false);
   const user: UserType = useAppSelector(selectUser)
 
-
   async function openWidget (e: React.SyntheticEvent) {
     e.preventDefault();
     setDisableWidgetButton(true)
@@ -24,7 +23,9 @@ export default function ProfileMenuColumn() {
        try {
          if (result.event === 'success') {
            dispatch(updateUser({
-             ...user,
+             firstName: user.firstName,
+             lastName: user.lastName,
+             email: user.email,
              _id: user._id,
              profilePicture: `https://res.cloudinary.com/dyneqi48f/image/upload/${result.info.path}`
            }))
