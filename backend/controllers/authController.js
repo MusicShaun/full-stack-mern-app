@@ -52,6 +52,7 @@ exports.login = ash(async (req, res, next) => {
     email: user.email,
     token,
     profilePicture: user.profilePicture 
+
   })
 })
 
