@@ -27,6 +27,7 @@ export default function ProfileMenuColumn() {
              lastName: user.lastName,
              email: user.email,
              _id: user._id,
+             token: user.token,
              profilePicture: `https://res.cloudinary.com/dyneqi48f/image/upload/${result.info.path}`
            }))
         }
