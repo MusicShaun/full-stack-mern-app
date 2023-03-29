@@ -1,7 +1,7 @@
 <h1 align='center'>
 <img src='https://res.cloudinary.com/dyneqi48f/image/upload/v1676016779/nsz9k9ogjf64gszkbb02.png' alt='' width='100px'/>
 </h1>
-<h1 align='center'> <a href='https://www.shaunpickett.com' target="_blank">Shaun's MERN Blog  <a></h1>
+<h1 align='center'> <a href='https://www.shaunpickett.com' target="_blank">	🔗 Shaun's MERN Blog  <a></h1>
 <h2 align='center'> A pointless blog site that is very easy on the eyes. </h2>
 
 <br/>
