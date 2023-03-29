@@ -4,6 +4,7 @@
 <h1 align='center'> Shaun's MERN Blog  </h1>
 <h2 align='center'> A pointless blog site that is very easy on the eyes. </h2>
 
+<br/>
 <img src='https://res.cloudinary.com/dyneqi48f/image/upload/v1680077497/Mern-blog-image_ob4y7p.png' alt='' width='100%'/>
 
 <h3>Purpose</h3>
@@ -33,6 +34,8 @@
 
 <br/>
 
-
+<br/>
+<img src='https://res.cloudinary.com/dyneqi48f/image/upload/v1680077621/mern-blog-image-2_gicdns.png' alt='' width='100%'/>
+<br/>
 <p>If you feel like offering constructive criticism please be my guest</p> 
   
